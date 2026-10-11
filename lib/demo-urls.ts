@@ -235,6 +235,10 @@ export const RENDERED_DEMOS: readonly string[] = [
   //                   headline that crawls the last pixel of its rise and a
   //                   toast that scales — the Player's CSS scaling breaks both.
   "capture-reveal",
+  //   font-shuffle    held states measured off a recording, each set in a
+  //                   different web font loaded at runtime — the Player shows
+  //                   only the first frame until every face has arrived.
+  "font-shuffle",
 ];
 
 /**

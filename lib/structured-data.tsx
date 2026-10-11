@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { installCommand } from "@/config/site";
+import { installCommand, SHADCN_LABS_URL } from "@/config/site";
 import {
   type CategoryId,
   GALLERY_COUNT,
@@ -33,6 +33,11 @@ export const PUBLISHER = {
   "@type": "Organization",
   name: "snapcn",
   url: SITE_URL,
+  parentOrganization: {
+    "@type": "Organization",
+    name: "Shadcn Labs",
+    url: SHADCN_LABS_URL,
+  },
 } as const;
 
 /**
