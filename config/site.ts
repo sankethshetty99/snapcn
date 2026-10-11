@@ -9,6 +9,52 @@ export const MINT = "#A1EEBD";
 
 export const GITHUB_URL = "https://github.com/snapcndev/snapcn";
 export const X_URL = "https://x.com/snapcndev";
+/** snapcn is a Shadcn Labs project — the family behind termcn, framecn, emailcn. */
+export const SHADCN_LABS_URL = "https://shadcn-labs.com";
+
+/**
+ * The "snapcn ▾" panel: Shadcn Labs' sibling projects, copied from termcn's
+ * `constants/nav.ts` (github.com/shadcn-labs/termcn). Each Labs site lists the
+ * others, so termcn is here and snapcn is not. Keep in step with theirs.
+ */
+export type LabsLink = { href: string; name: string; description?: string };
+
+export const LABS_SECTIONS: { title: string; items: LabsLink[] }[] = [
+  {
+    title: "Registries",
+    items: [
+      { href: "https://termcn.dev", name: "termcn" },
+      { href: "https://framecn.dev", name: "framecn" },
+      { href: "https://ogimagecn.com", name: "ogimagecn" },
+      { href: "https://agentcn.run", name: "agentcn" },
+      { href: "https://mcpcn.dev", name: "mcpcn" },
+      { href: "https://emailcn.run", name: "emailcn" },
+      { href: "https://pdfcn.dev", name: "pdfcn" },
+      { href: "https://editorcn.vercel.app", name: "editorcn" },
+      { href: "https://shadercn.run", name: "shadercn" },
+      { href: "https://mdxcn.dev", name: "mdxcn" },
+    ],
+  },
+  {
+    title: "Templates",
+    items: [{ href: "https://startercn.vercel.app", name: "startercn" }],
+  },
+  {
+    title: "Ports",
+    items: [{ href: "https://shadcn-cssinjs.com", name: "shadcn-cssinjs" }],
+  },
+  {
+    title: "Skills",
+    items: [
+      "launch-shadcn-registry",
+      "tailwind-to-stylex",
+      "mastra-file-agents",
+    ].map((name) => ({
+      href: `https://skills.sh/shadcn-labs/skills/${name}`,
+      name,
+    })),
+  },
+];
 
 /**
  * The one place the install command is spelled.
@@ -191,6 +237,10 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { href: `${GITHUB_URL}/issues`, label: "Issues" },
       { href: `${GITHUB_URL}/blob/main/LICENSE`, label: "MIT license" },
       { href: X_URL, label: "X" },
+      { href: SHADCN_LABS_URL, label: "Shadcn Labs" },
     ],
   },
 ];
+
+/** Every sibling Labs project, for the footer's backlinks. */
+export const LABS_PROJECTS: LabsLink[] = LABS_SECTIONS.flatMap((s) => s.items);
