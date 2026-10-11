@@ -1,12 +1,11 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PanelToggleIcon } from "@/components/icons/panel-toggle";
 import { NavBadge } from "@/components/nav-badge";
 import { SearchButton } from "@/components/search-button";
-import { SnapCnLogo } from "@/components/snapcn-logo";
+import { ShadcnLabsNav } from "@/components/shadcn-labs-nav";
 import {
   Sheet,
   SheetContent,
@@ -96,9 +95,7 @@ function SidebarBody({
   return (
     <>
       <div className="flex items-center justify-between gap-2">
-        <Link href="/" aria-label="snapcn home" className="shrink-0">
-          <SnapCnLogo />
-        </Link>
+        <ShadcnLabsNav className="shrink-0" />
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
             <span

@@ -2,7 +2,7 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { UserMenu } from "@/components/auth/user-menu";
 import { SearchButton } from "@/components/search-button";
-import { SnapCnLogo } from "@/components/snapcn-logo";
+import { ShadcnLabsNav } from "@/components/shadcn-labs-nav";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,15 +19,7 @@ import { NavMobile } from "./header-nav";
 import { ThemeToggle } from "./theme-toggle";
 
 export function HeaderLogo() {
-  return (
-    <Link
-      href="/"
-      aria-label="snapcn home"
-      className="flex items-center focus-visible:outline-none"
-    >
-      <SnapCnLogo />
-    </Link>
-  );
+  return <ShadcnLabsNav />;
 }
 
 export function HeaderActions() {
