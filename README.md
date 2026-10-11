@@ -4,6 +4,8 @@
 
 <h3>Product demo videos, built in React.</h3>
 
+<p>A <a href="https://shadcn-labs.com">Shadcn Labs</a> project.</p>
+
 <p>
 The shots a software demo actually needs — AI chat streams, terminal sessions,
 device frames, captions — as components you install with the shadcn CLI and own outright.
