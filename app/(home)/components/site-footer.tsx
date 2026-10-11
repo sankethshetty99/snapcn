@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { FOOTER_COLUMNS } from "@/config/site";
+import { LabsLogo } from "@/components/shadcn-labs-nav";
+import { SnapCnLogo } from "@/components/snapcn-logo";
+import { FOOTER_COLUMNS, LABS_PROJECTS, SHADCN_LABS_URL } from "@/config/site";
 import {
   CATALOGUE_COUNT,
   CATALOGUE_ITEMS,
@@ -7,7 +9,6 @@ import {
   GALLERY_COUNT,
 } from "@/lib/gallery-data";
 import { cn } from "@/lib/utils";
-import { HeaderLogo } from "./header-parts";
 
 /**
  * Sitemap footer: one column per group, each headed by a mono eyebrow.
@@ -89,7 +90,26 @@ export function SiteFooter() {
             the right — ElevenLabs' footer layout. */}
         <div className="grid gap-12 lg:grid-cols-[1fr_3fr]">
           <div className="flex flex-col gap-4">
-            <HeaderLogo />
+            {/* The header's "[Labs] / snapcn" lockup, without the dropdown: a
+                panel opened from the bottom of the page would open off-screen. */}
+            <span className="flex w-fit items-center gap-2">
+              <a
+                href={SHADCN_LABS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Shadcn Labs"
+                className="text-foreground transition-opacity hover:opacity-70"
+              >
+                <LabsLogo />
+                <span className="sr-only">Go to Shadcn Labs</span>
+              </a>
+              <span className="text-muted-foreground/60" aria-hidden="true">
+                /
+              </span>
+              <Link href="/" aria-label="snapcn home">
+                <SnapCnLogo />
+              </Link>
+            </span>
             {/* Not a bare "MIT licensed": half the catalogue is paid, and a
                 licence line that covers half of it is a small untruth. */}
             <p
@@ -97,8 +117,37 @@ export function SiteFooter() {
               suppressHydrationWarning
             >
               © {new Date().getFullYear()} snapcn — {GALLERY_COUNT} components
-              MIT licensed, {CATALOGUE_COUNT - GALLERY_COUNT} Pro
+              MIT licensed, {CATALOGUE_COUNT - GALLERY_COUNT} Pro. A{" "}
+              <a
+                href={SHADCN_LABS_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-4 hover:text-foreground"
+              >
+                Shadcn Labs
+              </a>{" "}
+              project.
             </p>
+            {/* Backlinks to the sibling Labs projects — beside the logo, not as
+                a last column, where it would land under 40-odd component names. */}
+            <div className="mt-4">
+              <p className={EYEBROW}>More from Shadcn Labs</p>
+              <ul className="mt-4 flex max-w-[16rem] flex-wrap gap-x-4 gap-y-2.5">
+                {LABS_PROJECTS.map(({ href, name }) => (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={LINK}
+                    >
+                      {name}
+                      <DrawArrow />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="columns-2 gap-x-8 md:columns-3">
             {GROUPS.map(({ title, href, links }) => (
