@@ -157,11 +157,15 @@ export async function GET(
      * `docs` is the upsell. Nothing lands in their project, and a free
      * component named in the same `add` now installs instead of failing with it.
      *
-     * Only the CLI, which sends `User-Agent: shadcn`. Everything else keeps the
-     * 402: the MCP server reads that status as "this key was refused", and
-     * agents read the JSON body below.
+     * Only the CLI, which sends `User-Agent: shadcn` — or bare `node`, which is
+     * what older shadcn CLIs send (Node's own fetch): 705 people installed free
+     * components that way in 30 days and every Pro request among them read
+     * "Failed to fetch (402)". Everything else keeps the 402: the MCP server
+     * (`snapcn-mcp` UA) reads that status as "this key was refused", and agents
+     * read the JSON body below.
      */
-    if (/^shadcn\b/i.test(req.headers.get("user-agent") ?? "")) {
+    const ua = req.headers.get("user-agent") ?? "";
+    if (/^shadcn\b/i.test(ua) || ua === "node") {
       /**
        * A preview, not an empty item: a terminal link was the whole offer, and
        * 140 people in 30 days asked for one or two Pro components by name and

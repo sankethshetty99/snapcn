@@ -342,10 +342,11 @@ const STILLS = [
   "https://media.snapcn.dev/demos/posters/word-captions.webp",
   "https://media.snapcn.dev/demos/posters/word-flip.webp",
 ];
-const OWN_CARDS = STILLS.flatMap((s, i) => [
-  ART[i % ART.length] as string,
-  s,
-]).map((f) => (f.startsWith("https://") ? f : staticFile(f)));
+// `concat(...map)`, not `flatMap`: a stock Remotion project types against
+// ES2015, where `flatMap` does not exist and the install shows red.
+const OWN_CARDS = ([] as string[])
+  .concat(...STILLS.map((s, i) => [ART[i % ART.length] as string, s]))
+  .map((f) => (f.startsWith("https://") ? f : staticFile(f)));
 // index 0, 2, 4 … are ART by construction, and the five seed cells only ever
 // reach the first `SEED.length` of them.
 

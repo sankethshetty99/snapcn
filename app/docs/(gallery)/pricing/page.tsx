@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FeaturedQuote } from "@/app/(home)/components/sections/featured-quote";
 import { auth } from "@/auth";
 import { ComponentCardGrid } from "@/components/docs/component-card-grid";
@@ -15,6 +16,7 @@ import { proDemoPoster, proDemoSrc } from "@/lib/pro-demos";
 import { RenderedDemo } from "@/lib/rendered-demos";
 import { planFor } from "@/lib/server/entitlements";
 import { docsBreadcrumb } from "@/lib/structured-data";
+import { cn } from "@/lib/utils";
 import { PricingPlans } from "./pricing-plans";
 import { PRICING_INTRO, pricing } from "./tiers";
 
@@ -43,6 +45,16 @@ export const metadata: Metadata = {
 
 const jsonLd = [docsBreadcrumb(TITLE, "/docs/pricing")];
 
+/**
+ * Three Pro demos *above* the plans. The page already played all of them —
+ * fifty-odd cards at the bottom — but the median visitor scrolls 19% of it and
+ * 65 of 91 never pass halfway (PostHog, 30 days to Oct 12), so almost nobody
+ * deciding at the plans had seen what Pro is. These are the scenes the Labs
+ * launch video is cut from, so a visitor arriving from that post sees what they
+ * just watched.
+ */
+const SHOWCASE = ["cross-out", "library-flight", "lockup-reveal"];
+
 export default async function PricingPage({
   searchParams,
 }: {
@@ -53,6 +65,11 @@ export default async function PricingPage({
   const { plan } = await planFor(session?.user?.id ?? null);
   const { tiers, footnote } = await pricing({ testCountry: country });
   const sampleVideo = proDemoSrc(PRO_SAMPLE.name);
+  const showcase = SHOWCASE.flatMap((slug) => {
+    const src = proDemoSrc(slug);
+    const item = PRO_GALLERY_ITEMS.find((i) => i.href.endsWith(`/${slug}`));
+    return src && item ? [{ slug, src, item }] : [];
+  });
 
   return (
     <GalleryFrame>
@@ -72,10 +89,32 @@ export default async function PricingPage({
           <EarlyBirdStrip className="mt-6" withLockIn />
         </div>
 
+        {showcase.length > 0 ? (
+          <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 lg:mt-12">
+            {showcase.map(({ slug, src, item }, i) => (
+              <Link
+                key={slug}
+                href={item.href}
+                aria-label={`${item.name} — Pro component`}
+                // One on a phone: three stacked would push the plans a screen down.
+                className={cn(
+                  "surface-card relative aspect-video w-full overflow-hidden rounded-xl",
+                  i > 0 && "hidden sm:block",
+                )}
+              >
+                <RenderedDemo
+                  src={src}
+                  poster={proDemoPoster(slug) ?? undefined}
+                />
+              </Link>
+            ))}
+          </div>
+        ) : null}
+
         {/* `#plans` and `#free` are addresses, not decoration: the 402, the
             docs pages and the old `/pro` links all land on them. This is the
             one pricing page — `/pro` forwards here. */}
-        <div id="plans" className="mt-10 scroll-mt-24 lg:mt-20">
+        <div id="plans" className="mt-10 scroll-mt-24 lg:mt-14">
           <PricingPlans tiers={tiers} currentPlan={plan} footnote={footnote} />
         </div>
 
