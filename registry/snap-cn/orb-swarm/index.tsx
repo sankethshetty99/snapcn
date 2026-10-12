@@ -202,10 +202,9 @@ function recolourTable(tex: Table, f: Recolour): number[] {
 function recolourHex(hex: string, f: Recolour): string {
   const c = parseColor(hex);
   const [r, g, b] = f([c.r * 255, c.g * 255, c.b * 255]);
+  // Slice, not `padStart` (ES2017) — a stock Remotion project types ES2015.
   const h = (v: number) =>
-    Math.round(Math.max(0, Math.min(255, v)))
-      .toString(16)
-      .padStart(2, "0");
+    `0${Math.round(Math.max(0, Math.min(255, v))).toString(16)}`.slice(-2);
   return `#${h(r)}${h(g)}${h(b)}`;
 }
 

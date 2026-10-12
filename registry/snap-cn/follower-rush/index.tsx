@@ -143,7 +143,8 @@ export const SAMPLE_FOLLOWERS: Follower[] = [
   "Cole",
 ].map((name, i) => ({
   name,
-  avatar: `/avatars/${String((i % SAMPLE_AVATAR_COUNT) + 1).padStart(2, "0")}.jpg`,
+  // Slice, not `padStart` (ES2017) — a stock Remotion project types ES2015.
+  avatar: `/avatars/${`0${(i % SAMPLE_AVATAR_COUNT) + 1}`.slice(-2)}.jpg`,
 }));
 
 // --- Pure helpers (unit-tested) -------------------------------------------

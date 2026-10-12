@@ -308,8 +308,8 @@ export function normalizeEffects(
   const list = Array.isArray(effects)
     ? effects
     : (effects.split(",").map((e) => e.trim()) as TextRevealEffect[]);
-  const out = list.filter((e): e is TextRevealEffect =>
-    VALID_EFFECTS.includes(e),
+  const out = list.filter(
+    (e): e is TextRevealEffect => VALID_EFFECTS.indexOf(e) !== -1,
   );
   return out.length > 0 ? out : [...TEXT_REVEAL_DEFAULTS.effects];
 }
@@ -434,7 +434,9 @@ export function resolveTextRevealSettings(
   props: TextRevealPropsInput,
 ): TextRevealSettings {
   const explicit: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(props)) {
+  // `keys`, not `Object.entries` (ES2017): stock Remotion types ES2015.
+  for (const key of Object.keys(props)) {
+    const value = (props as Record<string, unknown>)[key];
     if (value !== undefined && key !== "preset") explicit[key] = value;
   }
   const preset =

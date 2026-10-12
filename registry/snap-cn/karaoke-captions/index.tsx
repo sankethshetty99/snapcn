@@ -269,7 +269,7 @@ export function emphasisIndices(text: string, emphasize: string): number[] {
   const strip = (w: string) =>
     w.toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
   return splitWords(text)
-    .map((word, i) => (targets.includes(strip(word)) ? i : -1))
+    .map((word, i) => (targets.indexOf(strip(word)) !== -1 ? i : -1))
     .filter((i) => i >= 0);
 }
 
@@ -318,7 +318,8 @@ export function srtTimeToMs(stamp: string): number | null {
     (h ? Number(h) : 0) * 3600000 +
     Number(min) * 60000 +
     Number(sec) * 1000 +
-    Number(frac.padEnd(3, "0"))
+    // `padEnd(3, "0")` without the ES2017 lib a stock Remotion project lacks.
+    Number(frac + "000".slice(frac.length))
   );
 }
 
@@ -372,7 +373,9 @@ export function linesFromCaptions(
   if (current.length) groups.push(current);
 
   return groups.map((group) => {
-    const words = group.flatMap((c) => c.text.split(/\s+/).filter(Boolean));
+    const words = ([] as string[]).concat(
+      ...group.map((c) => c.text.split(/\s+/).filter(Boolean)),
+    );
     const startMs = group[0].startMs;
     const endMs = group[group.length - 1].endMs;
     // One timing per word: a multi-word cue is spread across its own span.

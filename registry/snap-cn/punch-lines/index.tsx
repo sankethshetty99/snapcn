@@ -495,8 +495,11 @@ export function PunchLines({
       n += beat.lines.length;
     }
   }
-  const allLines = beats.flatMap((beat) =>
-    beat.lines.map((words) => ({ words, size: beat.size })),
+  // `concat(...map)`, not `flatMap` (ES2019): stock Remotion types ES2015.
+  const allLines = ([] as { words: string[]; size: number }[]).concat(
+    ...beats.map((beat) =>
+      beat.lines.map((words) => ({ words, size: beat.size })),
+    ),
   );
 
   return (

@@ -13,11 +13,23 @@ const toOklch = converter("oklch");
 
 const BLACK: Rgb = { mode: "rgb", r: 0, g: 0, b: 0, alpha: 1 };
 
+/**
+ * Whether to warn. Read through `globalThis`, never a bare `process`: a Vite
+ * project defines no `process`, so the bare name threw a ReferenceError on the
+ * very input it meant to warn about — and a stock Remotion project has no Node
+ * types, so the bare name was also a type error in every install.
+ */
+function isDev(): boolean {
+  const env = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
+    .process?.env;
+  return env?.NODE_ENV !== "production";
+}
+
 export function parseColor(c: string): Rgb {
   const s = c.trim();
 
   if (s.startsWith("var(")) {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev()) {
       console.warn(
         `[snap-cn-ui] parseColor cannot resolve CSS variable "${s}" under Remotion's per-frame render. ` +
           "Animated colors must be concrete oklch/hex/rgb values supplied via the theme. " +
@@ -29,7 +41,7 @@ export function parseColor(c: string): Rgb {
 
   const rgb = toRgb(parse(s));
   if (!rgb) {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev()) {
       console.warn(
         `[snap-cn-ui] parseColor could not parse "${s}"; using black.`,
       );
@@ -53,7 +65,7 @@ export function rgbToOklch(rgb: Rgb): Oklch {
 function resolveColorString(s: string): string {
   const trimmed = s.trim();
   if (trimmed.startsWith("var(")) {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev()) {
       console.warn(
         `[snap-cn-ui] mixOklch cannot resolve CSS variable "${trimmed}" under Remotion's per-frame render. ` +
           "Animated colors must be concrete oklch/hex/rgb values supplied via the theme. " +
@@ -63,7 +75,7 @@ function resolveColorString(s: string): string {
     return "#000";
   }
   if (!parse(trimmed)) {
-    if (process.env.NODE_ENV !== "production") {
+    if (isDev()) {
       console.warn(
         `[snap-cn-ui] mixOklch could not parse "${trimmed}"; using black.`,
       );
