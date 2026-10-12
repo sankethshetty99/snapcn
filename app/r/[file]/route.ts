@@ -7,8 +7,58 @@ import {
   earlyBirdDaysLeft,
   PLANS,
 } from "@/lib/plans";
+import { proDemoSrc } from "@/lib/pro-demos";
 import { bearer, planForApiKey } from "@/lib/server/api-key";
 import { readProItem } from "@/lib/server/pro-registry";
+
+/**
+ * The file a preview installs: the component's export name (every Pro export
+ * is the PascalCase of its slug), the demo playing full-frame, and a mark.
+ *
+ * Concrete colours and a sized-to-frame mark, because it renders in somebody
+ * else's Remotion project — no CSS variables, no app font, any resolution.
+ */
+function previewSource(name: string, demo: string, page: string): string {
+  const component = name.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) =>
+    c.toUpperCase(),
+  );
+  return `// ${component} · snapcn Pro PREVIEW — ${page}
+// Plays the demo, watermarked, and ignores its props. Get the component itself:
+//   npx shadcn@latest add @snapcn/${name} --overwrite   (with a Pro key)
+"use client";
+
+import { AbsoluteFill, OffthreadVideo, useVideoConfig } from "remotion";
+
+export function ${component}(_props: Record<string, unknown>) {
+  const { height } = useVideoConfig();
+  return (
+    <AbsoluteFill style={{ background: "#000" }}>
+      <OffthreadVideo
+        src="${demo}"
+        muted
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          right: height * 0.03,
+          bottom: height * 0.03,
+          padding: \`\${height * 0.012}px \${height * 0.02}px\`,
+          borderRadius: 999,
+          background: "rgba(10,10,12,0.55)",
+          color: "rgba(255,255,255,0.92)",
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+          fontSize: height * 0.028,
+          fontWeight: 500,
+        }}
+      >
+        snapcn Pro preview · snapcn.dev
+      </div>
+    </AbsoluteFill>
+  );
+}
+`;
+}
 
 /**
  * The pro half of the registry.
@@ -112,6 +162,45 @@ export async function GET(
      * agents read the JSON body below.
      */
     if (/^shadcn\b/i.test(req.headers.get("user-agent") ?? "")) {
+      /**
+       * A preview, not an empty item: a terminal link was the whole offer, and
+       * 140 people in 30 days asked for one or two Pro components by name and
+       * ~1 followed it. The last buyer came through the editor's watermark —
+       * they saw the thing working in their own video first. So the CLI now
+       * installs a file under the real name and path that plays the real demo,
+       * watermarked, and ignores its props.
+       *
+       * It carries **no Pro source** — only the demo's URL. A watermark inside
+       * copied source is one line to delete, so watermarking the component
+       * itself would publish the paid tier; this keeps "a file that was never
+       * published cannot leak" true. Buying and re-running with a key
+       * overwrites it with the component, and their JSX already compiles.
+       */
+      const demo = proDemoSrc(name);
+      if (demo) {
+        return Response.json(
+          {
+            name,
+            type: "registry:component",
+            dependencies: ["remotion"],
+            files: [
+              {
+                path: `registry/snap-cn-pro/${name}/index.tsx`,
+                type: "registry:component",
+                target: `components/snap-cn/${name}.tsx`,
+                content: previewSource(name, demo, page),
+              },
+            ],
+            docs: [
+              `@snapcn/${name}: installed a watermarked PREVIEW — it plays the demo and ignores your props.`,
+              offer,
+              `Buy:         ${pricing}`,
+              `Then:        npx shadcn@latest add @snapcn/${name} --overwrite  (with your key: https://snapcn.dev/account)`,
+            ].join("\n"),
+          },
+          { headers: { "cache-control": "private, no-store" } },
+        );
+      }
       return Response.json(
         {
           name,
