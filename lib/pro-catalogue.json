@@ -10,6 +10,12 @@
     "description": "A line assembles a word at a time, resolves to your product's name, and becomes a prompt somebody types. Each new word's letters arrive at their own heights and fall into the baseline together; the name cuts in hard under a colour ramp that sweeps across it; then a caret types the wrong thing, deletes it, and types the right thing, with the last words landing inside a highlight that sweeps off to the right and hands them back at full size. Four acts in 4.8 seconds. Every beat is a prop."
   },
   {
+    "name": "agent-compose",
+    "title": "Agent Compose",
+    "description": "An agent's composer building itself around one chip, then sending a request. A Video chip types in alone and close up — its clapperboard drawing out of the hinge, each letter sliding in and fading up — then a shadcn field, the + and a snapcn menu fade in around it as the camera pulls back. The placeholder types, the mic and send button arrive, a centred heading types above the field and grows from its middle, the placeholder gives way to the request at about a character a frame, the send glyph turns from a waveform to an arrow, and the button flashes blue and darkens back under a soft glow. Replayed from a 60fps screen recording measured frame by frame against its own render: the camera, every typing clock, each fade and the send's colour are fitted tables, and Inter was chosen by fitting fifteen open faces against the recording.",
+    "added": "2026-10-13"
+  },
+  {
     "name": "agent-result",
     "title": "Agent Result",
     "description": "An agent asked for something, and what it hands back. A request types itself into a dark composer under a wave that trails the caret — each character lands in a washed accent and walks to ink on a Gaussian of its age — while the camera eases the field into place and pans left as the line outgrows it. The field's focus ring flares as the message goes, the camera lifts, and a hard cut lands on the run: two tool calls, each square arriving in the accent and blanching to white, a rail between them, and the transcript scrolling to follow its own last line as the answer builds underneath — a summary, a serif line, a source chip, and a one-row table with a tag, a detail and a link, over a toolbar. Replayed from a 60fps screen recording measured frame by frame: the typing clock, the wave, both cameras, the focus ring and every row's fade are tables and fitted curves, and the fonts were chosen by rendering thirty candidates each against the recording.",

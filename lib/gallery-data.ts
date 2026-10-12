@@ -619,6 +619,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   // AI chat input
   "agent-chat": "ai-input",
   "agent-open": "ai-input",
+  "agent-compose": "ai-input",
   "agent-result": "ai-input",
   "agent-run": "ai-input",
   "agent-tools": "ai-input",

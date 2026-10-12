@@ -131,6 +131,8 @@ const SEARCH_LEADS: Record<string, string> = {
   "agent-run":
     "AI agent run animation: a prompt sent and answered with visible tool steps.",
   "agent-tools": "AI agent tools animation for agent and MCP product demos.",
+  "agent-compose":
+    "AI chat input animation: a composer builds itself, types a prompt and sends it.",
   "agent-result":
     "AI agent answer animation: a prompt typed, tool calls run, and a reply with a table.",
   "task-stream":
