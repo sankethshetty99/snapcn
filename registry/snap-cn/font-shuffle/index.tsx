@@ -439,7 +439,9 @@ function loadFaces(): Promise<unknown> {
     return facesLoad;
   }
   facesLoad = Promise.all(
-    Object.values(FACES)
+    // `keys().map`, not `Object.values` (ES2017): stock Remotion types ES2015.
+    (Object.keys(FACES) as (keyof typeof FACES)[])
+      .map((k) => FACES[k])
       .filter((f) => f.src)
       .map((f) => {
         const face = new FontFace(f.family, `url(${f.src}) format("woff2")`, {
@@ -542,7 +544,14 @@ export function FontShuffle({
   const n = line.length;
   const [m, probe] = useMeasure(lead, subject);
 
-  const index = BEATS.findLastIndex(([at]) => frame >= at);
+  // The last beat already reached. A loop, not `findLastIndex` (ES2023).
+  let index = -1;
+  for (let i = BEATS.length - 1; i >= 0; i--) {
+    if (frame >= BEATS[i]![0]) {
+      index = i;
+      break;
+    }
+  }
   const beat = BEATS[Math.max(0, index)]![1];
   const w = m?.widths[Math.max(0, index)];
 

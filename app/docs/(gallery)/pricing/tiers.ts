@@ -155,6 +155,23 @@ function money(minor: number, currency: string): string {
   }).format(value);
 }
 
+/**
+ * A *converted* price — no regional price of ours, just the list price in the
+ * visitor's currency — to the whole unit, marked as approximate. Dodo's FX
+ * lands on amounts like "₹49,140.63", which sat beside our round regional
+ * prices looking like a bug. The exact charge is still on the card wherever
+ * there is tax ("₹57,985.94 with tax"), and checkout charges it to the paisa.
+ */
+function approx(minor: number, currency: string): string {
+  const digits =
+    new Intl.NumberFormat("en", {
+      style: "currency",
+      currency,
+    }).resolvedOptions().maximumFractionDigits ?? 2;
+  const unit = 10 ** digits;
+  return `≈ ${money(Math.round(minor / unit) * unit, currency)}`;
+}
+
 const CADENCE: Record<QuotedProduct, string> = {
   everything_annual: "Per year",
   lifetime: "One payment",
@@ -250,7 +267,13 @@ export function pricingFor(
         };
       }
       localised = true;
-      const price = money(quote.subtotal, quote.currency);
+      const ours =
+        regional &&
+        (annual || product === "lifetime") &&
+        regional.currency === quote.currency;
+      const price = ours
+        ? money(quote.subtotal, quote.currency)
+        : approx(quote.subtotal, quote.currency);
       return {
         ...tier,
         price,

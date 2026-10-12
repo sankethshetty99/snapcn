@@ -1,12 +1,11 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PanelToggleIcon } from "@/components/icons/panel-toggle";
 import { NavBadge } from "@/components/nav-badge";
 import { SearchButton } from "@/components/search-button";
-import { SnapCnLogo } from "@/components/snapcn-logo";
+import { ShadcnLabsNav } from "@/components/shadcn-labs-nav";
 import {
   Sheet,
   SheetContent,
@@ -65,7 +64,7 @@ export function GallerySidebar({
         // No border-r: the rail and the grid share one background, and the
         // whitespace between them is the separation. A rule down the full height
         // only chops the page in two.
-        "fixed top-[var(--fd-banner-height,0px)] left-0 z-30 hidden h-[calc(100vh-var(--fd-banner-height,0px))] w-[var(--gallery-sidebar-w-open)] flex-col overflow-y-auto bg-background px-5 py-5 transition-transform duration-300 ease-out lg:flex",
+        "fixed top-[var(--fd-banner-height,0px)] left-0 z-30 hidden h-[calc(100vh-var(--fd-banner-height,0px))] w-[var(--gallery-sidebar-w-open)] flex-col overflow-y-auto bg-background px-5 py-5 [scrollbar-width:none] transition-transform [&::-webkit-scrollbar]:hidden duration-300 ease-out lg:flex",
         collapsed && "-translate-x-full",
       )}
     >
@@ -96,32 +95,29 @@ function SidebarBody({
   return (
     <>
       <div className="flex items-center justify-between gap-2">
-        <Link href="/" aria-label="snapcn home" className="shrink-0">
-          <SnapCnLogo />
-        </Link>
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
-            <span
-              className="size-1.5 rounded-full bg-primary"
-              aria-hidden="true"
-            />
-            {/* The grid's own count, free and paid. It sits directly above the
-                cards and said 41 over 76 of them. `GALLERY_COUNT` is the free,
-                MIT, installable number and stays that — see the footer. */}
-            {CATALOGUE_COUNT} components
-          </span>
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label="Collapse sidebar"
-            className="flex size-7 shrink-0 items-center justify-center rounded-4xl text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <PanelToggleIcon className="size-[18px]" />
-          </button>
-        </div>
+        <ShadcnLabsNav className="shrink-0" />
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label="Collapse sidebar"
+          className="flex size-7 shrink-0 items-center justify-center rounded-4xl text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <PanelToggleIcon className="size-[18px]" />
+        </button>
       </div>
 
-      <SearchButton className="mt-6 text-[13px]" />
+      {/* Its own line since the Labs lockup took the header: the rail is 220px
+          inside, and lockup + count + toggle wanted ~300, so the count wrapped
+          and ran under the edge. */}
+      <span className="mt-3 flex items-center gap-1.5 whitespace-nowrap text-[13px] text-muted-foreground">
+        <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
+        {/* The grid's own count, free and paid. It sits directly above the
+            cards and said 41 over 76 of them. `GALLERY_COUNT` is the free,
+            MIT, installable number and stays that — see the footer. */}
+        {CATALOGUE_COUNT} components
+      </span>
+
+      <SearchButton className="mt-5 text-[13px]" />
 
       <nav className="mt-8 flex flex-col">
         {DOCS_SECTIONS.map((item) => {
@@ -275,7 +271,7 @@ export function GallerySidebarMobile() {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="w-[min(20rem,85vw)] overflow-y-auto bg-background px-5 py-5"
+        className="w-[min(20rem,85vw)] overflow-y-auto bg-background px-5 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <SheetHeader className="sr-only">
           <SheetTitle>Navigation</SheetTitle>

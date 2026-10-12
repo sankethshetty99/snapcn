@@ -189,7 +189,14 @@ export function PricingPlans({
                     {pending === tier.product ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : null}
-                    {current ? "Your plan" : tier.cta}
+                    {/* In a span, never a bare text node. The click inserts the
+                        spinner *before* this label, and browser translation
+                        (Edge, Chrome) had already swapped the bare text node
+                        for its own <font> — so React's insertBefore threw
+                        NotFoundError and the page died mid-checkout. Measured:
+                        a buyer on Edge, 30ms after "upgrade_started", never
+                        reached Dodo. */}
+                    <span>{current ? "Your plan" : tier.cta}</span>
                     {current || pending === tier.product ? null : arrow}
                   </Button>
                 ) : (

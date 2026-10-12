@@ -192,7 +192,8 @@ const DEFAULT_LINES: TerminalLine[] = [
 /** Auto freeze-frame heuristic: any line ending in "..." holds the camera. */
 export function autoPause(line: TerminalLine): number {
   if (line.pause !== undefined) return line.pause;
-  if (line.text.trimEnd().endsWith("...")) return 18;
+  // `replace`, not `trimEnd` (ES2019): stock Remotion types ES2015.
+  if (line.text.replace(/\s+$/, "").endsWith("...")) return 18;
   return 0;
 }
 

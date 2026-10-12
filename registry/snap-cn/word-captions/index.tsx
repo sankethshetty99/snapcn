@@ -445,7 +445,8 @@ export function srtTimeToMs(stamp: string): number | null {
     (h ? Number(h) : 0) * 3600000 +
     Number(min) * 60000 +
     Number(sec) * 1000 +
-    Number(frac.padEnd(3, "0"))
+    // `padEnd(3, "0")` without the ES2017 lib a stock Remotion project lacks.
+    Number(frac + "000".slice(frac.length))
   );
 }
 
@@ -472,7 +473,10 @@ export function captionsToWords(
   fps: number,
   explode = true,
 ): TimedWord[] {
-  const tokens = explode ? captions.flatMap(explodeCue) : captions;
+  // `concat(...map)`, not `flatMap` (ES2019): stock Remotion types ES2015.
+  const tokens = explode
+    ? ([] as Caption[]).concat(...captions.map((c) => explodeCue(c)))
+    : captions;
   return tokens.map((c) => ({
     text: c.text,
     startFrame: msToFrame(c.startMs, fps),

@@ -168,12 +168,12 @@ describe("pricingFor", () => {
       expect(card("IN", "Pro", india)?.caption).toBe(
         "Per year · ₹5,544.82 with tax",
       );
-      expect(card("IN", "Commercial", india)?.price).toBe("₹49,267.06");
+      expect(card("IN", "Commercial", india)?.price).toBe("≈ ₹49,267");
       expect(card("IN", "Pro", india)?.badge).toBeUndefined();
     });
 
     it("converts a country with no regional price into its own currency", () => {
-      expect(card("DE", "Pro", germany)?.price).toBe("€112.26");
+      expect(card("DE", "Pro", germany)?.price).toBe("≈ €112");
       expect(card("DE", "Lifetime", germany)?.caption).toBe(
         "One payment · €257.86 with tax",
       );

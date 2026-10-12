@@ -51,6 +51,8 @@ await renderMedia({
   audioCodec: null,
   outputLocation: out,
   concurrency: 4,
+  // 1.5 turns the 1280x720 authoring size into a real 1920x1080 render.
+  scale: Number(process.argv[4] ?? 1),
   onProgress: ({ progress }) =>
     process.stdout.write(`\r${(progress * 100).toFixed(0)}%   `),
 });

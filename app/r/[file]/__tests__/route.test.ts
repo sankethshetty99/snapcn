@@ -29,17 +29,33 @@ const get = (ua?: string) =>
   );
 
 describe("pro wall", () => {
-  it("gives the shadcn CLI an empty item whose docs carry the offer", async () => {
+  it("gives older CLIs (bare `node` UA) the same preview", async () => {
+    const res = await get("node");
+    expect(res.status).toBe(200);
+    expect((await res.json()).files).toHaveLength(1);
+  });
+
+  it("gives the shadcn CLI a watermarked preview, never the source", async () => {
     const res = await get("shadcn");
     expect(res.status).toBe(200);
     const item = await res.json();
-    expect(item).toMatchObject({ name, files: [] });
-    expect(item.docs).toContain("nothing was installed");
+    expect(item.name).toBe(name);
     expect(item.docs).toContain("/docs/pricing?ref=cli");
+    expect(item.files).toHaveLength(1);
+    const [file] = item.files;
+    // Same path as the paid file, so buying overwrites it in place.
+    expect(file.target).toBe(`components/snap-cn/${name}.tsx`);
+    const exportName = name.replace(
+      /(^|-)([a-z0-9])/g,
+      (_: string, __: string, c: string) => c.toUpperCase(),
+    );
+    expect(file.content).toContain(`export function ${exportName}(`);
+    expect(file.content).toContain("media.snapcn.dev/pro-demos/");
+    expect(file.content).toContain("snapcn Pro preview");
   });
 
   it("keeps the 402 for everything else, which the MCP key check reads", async () => {
-    for (const ua of [undefined, "node", "Mozilla/5.0"]) {
+    for (const ua of [undefined, "snapcn-mcp", "Mozilla/5.0"]) {
       const res = await get(ua);
       expect(res.status).toBe(402);
       expect((await res.json()).error).toBe("pro_component");
