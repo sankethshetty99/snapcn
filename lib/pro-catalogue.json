@@ -270,5 +270,23 @@
     "name": "word-settle",
     "title": "Word Settle",
     "description": "A sentence that arrives a word at a time, hot, and cools as it lands. Two clocks running at different speeds: words appear left to right every couple of frames, and a colour head crosses the line more slowly behind them, turning the accent into the text colour as it passes — so the newest words are always warm and the oldest always settled. The whole sentence is laid out and centred once and unrevealed words are hidden rather than removed, so the line never reflows under the reader."
+  },
+  {
+    "name": "trend-type",
+    "title": "Trend Type",
+    "description": "A headline types itself while a trend line draws underneath it. The camera follows the caret with a lag, marked words fill with their own gradients and the caret turns each word's colour a keystroke early, a wave with a white head runs ahead of the words with its fill fading in behind, and lavender and pink glows drift across the backdrop. Replayed from a screen recording measured frame by frame against its own render: camera, typing clock, caret blink, wave path and every colour are fitted tables.",
+    "added": "2026-10-14"
+  },
+  {
+    "name": "echo-stack",
+    "title": "Echo Stack",
+    "description": "One word with copies of itself stacked above and below in horizontal windows, fading as they go. The echoes open out from behind the word while the stack eases back, in one move on a flat field. The face, every echo's offset, opacity and window are measured off a screen recording.",
+    "added": "2026-10-14"
+  },
+  {
+    "name": "mood-board",
+    "title": "Mood Board",
+    "description": "A collage builds itself under a two-line headline. Each tile lands as a flat swatch and turns into its picture a few frames later, the words of the headline arrive one at a time and settle into place, and the camera rides across the board: easing in, a hard zoom-out cut, a long drift, then a run across a second cluster into large pictures that warm, glow and wash out one after another. Replayed from a screen recording measured frame by frame: the camera, every tile's swatch, colour, rect and timing, and each word's entrance are fitted tables.",
+    "added": "2026-10-14"
   }
 ]

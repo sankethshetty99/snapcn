@@ -3,7 +3,11 @@ import { captureServer } from "@/lib/analytics-server";
 import { licenceForProduct, oneTimePlanFor, planForProduct } from "@/lib/plans";
 import { isDbConfigured } from "@/lib/server/db";
 import { type DodoEvent, verifyWebhookSignature } from "@/lib/server/dodo";
-import { proReadyEmail, sendEmail } from "@/lib/server/email";
+import {
+  paymentFailedEmail,
+  proReadyEmail,
+  sendEmail,
+} from "@/lib/server/email";
 import {
   activatePlan,
   billingFor,
@@ -87,6 +91,25 @@ export async function POST(request: Request) {
   const ours = Boolean(
     planForProduct(metadata.product) || oneTimePlanFor(metadata.product),
   );
+
+  // A failed checkout grants nothing, so it is handled before any account is
+  // looked up — a guest who never paid has no account to find. Only checkout
+  // attempts (they carry a session and a link back into it): a failed renewal
+  // is Dodo's to retry, and "try again" there would sell a second subscription.
+  if (type === "payment.failed") {
+    const retry = str(data.payment_link);
+    if (
+      ours &&
+      guestEmail &&
+      str(data.checkout_session_id) &&
+      retry?.startsWith("https://")
+    ) {
+      await sendEmail(
+        paymentFailedEmail(guestEmail, str(data.error_code), retry),
+      );
+    }
+    return NextResponse.json({ ok: true });
+  }
 
   if (!str(metadata.user_id) && !(ours && guestEmail)) {
     // 200, deliberately, on an event this app cannot use. A 4xx would put it
@@ -341,7 +364,7 @@ export async function POST(request: Request) {
       }
 
       default:
-        // Everything else Dodo sends — payment failures, refunds, disputes,
+        // Everything else Dodo sends — refunds, disputes,
         // customer updates — is real, and none of it changes what this app
         // lets someone do. 200 so it is not redelivered.
         break;
