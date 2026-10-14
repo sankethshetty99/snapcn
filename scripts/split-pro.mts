@@ -133,6 +133,12 @@ const SEARCH_LEADS: Record<string, string> = {
   "agent-tools": "AI agent tools animation for agent and MCP product demos.",
   "agent-compose":
     "AI chat input animation: a composer builds itself, types a prompt and sends it.",
+  "trend-type":
+    "Typewriter headline animation: gradient words type in while a trend line draws below.",
+  "echo-stack":
+    "Echo text animation: a word stacked with fading copies of itself above and below.",
+  "mood-board":
+    "Collage animation: tiles land as swatches, turn into pictures, under a two-line headline.",
   "agent-result":
     "AI agent answer animation: a prompt typed, tool calls run, and a reply with a table.",
   "task-stream":

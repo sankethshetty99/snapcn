@@ -743,6 +743,61 @@ For help, reply to this email or write to ${SUPPORT}.
 }
 
 /**
+ * What to tell a buyer, keyed by Dodo's `error_code`. Only the codes a buyer
+ * can act on get their own line; everything else is "try another card".
+ *
+ * TRANSACTION_NOT_ALLOWED is the one that loses sales: debit cards in Nepal,
+ * Costa Rica and much of South Asia ship with international online payments
+ * switched off, so the bank — not the card, not us — refuses a foreign charge.
+ */
+const DECLINE_HINTS: Record<string, string> = {
+  TRANSACTION_NOT_ALLOWED:
+    "Your bank blocked it — many debit cards have international online payments switched off by default. Ask your bank to enable international e-commerce on the card, or use a USD / dollar card or another card.",
+  INSUFFICIENT_FUNDS:
+    "Your bank reported insufficient funds. Top up the card or use another one.",
+};
+const DECLINE_DEFAULT =
+  "Your bank declined it. Trying another card usually works — or ask your bank to allow international online payments.";
+
+/**
+ * Sent when a checkout payment fails, from the webhook. Nothing went wrong on
+ * our side, and the buyer usually does not know what to change — most failures
+ * are a bank refusing a foreign charge, which only the buyer can fix.
+ */
+export function paymentFailedEmail(
+  to: string,
+  errorCode: string | null,
+  retryUrl: string,
+): Email {
+  const hint = (errorCode && DECLINE_HINTS[errorCode]) || DECLINE_DEFAULT;
+  const text = `Your snapcn payment didn't go through.
+
+${hint}
+
+Try again here: ${retryUrl}
+
+For help, reply to this email or write to ${SUPPORT}.
+
+— Sri`;
+
+  return {
+    to,
+    subject: "Your snapcn payment didn't go through",
+    reply_to: SUPPORT,
+    text,
+    html: accountShell({
+      preheader: "Nothing was charged. Here's how to finish it.",
+      greeting: "Hi,",
+      heading: "Your payment didn't go through",
+      lead: esc(hint),
+      rows: [["Charged", "Nothing"]],
+      cta: { label: "Try again", href: retryUrl },
+      note: "Your cart is saved — the button reopens the same checkout.",
+    }),
+  };
+}
+
+/**
  * An invitation onto someone's Commercial licence. The seat is already theirs:
  * signing in with this address is the whole of accepting it.
  */
