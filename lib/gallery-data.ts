@@ -503,21 +503,6 @@ export const FREE_CATEGORIES = GALLERY_CATEGORIES.filter((category) =>
 export const NEW_COUNT = 6;
 
 /**
- * The "New" shelf — the most recently added components, newest first.
- *
- * Deliberately a *rank*, not a "within the last N days" window. A window needs
- * today's date, which the server render and the client hydration can disagree
- * about across a midnight boundary; and on a repo this young a 30-day window
- * matches every component, which is the same as matching none. A fixed count is
- * always populated, never stale, and needs no clock.
- */
-export const NEW_ITEMS: GalleryItem[] = GALLERY_ITEMS.filter(
-  (item) => item.added,
-)
-  .sort((a, b) => (b.added ?? "").localeCompare(a.added ?? ""))
-  .slice(0, NEW_COUNT);
-
-/**
  * Deterministic tile shape per card, stable regardless of the active filter or
  * sort. Explicit `item.tile` wins; otherwise a card's shape is derived from its
  * position in the master list. Cycle length 13 (coprime with the 1–4 column
@@ -717,6 +702,25 @@ export const CATALOGUE_ITEMS: GalleryItem[] = withPro(
   GALLERY_ITEMS,
   PRO_GALLERY_ITEMS,
 );
+
+/**
+ * The "New" shelf — the most recently added components, newest first.
+ *
+ * Deliberately a *rank*, not a "within the last N days" window. A window needs
+ * today's date, which the server render and the client hydration can disagree
+ * about across a midnight boundary; and on a repo this young a 30-day window
+ * matches every component, which is the same as matching none. A fixed count is
+ * always populated, never stale, and needs no clock.
+ *
+ * Ranked over the whole catalogue, paid included: it was over the free list
+ * alone, so from the day Pro went into the grid every paid launch landed in the
+ * changelog-dated catalogue and never on this shelf.
+ */
+export const NEW_ITEMS: GalleryItem[] = CATALOGUE_ITEMS.filter(
+  (item) => item.added,
+)
+  .sort((a, b) => (b.added ?? "").localeCompare(a.added ?? ""))
+  .slice(0, NEW_COUNT);
 
 /**
  * How many cards the grid holds — free and paid.
