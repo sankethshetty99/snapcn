@@ -96,16 +96,26 @@ describe("with a CDN configured", () => {
   });
 
   it("never lets a paid component into a list that means free", async () => {
-    const { GALLERY_ITEMS, GALLERY_COUNT, NEW_ITEMS, itemsByReleaseDate } =
+    const { GALLERY_ITEMS, GALLERY_COUNT, itemsByReleaseDate } =
       await load(CDN);
     expect(GALLERY_ITEMS.some((i) => i.pro)).toBe(false);
     expect(GALLERY_COUNT).toBe(GALLERY_ITEMS.length);
-    expect(NEW_ITEMS.some((i) => i.pro)).toBe(false);
     // The default is the free list, which is what the RSS feed publishes — it
     // promises things a reader can go and install.
     expect(
       itemsByReleaseDate().some((day) => day.items.some((i) => i.pro)),
     ).toBe(false);
+  });
+
+  it("ranks a paid launch onto the New shelf like any other", async () => {
+    const { CATALOGUE_ITEMS, NEW_ITEMS, NEW_COUNT } = await load(CDN);
+    // The shelf is a gallery filter — the shop window — so it ranks the whole
+    // catalogue. Over the free list alone, every paid launch missed it.
+    const newest = [...CATALOGUE_ITEMS].sort((a, b) =>
+      (b.added ?? "").localeCompare(a.added ?? ""),
+    )[0];
+    expect(NEW_ITEMS).toHaveLength(NEW_COUNT);
+    expect(NEW_ITEMS[0]?.added).toBe(newest?.added);
   });
 
   it("dates the paid catalogue into the changelog when asked for it", async () => {
