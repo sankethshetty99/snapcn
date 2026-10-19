@@ -615,6 +615,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   "files-drop": "ai-input",
   "task-stream": "ai-input",
   "glass-prompt": "ai-input",
+  "search-retype": "ai-input",
 };
 
 /**
