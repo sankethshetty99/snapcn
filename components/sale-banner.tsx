@@ -49,6 +49,7 @@ export function SaleBanner() {
         }}
       />
       <p className="relative">
+        <span className="hidden sm:inline">Extended by popular demand: </span>
         Early-bird pricing ends {EARLY_BIRD.endsOn}
         <span className="hidden sm:inline">
           {" "}

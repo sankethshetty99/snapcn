@@ -13,7 +13,7 @@ import { pricingFor } from "../tiers";
 /**
  * `PRICES_RISEN` is read when lib/plans loads, so this suite pins the clock to
  * the early-bird window first — otherwise every assertion about $129 turns red
- * on 20 October. `vi.hoisted` runs before the imports below.
+ * on 25 October. `vi.hoisted` runs before the imports below.
  */
 vi.hoisted(() => {
   vi.useFakeTimers({ now: new Date("2026-09-17T12:00:00Z"), toFake: ["Date"] });
@@ -44,10 +44,10 @@ describe("pricingFor", () => {
     for (const country of ["US", "DE", null]) {
       expect(card(country, "Pro")?.price, String(country)).toBe("$129");
       expect(card(country, "Pro")?.badge).toBe("Save $50");
-      expect(card(country, "Pro")?.note).toBe("Goes to $179/yr on 20 Oct");
+      expect(card(country, "Pro")?.note).toBe("Goes to $179/yr on 25 Oct");
       expect(card(country, "Pro")?.cta).toBe("Lock in $129/yr");
       expect(card(country, "Lifetime")?.price).toBe("$249");
-      expect(card(country, "Lifetime")?.note).toBe("Goes to $279 on 20 Oct");
+      expect(card(country, "Lifetime")?.note).toBe("Goes to $279 on 25 Oct");
       expect(card(country, "Lifetime")?.cta).toBe("Own it for $249");
     }
     expect(pricingFor("US", 50).footnote).toMatch(
@@ -94,7 +94,7 @@ describe("pricingFor", () => {
     expect(tier(42, DAYS_LEFT, "Pro")?.note).toBe(
       "42 of 50 left at this price",
     );
-    expect(tier(0, DAYS_LEFT, "Pro")?.note).toBe("Goes to $179/yr on 20 Oct");
+    expect(tier(0, DAYS_LEFT, "Pro")?.note).toBe("Goes to $179/yr on 25 Oct");
     expect(tier(50, 0, "Pro")?.note).toBeUndefined();
     expect(tier(50, 0, "Lifetime")?.note).toBeUndefined();
     // The saving chip goes with the window, even on a build from before it.
@@ -185,7 +185,7 @@ describe("pricingFor", () => {
     it("keeps the list price, the saving and the rises where Dodo charges the list price", () => {
       expect(card("US", "Pro", us)?.price).toBe("$129");
       expect(card("US", "Pro", us)?.badge).toBe("Save $50");
-      expect(card("US", "Pro", us)?.note).toBe("Goes to $179/yr on 20 Oct");
+      expect(card("US", "Pro", us)?.note).toBe("Goes to $179/yr on 25 Oct");
       expect(pricingFor("US", 50, "ip", us).footnote).toMatch(
         /^Lower prices for Pro and Lifetime in/,
       );

@@ -72,9 +72,9 @@ export const ROADMAP: RoadmapEntry[] = [
   },
   {
     stage: "building",
-    due: "2026-10-20",
+    due: "2026-10-25",
     title: "Templates",
-    body: "Whole videos rather than single scenes — a launch film, a feature walkthrough, a changelog clip — composed from the registry and ready to render once you drop your own copy in. Around ten land on 20 October, included in Pro.",
+    body: "Whole videos rather than single scenes — a launch film, a feature walkthrough, a changelog clip — composed from the registry and ready to render once you drop your own copy in. Five land on 25 October and five more on 10 November, included in Pro.",
     href: "/docs/templates",
   },
   {

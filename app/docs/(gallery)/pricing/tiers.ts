@@ -75,7 +75,7 @@ const TIERS = [
     features: [
       `All ${PRO_ITEMS.length} Pro components today`,
       `Growing to ${CATALOGUE_PROMISE.components} Pro components`,
-      `${CATALOGUE_PROMISE.templates} video templates from ${CATALOGUE_PROMISE.templatesOn}`,
+      `${CATALOGUE_PROMISE.templates} video templates: ${CATALOGUE_PROMISE.templatesSchedule}`,
       "The snapcn MCP server for your agent",
       "No watermark, 1080p exports",
     ],

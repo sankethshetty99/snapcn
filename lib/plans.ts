@@ -156,9 +156,9 @@ export function entitledPlan(
  * what makes "lock in" true rather than a slogan.
  */
 export const EARLY_BIRD = {
-  endsAt: "2026-10-20T00:00:00Z",
-  endsOn: "20 October",
-  endsOnShort: "20 Oct",
+  endsAt: "2026-10-25T18:30:00Z",
+  endsOn: "25 October",
+  endsOnShort: "25 Oct",
   risesTo: { everything_annual: 17900, lifetime: 27900 },
 } as const;
 
@@ -345,6 +345,8 @@ export const CATALOGUE_PROMISE = {
   templates: "10+",
   /** The day the first templates land — the same day the early-bird prices end. */
   templatesOn: EARLY_BIRD.endsOn,
+  /** Five land with the rise, five more after: the copy says so rather than "ten on the day". */
+  templatesSchedule: `5 on ${EARLY_BIRD.endsOn}, 5 more on 10 November`,
 } as const;
 
 /**

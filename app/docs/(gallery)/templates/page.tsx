@@ -91,7 +91,7 @@ const COMING = [
 const FAQ = [
   {
     q: "Are templates included in Pro?",
-    a: `Yes. Pro and Lifetime include every template at no extra cost — the ${CATALOGUE_PROMISE.templates} on ${EARLY_BIRD.endsOn} and every one after.`,
+    a: `Yes. Pro and Lifetime include every template at no extra cost — ${CATALOGUE_PROMISE.templatesSchedule}, and every one after.`,
   },
   // Only while there is a change to come: after the rise it would read
   // "from $179 to $179".
@@ -110,7 +110,7 @@ const FAQ = [
 ].filter((f) => f !== false);
 
 /**
- * `/docs/templates` — what lands on 20 October, and why today is the day to buy.
+ * `/docs/templates` — what lands on 25 October, and why today is the day to buy.
  *
  * It was a coming-soon card with one button, on the second-busiest docs page
  * (719 people a month, for templates that did not exist yet). Every one of
@@ -139,9 +139,9 @@ export default function TemplatesPage() {
             Finished videos. Your product in them.
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-body-lg text-current/70">
-            Around ten complete videos, each composed from snapcn components,
-            cut to time and ready to render. Swap in your headline, your
-            screenshots and your logo — the motion is already done.
+            Ten complete videos, each composed from snapcn components, cut to
+            time and ready to render. Swap in your headline, your screenshots
+            and your logo — the motion is already done.
           </p>
           <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -217,11 +217,12 @@ export default function TemplatesPage() {
             })}
             <li className="flex flex-col justify-center rounded-2xl border border-border border-dashed p-6">
               <p className="font-medium text-foreground">
-                …and more on {EARLY_BIRD.endsOn}
+                …and five more on 10 November
               </p>
               <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-                Around ten at launch, then more with every release. Each one is
-                code in your repo, so every beat is yours to change.
+                Five at launch, five more on 10 November, then more with every
+                release. Each one is code in your repo, so every beat is yours
+                to change.
               </p>
             </li>
           </ul>
@@ -268,7 +269,7 @@ export default function TemplatesPage() {
             <ul className="mx-auto mt-8 grid max-w-3xl gap-3 text-sm sm:grid-cols-2">
               {[
                 `All ${PRO_ITEMS.length} Pro components today, growing to ${CATALOGUE_PROMISE.components}`,
-                `${CATALOGUE_PROMISE.templates} video templates from ${EARLY_BIRD.endsOn}`,
+                `${CATALOGUE_PROMISE.templates} video templates: ${CATALOGUE_PROMISE.templatesSchedule}`,
                 "The snapcn MCP server for your coding agent",
                 "No watermark, 1080p exports in the editor",
               ].map((f) => (
@@ -336,7 +337,7 @@ export default function TemplatesPage() {
             />
           </Link>
           {/* The second-busiest docs page asked for nothing from anyone not
-              buying today, and the list the 20 Oct launch goes to was 5
+              buying today, and the list the 25 Oct launch goes to was 5
               people (Sep 2026). */}
           <p className="mt-10 text-muted-foreground text-sm">
             Not ready? One email when the templates land, before the price goes
