@@ -183,7 +183,7 @@ export const DOCS_PAGE_META: Record<string, DocsPageMeta> = {
   templates: {
     title: "Templates",
     seoTitle: "Remotion Video Templates — launch, demo, changelog",
-    description: `Around ten finished Remotion videos land on ${CATALOGUE_PROMISE.templatesOn} — launch film, feature walkthrough, changelog clip — ready to render with your copy. In Pro.`,
+    description: `Ten finished Remotion videos (${CATALOGUE_PROMISE.templatesSchedule}) — launch film, feature walkthrough, changelog clip — ready to render with your copy. In Pro.`,
   },
 };
 

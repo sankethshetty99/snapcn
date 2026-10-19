@@ -16,7 +16,7 @@ import {
 /**
  * `PRICES_RISEN` is read when lib/plans loads, so this suite pins the clock to
  * the early-bird window first — otherwise every assertion about $129 turns red
- * on 20 October. `vi.hoisted` runs before the imports below.
+ * on 25 October. `vi.hoisted` runs before the imports below.
  */
 vi.hoisted(() => {
   vi.useFakeTimers({ now: new Date("2026-09-17T12:00:00Z"), toFake: ["Date"] });
@@ -171,7 +171,7 @@ describe("the catalogue ladder", () => {
   });
 
   it("switches the list prices to the risen ones in a process started after the rise", async () => {
-    vi.setSystemTime(new Date("2026-10-20T00:00:01Z"));
+    vi.setSystemTime(new Date("2026-10-25T18:30:01Z"));
     vi.resetModules();
     const risen = await import("@/lib/plans");
     expect(risen.PRICES_RISEN).toBe(true);
