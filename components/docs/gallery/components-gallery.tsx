@@ -14,6 +14,7 @@ import { GalleryCard } from "./gallery-card";
 import { OpenPanel } from "./gallery-detail-overlay";
 import { GalleryExplorer } from "./gallery-explorer";
 import { GalleryHeaderRow } from "./gallery-header-row";
+import { LockedPills } from "./locked-pills";
 
 /**
  * The Components gallery: header, Pro banner, filter pills, grid and the detail
@@ -84,9 +85,9 @@ function GalleryGridFallback() {
     <div className="not-prose">
       {/* Matches GalleryExplorer's bar exactly — no border-b, or the fallback
           flashes a rule that the real bar does not have. */}
-      <div className="sticky top-[var(--fd-banner-height,0px)] z-30 -mx-6 bg-background/90 px-6 py-3 backdrop-blur lg:-mx-8 lg:px-8">
+      <div className="sticky top-[calc(var(--fd-banner-height,0px)+3.5rem)] z-30 mx-[calc(50%-50vw)] bg-background/80 px-[calc(50vw-50%)] py-3 backdrop-blur-xl">
         <div className="flex items-center gap-2">
-          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pt-1.5 pr-1.5">
             <span className="shrink-0 rounded-full bg-foreground px-3.5 py-1.5 text-sm font-medium text-background">
               All
             </span>
@@ -98,6 +99,7 @@ function GalleryGridFallback() {
                 {c.label}
               </span>
             ))}
+            <LockedPills />
           </div>
         </div>
       </div>

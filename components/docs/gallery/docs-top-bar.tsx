@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { ChromeControls } from "./chrome-controls";
-import { GallerySidebarMobile } from "./gallery-sidebar";
 import { DocsSectionNav } from "./section-nav";
 
 /**
@@ -22,7 +21,6 @@ export function DocsTopBar({ children }: { children?: ReactNode }) {
     <div className="pt-6">
       <DocsSectionNav className="mb-4" />
       <div className="flex items-center gap-2">
-        <GallerySidebarMobile />
         {children}
         <ChromeControls className="ml-auto" />
       </div>

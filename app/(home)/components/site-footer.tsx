@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FooterGlow, GLOW_HEIGHT } from "@/components/footer-glow";
 import { LabsLogo } from "@/components/shadcn-labs-nav";
 import { SnapCnLogo } from "@/components/snapcn-logo";
 import { FOOTER_COLUMNS, LABS_PROJECTS, SHADCN_LABS_URL } from "@/config/site";
@@ -79,7 +80,12 @@ const GROUPS: Group[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border">
+    // No rule under the home page's closing CTA: its blobs end the page on their own.
+    <footer
+      className="border-t border-border [body:has(#cta)_&]:border-t-0"
+      // Room for the glow to rise into, under the links (footer-glow.tsx).
+      style={{ paddingBottom: GLOW_HEIGHT }}
+    >
       <div className="section pt-14 pb-12 sm:pt-16">
         {/* Every component by name under its category, then the site links —
             one flow, no divider. CSS columns rather than a grid: the groups run
@@ -148,6 +154,17 @@ export function SiteFooter() {
                 ))}
               </ul>
             </div>
+            {/* Launched on Product Hunt 20 Oct — a footer link, not the embed's
+                white card, which shouted on a dark page. */}
+            <a
+              href="https://www.producthunt.com/products/snapcn?embed=true&utm_source=embed&utm_medium=post_embed"
+              target="_blank"
+              rel="noopener"
+              className={cn(LINK, "mt-4")}
+            >
+              Featured on Product Hunt
+              <DrawArrow />
+            </a>
           </div>
           <div className="columns-2 gap-x-8 md:columns-3">
             {GROUPS.map(({ title, href, links }) => (
@@ -197,6 +214,7 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
+      <FooterGlow />
     </footer>
   );
 }

@@ -1,7 +1,3 @@
-import { ThemeToggle } from "@/app/(home)/components/theme-toggle";
-import { UserMenu } from "@/components/auth/user-menu";
-import { cn } from "@/lib/utils";
-
 /**
  * Theme + account, as one unit.
  *
@@ -15,11 +11,9 @@ import { cn } from "@/lib/utils";
  * shares, which made it the tempting answer, but it put the account menu at the
  * *bottom left* of the window — nowhere anyone looks for it.
  */
-export function ChromeControls({ className }: { className?: string }) {
-  return (
-    <div className={cn("flex shrink-0 items-center gap-1.5", className)}>
-      <ThemeToggle />
-      <UserMenu />
-    </div>
-  );
+// Renders nothing now: every page wears the site navbar (gallery-frame.tsx),
+// which already carries the theme toggle and Sign in. Kept as a component so
+// the call sites (docs top bar, video editor toolbar) need no edit.
+export function ChromeControls(_: { className?: string }) {
+  return null;
 }

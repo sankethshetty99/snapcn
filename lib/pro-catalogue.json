@@ -197,7 +197,8 @@
   {
     "name": "search-retype",
     "title": "Search Retype",
-    "description": "A search field types its first query, the camera pushes in, the query deletes back to nothing and a new one types in. Every keystroke, deletion and caret blink lands on the frame it did in the reference recording; each new character arrives in the accent and settles to ink, and the field leaves on a sideways whip."
+    "description": "A search field types its first query, the camera pushes in, the query deletes back to nothing and a new one types in. Every keystroke, deletion and caret blink lands on the frame it did in the reference recording; each new character arrives in the accent and settles to ink, and the field leaves on a sideways whip.",
+    "added": "2026-10-19"
   },
   {
     "name": "sentence-set",

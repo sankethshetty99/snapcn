@@ -23,35 +23,90 @@ export const LABS_SECTIONS: { title: string; items: LabsLink[] }[] = [
   {
     title: "Registries",
     items: [
-      { href: "https://termcn.dev", name: "termcn" },
-      { href: "https://framecn.dev", name: "framecn" },
-      { href: "https://ogimagecn.com", name: "ogimagecn" },
-      { href: "https://agentcn.run", name: "agentcn" },
-      { href: "https://mcpcn.dev", name: "mcpcn" },
-      { href: "https://emailcn.run", name: "emailcn" },
-      { href: "https://pdfcn.dev", name: "pdfcn" },
-      { href: "https://editorcn.vercel.app", name: "editorcn" },
-      { href: "https://shadercn.run", name: "shadercn" },
-      { href: "https://mdxcn.dev", name: "mdxcn" },
+      {
+        href: "https://termcn.dev",
+        name: "termcn",
+        description: "Terminal UI components for CLIs, on Ink and OpenTUI.",
+      },
+      {
+        href: "https://framecn.dev",
+        name: "framecn",
+        description: "Video components built on Editframe.",
+      },
+      {
+        href: "https://ogimagecn.com",
+        name: "ogimagecn",
+        description: "Open Graph images, built on Satori.",
+      },
+      {
+        href: "https://agentcn.run",
+        name: "agentcn",
+        description: "AI agent recipes on Eve, Flue and Mastra.",
+      },
+      {
+        href: "https://mcpcn.dev",
+        name: "mcpcn",
+        description: "UI components for MCP apps.",
+      },
+      {
+        href: "https://emailcn.run",
+        name: "emailcn",
+        description: "Email components, installed with the shadcn CLI.",
+      },
+      {
+        href: "https://pdfcn.dev",
+        name: "pdfcn",
+        description: "PDF documents in React, on Takumi and Forme.",
+      },
+      {
+        href: "https://editorcn.vercel.app",
+        name: "editorcn",
+        description: "Rich text editors built on Tiptap.",
+      },
+      {
+        href: "https://shadercn.run",
+        name: "shadercn",
+        description: "GPU shader components for React.",
+      },
+      {
+        href: "https://mdxcn.dev",
+        name: "mdxcn",
+        description: "Callouts, steps and charts for MDX docs.",
+      },
     ],
   },
   {
     title: "Templates",
-    items: [{ href: "https://startercn.vercel.app", name: "startercn" }],
+    items: [
+      {
+        href: "https://startercn.vercel.app",
+        name: "startercn",
+        description: "Start and publish your own shadcn registry.",
+      },
+    ],
   },
   {
     title: "Ports",
-    items: [{ href: "https://shadcn-cssinjs.com", name: "shadcn-cssinjs" }],
+    items: [
+      {
+        href: "https://shadcn-cssinjs.com",
+        name: "shadcn-cssinjs",
+        description: "shadcn components styled with StyleX.",
+      },
+    ],
   },
   {
     title: "Skills",
-    items: [
-      "launch-shadcn-registry",
-      "tailwind-to-stylex",
-      "mastra-file-agents",
-    ].map((name) => ({
+    items: (
+      [
+        ["launch-shadcn-registry", "Launch and promote a shadcn registry."],
+        ["tailwind-to-stylex", "Migrate Tailwind classes to StyleX."],
+        ["mastra-file-agents", "Give each Mastra agent its own folder."],
+      ] as const
+    ).map(([name, description]) => ({
       href: `https://skills.sh/shadcn-labs/skills/${name}`,
       name,
+      description,
     })),
   },
 ];
@@ -115,11 +170,9 @@ export type NavLink = {
 // has convinced you.
 export const NAV_LINKS: NavLink[] = [
   { href: "/docs/components", label: "Components" },
-  // The editor shipped and nothing on the site said so: it is a nav item that
-  // reads exactly like the four-year-old one next to it. The flag is the whole
-  // announcement. **Take it off once the editor stops being news** — a "New"
-  // that outlives its release teaches people to stop reading flags.
-  { href: "/docs/video-editor", label: "Video Editor", badge: "New" },
+  // Its "New" flag came off 20 Oct: a "New" that outlives its release teaches
+  // people to stop reading flags.
+  { href: "/docs/video-editor", label: "Video Editor" },
   { href: "/docs/mcp", label: "MCP" },
   { href: "/docs/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },

@@ -5,9 +5,10 @@ import { GithubButtonLink } from "./github-button-link";
 export async function GithubButton() {
   const stars = await getGitHubStars();
   return (
-    <GithubButtonLink className="inline-flex h-9 items-center gap-2 rounded-4xl border border-border px-3 text-sm font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+    <GithubButtonLink className="inline-flex h-9 items-center gap-1.5 rounded-button border border-border px-2.5 text-sm font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
       <GitHubIcon className="size-4" />
-      <span className="hidden sm:inline">Star</span>
+      {/* Just the mark and the count — "Star" made the header too busy. */}
+      <span className="sr-only">Star on GitHub</span>
       {/* `> 0`, not `!== null`: the count used to be dead code, because the repo
           it asked about did not exist and the fetch always failed. Now that it
           resolves, a fresh repo would render a literal "Star 0". No count reads

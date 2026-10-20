@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { proDemoPoster, proDemoSrc } from "@/lib/pro-demos";
@@ -133,9 +132,6 @@ export function ComponentCard({ item }: { item: CardItem }) {
         )}
       >
         <CardFrame item={item} />
-        <span className="absolute top-2 right-2 flex size-7 items-center justify-center rounded-full border border-border bg-background/90 opacity-0 backdrop-blur transition-opacity duration-150 group-hover/card:opacity-100 group-focus-visible/card:opacity-100">
-          <ArrowUpRight className="size-3.5 text-foreground" />
-        </span>
       </Link>
     );
   }

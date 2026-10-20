@@ -70,7 +70,7 @@ function SignIn({ className }: { className?: string }) {
     <Button
       variant="outline"
       size="sm"
-      className={className}
+      className={cn("h-9 px-3.5 text-sm", className)}
       onPointerEnter={() => void loadPanels()}
       onFocus={() => void loadPanels()}
       onClick={onClick}
