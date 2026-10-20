@@ -25,7 +25,7 @@ export function HeaderLogo() {
 export function HeaderActions() {
   return (
     <div className="flex items-center gap-1.5">
-      <SearchButton className="lg:w-52" />
+      <SearchButton iconOnly />
       <div className="hidden sm:block">
         <GithubButton />
       </div>

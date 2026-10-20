@@ -29,6 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { GalleryCard } from "./gallery-card";
 import { GalleryDetailOverlay } from "./gallery-detail-overlay";
+import { LockedPills } from "./locked-pills";
 
 // "new" leads the bar: the shelf a returning visitor checks first, and the only
 // one that changes between visits. It is a filter, not a category — see
@@ -117,6 +118,33 @@ export function GalleryExplorer({
   /** The documentation of the component whose URL this is, server-rendered. */
   initialDoc?: { slug: string; body: ReactNode };
 }) {
+  // Once the bar is stuck under the navbar, the two read as one frosted
+  // surface: the bar's backdrop grows up behind the navbar, and the navbar
+  // drops its own (`html[data-bar-stuck]`, sticky-header-shell.tsx). Two
+  // separate blurs over different content showed a seam between them.
+  const bar = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const el = bar.current;
+    if (!el) return;
+    const check = () =>
+      setStuck(
+        el.getBoundingClientRect().top <=
+          Number.parseFloat(getComputedStyle(el).top) + 0.5,
+      );
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-bar-stuck", stuck);
+    return () => document.documentElement.removeAttribute("data-bar-stuck");
+  }, [stuck]);
+
   const [{ category }, setState] = useQueryStates(
     { category: parseAsStringLiteral(FILTER_IDS) },
     { history: "replace" },
@@ -219,10 +247,17 @@ export function GalleryExplorer({
       <div className="not-prose">
         {/* No border-b. The bar is sticky and already separates itself when it
           overlaps the grid — the blurred background is the affordance. */}
-        <div className="sticky top-[var(--fd-banner-height,0px)] z-30 -mx-6 bg-background/90 px-6 py-3 backdrop-blur lg:-mx-8 lg:px-8">
+        <div
+          ref={bar}
+          className={cn(
+            "sticky top-[calc(var(--fd-banner-height,0px)+3.5rem)] z-30 mx-[calc(50%-50vw)] px-[calc(50vw-50%)] py-3",
+            "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:bottom-0 before:-z-10 before:bg-background/80 before:backdrop-blur-xl",
+            stuck && "before:-top-14",
+          )}
+        >
           <div className="flex items-center gap-2">
             <div
-              className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+              className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pt-1.5 pr-1.5 [&::-webkit-scrollbar]:hidden"
               style={{ scrollbarWidth: "none" }}
             >
               <button
@@ -262,6 +297,7 @@ export function GalleryExplorer({
                   {c.label}
                 </button>
               ))}
+              <LockedPills />
             </div>
           </div>
         </div>

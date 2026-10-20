@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { type MouseEvent, useRef } from "react";
@@ -131,7 +130,7 @@ export function GalleryCard({
       // No `mb-*` and no `break-inside-avoid`: the grid's `gap-3` makes both
       // gutters now. Left in, the margin stacked on top of the row gap and the
       // vertical gutter came out at twice the horizontal one.
-      className="group/card relative block overflow-hidden rounded-2xl bg-gallery-card outline-none ring-1 ring-border/30 focus-visible:ring-2 focus-visible:ring-ring/40"
+      className="group/card relative block overflow-hidden rounded-2xl bg-gallery-card outline-none ring-1 ring-border/70 focus-visible:ring-2 focus-visible:ring-ring/40"
       style={{ aspectRatio }}
     >
       <div ref={containerRef} className="absolute inset-0">
@@ -175,23 +174,14 @@ export function GalleryCard({
       ) : null}
 
       {/* Hover footer — hidden until the card is hovered/focused so the resting
-          card is pure video. A blur rises from the bottom (mask fades it up) and
-          carries the open arrow. */}
+          card is pure video. A blur rises from the bottom (mask fades it up);
+          no arrow on it any more — the whole card is the link. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 h-24 opacity-0 transition-opacity duration-200 ease-out group-hover/card:opacity-100 group-focus-visible/card:opacity-100"
       >
         <div className="absolute inset-0 backdrop-blur-md [-webkit-mask-image:linear-gradient(to_top,black_35%,transparent)] [mask-image:linear-gradient(to_top,black_35%,transparent)]" />
         <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
-
-        {/* The arrow, and nothing else. There was a category coin on the left
-            too — the same icon the filter bar above already shows, on a card
-            the reader has just hovered inside a category they picked. It named
-            what they were looking at instead of telling them what happens if
-            they click. */}
-        <span className="absolute bottom-3 right-3 flex size-9 items-center justify-center rounded-full bg-gallery-chip backdrop-blur-md transition-colors duration-150 group-hover/card:bg-foreground">
-          <ArrowUpRight className="size-4 text-foreground transition-colors duration-150 group-hover/card:text-background" />
-        </span>
       </div>
     </Link>
   );

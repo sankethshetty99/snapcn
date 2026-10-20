@@ -17,9 +17,18 @@ import { cn } from "@/lib/utils";
  * at `lg`, so it always shows the box; the home header shows the icon on
  * mobile/tablet and the box on desktop. Callers cap the box width via
  * `className` (e.g. `lg:w-56`), which `cn`/tailwind-merge lets win over the
- * base `lg:w-full`.
+ * base `lg:w-full`. `shrink-0` because the docs rail stacks it in a
+ * height-capped flex column, which squeezed it to 24px — the ⌘K chips then
+ * filled it edge to edge.
  */
-export function SearchButton({ className }: { className?: string }) {
+export function SearchButton({
+  className,
+  iconOnly = false,
+}: {
+  className?: string;
+  /** Stay the square icon at every width — the home header wants no box. */
+  iconOnly?: boolean;
+}) {
   const { setOpenSearch } = useSearchContext();
 
   // The modifier glyph is client-only (⌘ on Apple, Ctrl elsewhere). Default to
@@ -39,16 +48,21 @@ export function SearchButton({ className }: { className?: string }) {
       aria-label="Search"
       onClick={() => setOpenSearch(true)}
       className={cn(
-        "flex h-9 w-9 items-center justify-center rounded-4xl border border-border bg-background px-0 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none lg:w-full lg:justify-start lg:gap-2 lg:px-3",
+        "flex h-9 w-9 shrink-0 items-center justify-center rounded-button border border-border bg-background px-0 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-none",
+        !iconOnly && "lg:w-full lg:justify-start lg:gap-2 lg:px-3",
         className,
       )}
     >
       <Search className="size-4 shrink-0" aria-hidden="true" />
-      <span className="hidden flex-1 text-left lg:block">Search…</span>
-      <KbdGroup className="hidden lg:flex">
-        <Kbd>{mod}</Kbd>
-        <Kbd>K</Kbd>
-      </KbdGroup>
+      {iconOnly ? null : (
+        <>
+          <span className="hidden flex-1 text-left lg:block">Search…</span>
+          <KbdGroup className="hidden lg:flex">
+            <Kbd>{mod}</Kbd>
+            <Kbd>K</Kbd>
+          </KbdGroup>
+        </>
+      )}
     </button>
   );
 }

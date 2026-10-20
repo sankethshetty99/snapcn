@@ -22,6 +22,9 @@ const POSTHOG_ASSETS = `https://${POSTHOG_REGION}-assets.i.posthog.com`;
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Dev only: without it, opening the dev server as 127.0.0.1 instead of
+  // localhost blocks the client bundle and no button on any page responds.
+  allowedDevOrigins: ["127.0.0.1"],
   // Version skew: a tab opened before a deploy calls Server Actions by the old
   // build's IDs ("Server Action … was not found"). With a per-deploy ID, Next
   // hard-reloads on mismatch instead. Coolify sets SOURCE_COMMIT at build time.

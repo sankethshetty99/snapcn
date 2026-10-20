@@ -287,9 +287,10 @@ export interface CountGridProps {
  * Through `staticFile`, not as a bare path. A Remotion bundle copies the public
  * directory to `<bundle>/public/` and serves it from there, so a hard-coded
  * `/demos/posters/x.webp` is a 404 in every render while looking perfect in the
- * app — `staticFile` is what knows the difference. The stills are the
- * exception: they live on snapcn's media host now, not in `public/`, so they
- * are full URLs and need no rewriting.
+ * app — `staticFile` is what knows the difference. None of these live in
+ * `public/` any more: a fresh install has no snapcn `public/`, so a relative
+ * path there failed every render outside this repo. All of them are full URLs
+ * on snapcn's media host; `staticFile` is only for a user's own relative paths.
  *
  * Both kinds on purpose. Eight frames alone tile visibly across forty cells;
  * the registry's stills alone are 16:9 scenes of dark text on white, and a 3:4
@@ -298,14 +299,14 @@ export interface CountGridProps {
  * weight, which is also where the reference's grid of portraits sits.
  */
 const ART = [
-  "showcase-assets/438b9e6b50654a44d404fbf358c26e9f.webp",
-  "showcase-assets/5e5305b05bd405a0d89570725434099e.webp",
-  "showcase-assets/767d99bb371a54d0d36751e8cecae43c.jpg",
-  "showcase-assets/821d815affa6496c39cbdeeec7a84603.jpg",
-  "showcase-assets/937438c560ada1c83317f2c11b3454b0.jpg",
-  "showcase-assets/98f89cb9994f5c382ab964062c4039db.jpg",
-  "showcase-assets/b25b82db2892efff9be3204e860d30ee.jpg",
-  "showcase-assets/c9ebc6337aa2268ac4b357f9cb1ac547.jpg",
+  "https://media.snapcn.dev/demos/showcase/438b9e6b50654a44d404fbf358c26e9f.webp",
+  "https://media.snapcn.dev/demos/showcase/5e5305b05bd405a0d89570725434099e.webp",
+  "https://media.snapcn.dev/demos/showcase/767d99bb371a54d0d36751e8cecae43c.jpg",
+  "https://media.snapcn.dev/demos/showcase/821d815affa6496c39cbdeeec7a84603.jpg",
+  "https://media.snapcn.dev/demos/showcase/937438c560ada1c83317f2c11b3454b0.jpg",
+  "https://media.snapcn.dev/demos/showcase/98f89cb9994f5c382ab964062c4039db.jpg",
+  "https://media.snapcn.dev/demos/showcase/b25b82db2892efff9be3204e860d30ee.jpg",
+  "https://media.snapcn.dev/demos/showcase/c9ebc6337aa2268ac4b357f9cb1ac547.jpg",
 ];
 const STILLS = [
   "https://media.snapcn.dev/demos/posters/agent-steps.webp",

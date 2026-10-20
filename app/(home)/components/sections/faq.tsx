@@ -1,7 +1,7 @@
-import { ChevronDown } from "lucide-react";
-import { GITHUB_URL, INSTALL_COMMAND } from "@/config/site";
+import { INSTALL_COMMAND } from "@/config/site";
 import { GALLERY_COUNT } from "@/lib/gallery-data";
 import { FadeUp } from "../fade-up";
+import { FaqChat } from "./faq-chat";
 
 /**
  * ## Why `<details>` and not the Accordion in `components/ui`
@@ -81,35 +81,10 @@ export function Faq() {
                 The questions people ask before they run the CLI — what it
                 needs, what it costs, and what you own afterwards.
               </p>
-              <p className="mt-4 max-w-sm text-pretty text-sm text-current/60">
-                Something not here?{" "}
-                <a
-                  href={`${GITHUB_URL}/issues`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-foreground underline underline-offset-4"
-                >
-                  Open an issue on GitHub
-                </a>
-                .
-              </p>
             </div>
 
-            <div className="border-t border-border md:col-span-3">
-              {FAQ_ITEMS.map(({ q, a }) => (
-                <details key={q} className="group border-b border-border">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left text-base font-medium text-foreground [&::-webkit-details-marker]:hidden">
-                    <h3 className="font-medium">{q}</h3>
-                    <ChevronDown
-                      className="size-4 shrink-0 text-current/40 transition-transform group-open:rotate-180"
-                      aria-hidden
-                    />
-                  </summary>
-                  <p className="pb-5 pr-8 text-pretty leading-relaxed text-current/70">
-                    {a}
-                  </p>
-                </details>
-              ))}
+            <div className="md:col-span-3">
+              <FaqChat items={FAQ_ITEMS} />
             </div>
           </div>
         </FadeUp>

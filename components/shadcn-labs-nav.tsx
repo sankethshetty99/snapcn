@@ -1,11 +1,12 @@
 "use client";
 
 import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { SnapCnLogo } from "@/components/snapcn-logo";
-import { LABS_SECTIONS, type LabsLink, SHADCN_LABS_URL } from "@/config/site";
+import { LABS_PROJECTS, type LabsLink, SHADCN_LABS_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 /**
@@ -38,78 +39,135 @@ export function LabsLogo() {
 
 const TITLE = "text-sm font-medium text-muted-foreground";
 
-function ExternalLink({ item }: { item: LabsLink }) {
+/** A sister project: its name, what it is for, and where it goes. */
+function ProjectLink({ item }: { item: LabsLink }) {
   return (
     <a
       href={utm(item.href)}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 whitespace-nowrap text-base decoration-muted-foreground/50 underline-offset-4 hover:underline"
+      title={item.description}
+      className="group flex flex-col rounded-[8px] px-3 py-1.5 transition-colors hover:bg-foreground/5"
     >
-      {item.name}
-      <ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
+      <span className="inline-flex items-center gap-1 font-medium text-foreground text-sm">
+        {item.name}
+        <ArrowUpRight
+          className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-60"
+          aria-hidden="true"
+        />
+      </span>
+      {item.description ? (
+        <span className="truncate text-muted-foreground text-xs">
+          {item.description}
+        </span>
+      ) : null}
     </a>
   );
 }
 
+/** The sheet's grow/shrink: a soft spring, no bounce. */
+const SHEET = { type: "spring" as const, stiffness: 320, damping: 34 };
+
+/**
+ * The navbar growing down into a sheet. One frosted layer starts at the
+ * header's own top edge and animates its height from the header's to the
+ * header's plus the links', so the menu reads as the bar opening rather than a
+ * panel dropped under it. The header goes transparent meanwhile
+ * (`html[data-menu-open]`, sticky-header-shell.tsx) — two frosts would seam.
+ */
 function Panel({
   top,
+  header,
   onClose,
   onHold,
 }: {
   top: number;
+  header: number;
   onClose: () => void;
   onHold: (held: boolean) => void;
 }) {
+  useEffect(() => {
+    document.documentElement.setAttribute("data-menu-open", "");
+    return () => document.documentElement.removeAttribute("data-menu-open");
+  }, []);
+
   return (
     <>
-      <button
+      <motion.button
         type="button"
         aria-label="Close menu"
-        className="fixed inset-x-0 bottom-0 z-40 cursor-default bg-background/60"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-x-0 bottom-0 z-[38] cursor-default bg-background/40 backdrop-blur-[2px]"
         style={{ top }}
         onClick={onClose}
       />
-      <nav
+      <motion.nav
         aria-label="Shadcn Labs projects"
-        className="fixed inset-x-0 z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-border bg-background dark:bg-black"
+        initial={{ height: header }}
+        animate={{ height: "auto" }}
+        exit={{ height: header }}
+        transition={SHEET}
+        className="fixed inset-x-0 z-[39] max-h-[calc(100dvh-4rem)] overflow-hidden border-border border-b bg-background/80 backdrop-blur-xl"
         style={{ top }}
         onMouseEnter={() => onHold(true)}
         onMouseLeave={() => onHold(false)}
       >
-        <div className="section flex flex-col gap-8 py-5 md:flex-row md:flex-wrap">
-          {LABS_SECTIONS.map((section) => (
-            <div key={section.title} className="flex flex-col gap-3">
-              <p className={TITLE}>{section.title}</p>
-              <ul
-                className={cn(
-                  "space-y-1",
-                  section.items.length > 4 && "columns-2 gap-x-6",
-                )}
-              >
-                {section.items.map((item) => (
-                  <li key={item.href} className="break-inside-avoid">
-                    <ExternalLink item={item} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </nav>
+        {/* Room for the header, which sits on top of this layer. */}
+        <div style={{ height: header }} />
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.18 }}
+          className="section flex flex-col gap-3 pt-1 pb-5"
+        >
+          {/* One line of who makes these, then every project in a compact grid:
+              name, and what it is for on one truncated line. */}
+          <div className="flex items-center justify-between gap-4 px-3">
+            <p className={TITLE}>More from Shadcn Labs</p>
+            <a
+              href={utm(SHADCN_LABS_URL)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-foreground text-sm underline-offset-4 hover:underline"
+            >
+              Visit Shadcn Labs
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
+            </a>
+          </div>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            {LABS_PROJECTS.map((item) => (
+              <li key={item.href} className="min-w-0">
+                <ProjectLink item={item} />
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      </motion.nav>
     </>
   );
 }
 
 export function ShadcnLabsNav({ className }: { className?: string }) {
-  const [top, setTop] = useState<number | null>(null);
+  const [sheet, setSheet] = useState<{ top: number; header: number } | null>(
+    null,
+  );
+  const top = sheet?.top ?? null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const trigger = useRef<HTMLButtonElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const close = () => setTop(null);
-  const open = () =>
-    setTop((trigger.current?.getBoundingClientRect().bottom ?? 56) + 12);
+  const close = () => setSheet(null);
+  // The sheet starts at the header's top edge and is first exactly its height.
+  const open = () => {
+    const box = trigger.current?.closest("header")?.getBoundingClientRect();
+    setSheet({ top: box?.top ?? 0, header: box?.height ?? 56 });
+  };
   // Opens on hover like termcn's NavigationMenu. Leaving starts a short close
-  // so the pointer can cross the 12px gap into the panel; entering it cancels.
+  // so the pointer can move from the trigger into the sheet; entering cancels.
   const hold = (held: boolean) => {
     clearTimeout(timer.current);
     if (!held) timer.current = setTimeout(close, 150);
@@ -117,7 +175,7 @@ export function ShadcnLabsNav({ className }: { className?: string }) {
 
   useEffect(() => {
     if (top === null) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setTop(null);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSheet(null);
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [top]);
@@ -140,33 +198,56 @@ export function ShadcnLabsNav({ className }: { className?: string }) {
       <Link href="/" aria-label="snapcn home" className="flex items-center">
         <SnapCnLogo />
       </Link>
-      <button
-        ref={trigger}
-        type="button"
-        aria-expanded={top !== null}
-        aria-label="Shadcn Labs projects"
-        className="flex items-center gap-1 rounded-md px-1 py-1 text-base font-medium"
-        onMouseEnter={() => {
-          hold(true);
-          open();
-        }}
-        onMouseLeave={() => hold(false)}
-        // Touch and keyboard have no hover: a click opens, backdrop/Escape close.
-        onClick={open}
-      >
-        snapcn
-        <ChevronDown
-          className={cn(
-            "size-3 transition-transform duration-200",
-            top !== null && "rotate-180",
-          )}
-          strokeWidth={2.5}
-          aria-hidden="true"
-        />
-      </button>
-      {top !== null
+      {/* The word goes home, like the logo beside it; the chevron opens the
+          Labs menu. Hover over either still opens it. */}
+      <span className="flex items-center">
+        <Link
+          href="/"
+          className="rounded-md px-1 py-1 font-medium text-base"
+          onMouseEnter={() => {
+            hold(true);
+            open();
+          }}
+          onMouseLeave={() => hold(false)}
+        >
+          snapcn
+        </Link>
+        <button
+          ref={trigger}
+          type="button"
+          aria-expanded={top !== null}
+          aria-label="Shadcn Labs projects"
+          onMouseEnter={() => {
+            hold(true);
+            open();
+          }}
+          onMouseLeave={() => hold(false)}
+          className="flex items-center rounded-md px-0.5 py-1"
+          // Touch and keyboard have no hover: a click opens, backdrop/Escape close.
+          onClick={open}
+        >
+          <ChevronDown
+            className={cn(
+              "size-3 transition-transform duration-200",
+              top !== null && "rotate-180",
+            )}
+            strokeWidth={2.5}
+            aria-hidden="true"
+          />
+        </button>
+      </span>
+      {mounted
         ? createPortal(
-            <Panel top={top} onClose={close} onHold={hold} />,
+            <AnimatePresence>
+              {sheet ? (
+                <Panel
+                  top={sheet.top}
+                  header={sheet.header}
+                  onClose={close}
+                  onHold={hold}
+                />
+              ) : null}
+            </AnimatePresence>,
             document.body,
           )
         : null}

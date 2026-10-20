@@ -1,156 +1,225 @@
-import Link from "next/link";
-import { INSTALL_COMMAND } from "@/config/site";
-import type { CategoryId } from "@/lib/gallery-data";
-import {
-  CATEGORY_ICONS,
-  FREE_CATEGORIES,
-  GALLERY_COUNT,
-  GALLERY_ITEMS,
-} from "@/lib/gallery-data";
+import { ArrowUp, Plus } from "lucide-react";
+import { GALLERY_COUNT } from "@/lib/gallery-data";
 import { FadeUp } from "../fade-up";
+import { AgentsVisual } from "./agents-visual";
+import { CardCarousel } from "./card-carousel";
 
 /**
- * The page's answer to "what is this", in prose a machine can quote.
+ * Five steps, five cards in a carousel — Tenor's "There's room to surprise yourself"
+ * section: a picture on top, a big title and two lines of copy at the foot,
+ * flat muted panels with barely-there corners. The panels inside take explicit
+ * px radii (Tenor's, halved from a 2x capture): this site's `--radius` is
+ * 0.28rem, so `rounded-2xl` is only 8px and read as square.
  *
- * Everything above this section is a picture or a button. A crawler — and, more
- * to the point, an assistant summarising snapcn for somebody who asked it what
- * to use for a Remotion demo — had one sentence of the hero to go on. This is
- * the paragraph that gets quoted, so it says the whole thing plainly: registry,
- * CLI, the file lands in your repo, no package.
- *
- * The category list is also the only place on the landing page that links into
- * the seven docs categories. Those pages are where the long-tail traffic lands
- * ("remotion text animation", "remotion captions"); a home page that links to
- * none of them hands them no authority at all.
- *
- * Counts come from `GALLERY_ITEMS`, never from a number typed here — same rule
- * the gallery's own top bar follows.
+ * It replaced a grid of the seven categories, each linking to its docs page.
+ * Those links still exist — the footer lists every category and component — so
+ * the long-tail pages lose no authority from the home page.
  */
-const COUNTS = GALLERY_ITEMS.reduce<Record<string, number>>((acc, item) => {
-  acc[item.category] = (acc[item.category] ?? 0) + 1;
-  return acc;
-}, {});
 
-/**
- * One line per category, written as the sentence somebody would type into a
- * search box — "text reveals", "karaoke captions", "phone and laptop mockups" —
- * rather than as a category blurb. The label above it is already the abstract
- * noun; this is the concrete one.
- */
-const BLURBS: Record<CategoryId, string> = {
-  text: "Text reveals, word flips, kinetic titles and highlight sweeps — the type animations a product video opens on.",
-  captions:
-    "Word-by-word and karaoke captions, timed against your audio, for the vertical cuts that get watched on mute.",
-  logos:
-    "Logo stings: an assemble that snaps your mark together, and a flicker for the sign-on shot.",
-  screens:
-    "Phone, laptop and terminal mockups to put your actual product on screen without opening a design tool.",
-  charts:
-    "Scatter plots, unit charts and figures that count up to the number, for the metrics beat.",
-  social:
-    "Follower and metric counters that rush up to a number, for the social proof beat.",
-  scenes:
-    "Whole compositions — hero launch, orbit gallery, moodboard reveal — assembled from the primitives above.",
-  "ai-input":
-    "Prompt typing, answer streaming and prompt zooms, for demoing an AI product's actual interaction.",
-};
+const CARD =
+  "flex flex-col overflow-hidden rounded-[5px] bg-muted text-foreground";
+const PANEL =
+  "border border-border/60 bg-background shadow-[0_1px_2px_rgba(0,0,0,0.04)]";
+
+/** Step one: the install command, set in a prompt box. */
+function InstallVisual() {
+  return (
+    <div className={`${PANEL} w-full max-w-[22rem] rounded-[18px] p-3`}>
+      <p className="truncate px-2 pt-1 pb-5 font-mono text-[0.8125rem] text-current/70">
+        npx shadcn add @snapcn/text-reveal
+      </p>
+      <div className="flex items-center gap-2">
+        <span className="grid size-8 place-items-center rounded-full bg-muted">
+          <Plus className="size-4 text-current/60" aria-hidden />
+        </span>
+        <span className="ml-auto text-sm text-current/70">@snapcn</span>
+        <span className="grid size-8 place-items-center rounded-full bg-foreground/40 text-background">
+          <ArrowUp className="size-4" aria-hidden />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Step two: a props panel, the customizer's controls as a still. */
+function PropsVisual() {
+  return (
+    <div className={`${PANEL} w-full max-w-[20rem] rounded-[16px] p-4 text-sm`}>
+      <div className="flex gap-1">
+        <span className="rounded-[8px] bg-muted px-2.5 py-1 font-medium">
+          Props
+        </span>
+        <span className="px-2.5 py-1 text-current/60">Theme</span>
+      </div>
+      <div className="mt-4 space-y-3 border-border/60 border-t pt-4">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-current/60">text</span>
+          <span className="rounded-[6px] border border-primary px-2 py-0.5">
+            Ship it in minutes
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-current/60">theme</span>
+          <span className="rounded-[6px] bg-muted px-2 py-0.5">midnight ▾</span>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-current/60">speed</span>
+          <span className="relative h-1 w-32 rounded-full bg-muted">
+            <span className="absolute inset-y-0 left-0 w-3/5 rounded-full bg-foreground/70" />
+            <span className="absolute top-1/2 left-3/5 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border bg-background" />
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-current/60">accent</span>
+          <span className="flex gap-1.5">
+            {["#E4823F", "#2F6FE0", "#292327"].map((c) => (
+              <span
+                key={c}
+                className="size-5 rounded-[5px] border border-border/60"
+                style={{ background: c }}
+              />
+            ))}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Step three: two scenes on a timeline, the way `<Series>` lays them out. */
+function ComposeVisual() {
+  const ROWS = [
+    { name: "LogoAssemble", from: 0, to: 43, tone: "bg-[#E4823F]" },
+    { name: "TextReveal", from: 43, to: 100, tone: "bg-primary" },
+  ];
+  return (
+    <div className={`${PANEL} w-full max-w-[22rem] rounded-[16px] p-4 text-sm`}>
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[0.8125rem] text-current/70">
+          launch-scene.tsx
+        </span>
+        <span className="text-current/50 text-xs">210f · 30fps</span>
+      </div>
+      <div className="relative mt-4 space-y-2 border-border/60 border-t pt-4">
+        {ROWS.map((r) => (
+          <div key={r.name} className="relative h-8 rounded-[8px] bg-muted">
+            <span
+              className={`absolute inset-y-0 flex items-center rounded-[8px] px-2.5 font-medium text-white text-xs ${r.tone}`}
+              style={{ left: `${r.from}%`, width: `${r.to - r.from}%` }}
+            >
+              {r.name}
+            </span>
+          </div>
+        ))}
+        {/* The playhead. */}
+        <span className="absolute top-2 bottom-0 left-[58%] w-px bg-foreground">
+          <span className="absolute -top-1 -left-[3px] size-[7px] rounded-full bg-foreground" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Step four: the spring every component is written with, drawn. */
+function AnimateVisual() {
+  return (
+    <div className={`${PANEL} w-full max-w-[20rem] rounded-[16px] p-4 text-sm`}>
+      <span className="font-mono text-[0.8125rem] text-current/70">
+        spring({"{"} frame, fps {"}"})
+      </span>
+      <svg
+        viewBox="0 0 200 90"
+        className="mt-3 w-full border-border/60 border-t pt-3"
+        aria-hidden
+      >
+        <path
+          d="M0 85 C 30 85, 40 -6, 70 10 S 105 30, 125 18 S 160 14, 200 15"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <line
+          x1="0"
+          y1="15"
+          x2="200"
+          y2="15"
+          stroke="currentColor"
+          strokeOpacity="0.15"
+          strokeDasharray="3 4"
+        />
+        <circle cx="70" cy="10" r="4.5" fill="#E4823F" />
+      </svg>
+      <div className="mt-2 flex justify-between text-current/50 text-xs">
+        <span>damping 12</span>
+        <span>stiffness 120</span>
+      </div>
+    </div>
+  );
+}
+
+const STEPS = [
+  {
+    title: "Pick a shot",
+    body: "One command, and the component's source lands in components/snap-cn/ — a file you own, not a package.",
+    Visual: InstallVisual,
+  },
+  {
+    title: "Tune every prop",
+    body: "Copy, colours and timing are all props. Change one in the editor and the frame updates under your cursor.",
+    Visual: PropsVisual,
+  },
+  {
+    title: "Compose scenes",
+    body: "Scenes drop into a Remotion timeline like any React component. Sequence them, nest them — it is all JSX, in your repo.",
+    Visual: ComposeVisual,
+  },
+  {
+    title: "Animate anything",
+    body: "No keyframe graph to learn: every component is plain useCurrentFrame, interpolate and spring, so any number is yours to change.",
+    Visual: AnimateVisual,
+  },
+  {
+    title: "Hand it to your agent",
+    body: "Claude Code, Cursor, Codex and the rest read the registry over MCP and assemble the video with you.",
+    Visual: AgentsVisual,
+  },
+];
 
 export function WhatYouGet() {
   return (
     <section id="what-you-get" className="relative pb-20 sm:pb-28">
       <div className="section">
         <FadeUp>
-          <h2 className="max-w-[18ch] text-pretty font-sans text-[clamp(2.25rem,4.6vw,3.5rem)] font-normal leading-[1.06] tracking-[-0.03em] text-foreground">
+          <h2 className="text-pretty font-sans text-[clamp(2rem,3.6vw,2.75rem)] font-normal leading-[1.1] tracking-[-0.03em] text-foreground">
             A shadcn registry, for video
           </h2>
-          <div className="mt-5 max-w-2xl space-y-4 text-pretty text-body-lg text-current/70">
-            <p>
-              snapcn is a registry of {GALLERY_COUNT} Remotion components for
-              React video. You run{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                {INSTALL_COMMAND}
-              </code>
-              , the source file lands in{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                components/snap-cn/
-              </code>
-              , and you edit it like code you wrote yourself.
-            </p>
-            <p>
-              Nothing is added to your{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                package.json
-              </code>
-              . There is no snapcn runtime, no version to pin and no upgrade
-              that can change your video the week before you ship it. Every
-              component is written against the plain Remotion API —{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                useCurrentFrame()
-              </code>
-              ,{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                interpolate()
-              </code>{" "}
-              and{" "}
-              <code className="font-mono text-[0.9em] text-foreground">
-                spring()
-              </code>{" "}
-              — so the file you own is a file you can read.
-            </p>
-          </div>
+          <p className="mt-4 max-w-xl text-pretty text-body-lg text-current/70">
+            {GALLERY_COUNT} Remotion components you install with the shadcn CLI.
+            No runtime, no version to pin — the code is yours.
+          </p>
         </FadeUp>
 
         <FadeUp delay={0.08}>
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {FREE_CATEGORIES.map(({ id, label }) => {
-              const Icon = CATEGORY_ICONS[id];
-              return (
-                <li key={id}>
-                  <Link
-                    href={`/docs/${id}`}
-                    className="flex h-full flex-col gap-3 rounded-[1.25rem] border border-border/60 bg-card p-6 transition-colors hover:bg-muted/60"
-                  >
-                    <span className="flex items-center gap-2.5">
-                      <span className="grid size-8 place-items-center rounded-lg border border-border/60 bg-background">
-                        <Icon className="size-4 text-current/60" aria-hidden />
-                      </span>
-                      <h3 className="text-base font-medium text-foreground">
-                        {label}
-                      </h3>
-                      <span className="text-sm text-current/40">
-                        {COUNTS[id] ?? 0}
-                      </span>
-                    </span>
-                    <p className="text-sm leading-relaxed text-pretty text-current/70">
-                      {BLURBS[id]}
+          <div className="mt-6">
+            <CardCarousel>
+              {STEPS.map(({ title, body, Visual }) => (
+                <li key={title} className={CARD}>
+                  <div className="flex h-72 items-center justify-center overflow-hidden px-8 sm:h-80">
+                    <Visual />
+                  </div>
+                  <div className="px-8 pt-6 pb-8">
+                    <h3 className="font-medium text-[1.75rem] leading-tight tracking-[-0.02em]">
+                      {title}
+                    </h3>
+                    <p className="mt-3 max-w-[34ch] text-pretty text-current/70 leading-relaxed">
+                      {body}
                     </p>
-                  </Link>
+                  </div>
                 </li>
-              );
-            })}
-            {/* Spans what is left of the last row, so the grid ends flush
-                instead of on an empty cell. */}
-            <li
-              className={
-                ["lg:col-span-3", "lg:col-span-2", ""][
-                  FREE_CATEGORIES.length % 3
-                ]
-              }
-            >
-              <Link
-                href="/docs/components"
-                className="flex h-full flex-col justify-center gap-3 rounded-[1.25rem] bg-primary p-6 text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                <h3 className="text-base font-medium">
-                  All {GALLERY_COUNT} components →
-                </h3>
-                <p className="text-sm leading-relaxed text-pretty text-current/80">
-                  The whole registry in one filterable grid, every card playing
-                  its own scene in a real Remotion player.
-                </p>
-              </Link>
-            </li>
-          </ul>
+              ))}
+            </CardCarousel>
+          </div>
         </FadeUp>
       </div>
     </section>

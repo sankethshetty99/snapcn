@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { HeroVideo } from "@/components/hero-video";
 import { Button } from "@/components/ui/button";
 import { useTrackEvent } from "@/lib/analytics";
 import { FeaturedQuote } from "./featured-quote";
@@ -28,7 +29,7 @@ export function Hero() {
       </div>
 
       <div className="section">
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-start text-left">
           <div className={RISE}>
             <FeaturedQuote className="mb-8" />
           </div>
@@ -58,74 +59,92 @@ export function Hero() {
 
                 Keep this under ~32 characters. Past that it wraps to three rows
                 of 5.5rem type, which is a headline you read rather than take in. */}
-            <h1 className="mx-auto max-w-[16ch] text-pretty font-sans text-[clamp(2.75rem,6.5vw,5.5rem)] font-normal leading-[1.05] tracking-[-0.03em] text-foreground">
+            <h1 className="text-balance font-sans text-[clamp(3rem,8vw,7.5rem)] font-normal leading-none tracking-[-0.045em] text-foreground">
               Product demo videos, in React.
             </h1>
           </div>
 
-          {/* `text-body-lg` at 70% of the foreground rather than a separate
+          {/* Tenor's split: the copy and the actions left, the launch film right. */}
+          <div className="mt-10 grid w-full grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-2 lg:gap-16">
+            <div>
+              {/* `text-body-lg` at 70% of the foreground rather than a separate
               grey. The face is Saans, inherited from `html` like everything. */}
-          <div className={`${RISE} delay-[120ms]`}>
-            {/* Carries the search terms the h1 gave up — "copy-paste",
+              <div className={`${RISE} delay-[120ms]`}>
+                {/* Carries the search terms the h1 gave up — "copy-paste",
                 "Remotion", "shadcn CLI" — and spends the rest of the sentence on
                 the shot list, which is the part no other Remotion registry can
                 claim. Naming the shots also does the demo's job for it: a reader
                 who needs a terminal in a video recognises themselves here. */}
-            <p className="mx-auto mt-6 max-w-xl text-pretty text-body-lg text-current/70">
-              Copy-paste Remotion components for the shots a software demo is
-              made of — streaming AI answers, terminals, device frames,
-              captions. Install with the shadcn CLI; the code is yours.
-            </p>
-          </div>
+                <p className="max-w-xl text-pretty text-body-lg text-current/70">
+                  Copy-paste Remotion components for the shots a software demo
+                  is made of — streaming AI answers, terminals, device frames,
+                  captions. Install with the shadcn CLI; the code is yours.
+                </p>
+              </div>
 
-          <div className={`${RISE} delay-[180ms]`}>
-            <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row">
-              {/* The editor leads, and the ranking is measured rather than
+              <div className={`${RISE} delay-[180ms]`}>
+                <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
+                  {/* The editor leads, and the ranking is measured rather than
                   chosen: of everyone who lands on the site, 24% open the editor
                   and 3.8% export a video from it, while the gallery's job ends
                   at a copied install command. Someone who has made a video has
                   understood the product in a way no component grid explains.
                   Browsing is still one click away for the reader who wants to
                   read code first. */}
-              <Button
-                size="lg"
-                className="h-11 gap-2 px-6 text-sm"
-                nativeButton={false}
-                render={
-                  <Link
-                    href="/docs/video-editor"
-                    onClick={() =>
-                      trackEvent("cta_clicked", {
-                        cta: "hero_editor",
-                        destination: "/docs/video-editor",
-                      })
+                  <Button
+                    size="lg"
+                    className="h-11 gap-2 px-6 text-sm"
+                    nativeButton={false}
+                    render={
+                      <Link
+                        href="/docs/video-editor"
+                        onClick={() =>
+                          trackEvent("cta_clicked", {
+                            cta: "hero_editor",
+                            destination: "/docs/video-editor",
+                          })
+                        }
+                      />
                     }
-                  />
-                }
-              >
-                Make a video
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-11 gap-2 px-6 text-sm"
-                nativeButton={false}
-                render={
-                  <Link
-                    href="/docs/components"
-                    onClick={() =>
-                      trackEvent("cta_clicked", {
-                        cta: "hero_browse",
-                        destination: "/docs/components",
-                      })
+                  >
+                    Make a video
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-11 gap-2 px-6 text-sm"
+                    nativeButton={false}
+                    render={
+                      <Link
+                        href="/docs/components"
+                        onClick={() =>
+                          trackEvent("cta_clicked", {
+                            cta: "hero_browse",
+                            destination: "/docs/components",
+                          })
+                        }
+                      />
                     }
-                  />
-                }
-              >
-                Browse components
-              </Button>
+                  >
+                    Browse components
+                  </Button>
+                </div>
+              </div>
             </div>
+
+            <figure
+              className={`${RISE} delay-[180ms] w-full max-w-[34rem] lg:justify-self-end`}
+            >
+              {/* Muted loop; a click opens it full-size with the music. */}
+              <HeroVideo
+                src="https://media.snapcn.dev/home/snapcn-launch.mp4"
+                poster="https://media.snapcn.dev/home/snapcn-launch.jpg"
+              />
+              <figcaption className="mt-3 text-muted-foreground text-sm">
+                Introducing snapcn. Made with snapcn.
+              </figcaption>
+            </figure>
           </div>
         </div>
       </div>

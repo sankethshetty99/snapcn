@@ -4,7 +4,6 @@ import { Download, LayoutGrid, Loader2, SlidersHorizontal } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ChromeControls } from "@/components/docs/gallery/chrome-controls";
-import { GallerySidebarMobile } from "@/components/docs/gallery/gallery-sidebar";
 import { PanelToggleIcon } from "@/components/icons/panel-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -415,8 +414,6 @@ export function VideoEditor({
     <div className="flex h-full flex-col overflow-hidden bg-muted/40">
       {/* Top bar */}
       <header className="flex min-h-14 shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border bg-background px-3 py-2">
-        <GallerySidebarMobile />
-
         <div className="min-w-0">
           {projects.enabled ? (
             <ProjectMenu

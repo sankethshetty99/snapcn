@@ -99,7 +99,7 @@ export function PricingPlans({
            * transform only, so it answers the pointer without animating layout.
            */
           const ctaClass =
-            "group/cta h-12 w-full gap-2 rounded-xl text-base font-medium transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] lg:h-11";
+            "group/cta h-12 w-full gap-2 rounded-button text-base font-medium transition-[background-color,transform] duration-150 ease-out active:scale-[0.97] lg:h-11";
           const arrow = (
             <ArrowRight
               aria-hidden

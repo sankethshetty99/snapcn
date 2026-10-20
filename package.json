@@ -58,6 +58,7 @@
     "jotai": "^2.19.1",
     "lucide-react": "^1.7.0",
     "lz-string": "^1.5.0",
+    "media-chrome": "^4.19.3",
     "mmdb-lib": "^3.0.3",
     "motion": "^12.40.0",
     "next": "16.2.2",

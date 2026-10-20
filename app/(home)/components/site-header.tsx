@@ -6,15 +6,13 @@ import { StickyHeaderShell } from "./sticky-header-shell";
 export function SiteHeader() {
   return (
     <StickyHeaderShell>
-      {/* Two groups, not three. Three children under `justify-between` push the
-          nav into the middle of whatever space is left over, which strands it
-          halfway across the bar with a hole beside the logo. The links belong
-          to the logo. */}
-      <div className="flex items-center gap-5">
-        <HeaderLogo />
+      {/* Tenor's bar: the logo alone on the left, the links and the actions
+          together on the right. Still two groups under `justify-between`. */}
+      <HeaderLogo />
+      <div className="flex items-center gap-3">
         <NavDesktop links={NAV_LINKS} />
+        <HeaderActions />
       </div>
-      <HeaderActions />
     </StickyHeaderShell>
   );
 }

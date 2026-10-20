@@ -1,197 +1,156 @@
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { FadeUp } from "../fade-up";
+"use client";
+
+import { motion } from "motion/react";
+import { Fragment } from "react";
 import { VerifiedIcon } from "./featured-quote";
-import { WALL_POSTS } from "./wall-of-love-posts";
+import { WALL_POSTS, type WallPost } from "./wall-of-love-posts";
 
 /**
- * The wall of love — real posts about snapcn, and the ask to add one.
+ * Testimonials as four columns of real X posts scrolling upward at different
+ * speeds, faded top and bottom. Each column is its list twice, translated by
+ * -50% and looped, so it never runs out; the copy is aria-hidden.
  *
- * ## Why there is no embed
- *
- * Not one line of X's widget script. The posts are data in
- * `wall-of-love-posts.ts` and this whole section is server-rendered with zero
- * JavaScript of its own: no third-party frame per card, no layout shift as
- * nine iframes settle, no tracker on the landing page, and it still renders
- * when X is down or the reader blocks it. The cost is that a card does not
- * update if someone edits their post — which is the trade we want, since a
- * quote we shipped should not silently become a different quote.
- *
- * `x.com/intent/tweet` is likewise a URL, not an SDK. The composer opens
- * pre-filled and fully editable — nothing is posted by clicking these, X still
- * needs its own send. That is why the button can say what it does without a
- * confirmation step behind it.
- *
- * ## Layout
- *
- * CSS multi-column, not a JS masonry library. The quotes are wildly uneven —
- * four words from one account, a paragraph from another — and columns pack
- * that without measuring anything. The one rule it needs is
- * `break-inside-avoid`, so a card never splits across a column boundary.
- * Source order is preserved down each column rather than across, which is
- * fine here: these are peers, and no card is "first".
+ * Every card is a real post and links to it — `WALL_POSTS`, not sample copy.
+ * Radii are explicit px: this site's `--radius` makes `rounded-3xl` ~10px.
  */
-const SITE_URL = "https://snapcn.dev";
 
-const intent = (text: string) =>
-  `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+const COLUMNS = [0, 1, 2, 3].map((c) =>
+  WALL_POSTS.filter((_, i) => i % 4 === c),
+);
+/** Seconds per loop. Seven cards a column, ~5s a card, staggered. */
+const DURATIONS = [36, 46, 41, 43];
+const HOVER = {
+  scale: 1.03,
+  y: -8,
+  boxShadow:
+    "0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+  transition: { type: "spring" as const, stiffness: 400, damping: 17 },
+};
 
-const POSTS = [
-  {
-    label: "Post about snapcn",
-    // Written in the reader's voice, not ours — they are the one posting it, and
-    // a line of marketing copy in the first person is the thing people delete.
-    text: `@snapcn: ready-made Remotion components for video, installed with the shadcn CLI. Copy the code, own it forever.`,
-    primary: true,
-  },
-  {
-    label: "Show what you built",
-    text: `Made this with snapcn 🎬
-
-Remotion video components you install with the shadcn CLI:
-${SITE_URL}`,
-    primary: false,
-  },
-] as const;
-
-export function WallOfLove() {
+function Column({
+  posts,
+  duration,
+  className,
+}: {
+  posts: WallPost[];
+  duration: number;
+  className?: string;
+}) {
   return (
-    // Bottom padding only, like every other section here: the showcase wall
-    // above already carries its own `pb`, and adding a `pt` to meet it stacked
-    // two gaps into one 176px hole.
-    <section id="wall-of-love" className="relative pb-20 sm:pb-28">
-      <div className="section">
-        <FadeUp>
-          {/* At the same size the changelog and the hero use — the size is what
-              keeps this section on the same page as the two above it, and now
-              the alignment matches them too. */}
-          <h2 className="ml-auto max-w-[14ch] text-pretty text-right font-sans text-[clamp(2.25rem,4.6vw,3.5rem)] font-normal leading-[1.06] tracking-[-0.03em] text-foreground">
-            What people are saying
-          </h2>
-          <p className="mt-5 ml-auto max-w-xl text-pretty text-right text-body-lg text-current/70">
-            Real posts from X. Every card links to the original.
-          </p>
-        </FadeUp>
-
-        <FadeUp delay={0.08}>
-          {/* "Show more" without JavaScript: a hidden checkbox the label toggles,
-              and the wall's height cap keyed off it with `peer-checked`. */}
-          <input
-            id="wall-more"
-            type="checkbox"
-            className="peer sr-only"
-            aria-label="Show all posts"
-          />
-          <div className="relative mt-12 max-h-[44rem] overflow-hidden peer-checked:max-h-none peer-checked:[&>[data-fade]]:hidden">
-            <ul className="gap-4 sm:columns-2 lg:columns-4">
-              {WALL_POSTS.map((post) => (
-                <li key={post.handle} className="mb-4 break-inside-avoid">
-                  <a
-                    href={post.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex h-full flex-col gap-4 rounded-[1.25rem] border border-border/60 bg-card p-6 transition-colors hover:bg-muted/60"
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Plain <img>: these are nine 400px avatars copied into
-                        /public, already the right size and shape. next/image
-                        would add a resize round-trip for no gain. */}
-                      {/* biome-ignore lint/performance/noImgElement: local, fixed-size avatar. */}
-                      <img
-                        src={`/wall-of-love/${post.handle}.jpg`}
-                        alt=""
-                        width={48}
-                        height={48}
-                        loading="lazy"
-                        decoding="async"
-                        className="size-12 shrink-0 rounded-full object-cover"
-                      />
-                      <span className="min-w-0">
-                        {/* A row, not a block, so the badge sits on the name's
-                          baseline and the *name* is what truncates — put the
-                          badge inside the truncating span and a long name eats
-                          it before it eats itself. */}
-                        <span className="flex min-w-0 items-center gap-1">
-                          <span className="truncate text-base font-medium text-foreground">
-                            {post.name}
-                          </span>
-                          {post.verified ? <VerifiedIcon /> : null}
-                        </span>
-                        <span className="block truncate text-sm text-current/50">
-                          @{post.handle}
-                        </span>
-                      </span>
-                      <XIcon className="mb-auto ml-auto size-4 shrink-0 text-current/40" />
-                    </div>
-
-                    {/* `whitespace-pre-line` keeps the author's own line breaks —
-                      the posts use them as structure (bullets, a beat between
-                      thoughts) and reflowing them into a block loses that.
-                      `lang` so the right CJK/Latin faces are picked. */}
+    <div className={className}>
+      <motion.ul
+        animate={{ translateY: "-50%" }}
+        transition={{
+          duration,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "linear",
+          repeatType: "loop",
+        }}
+        className="m-0 flex list-none flex-col gap-3 p-0 pb-3"
+      >
+        {[0, 1].map((copy) => (
+          <Fragment key={copy}>
+            {posts.map((post) => (
+              <motion.li
+                key={`${copy}-${post.handle}`}
+                aria-hidden={copy === 1 || undefined}
+                whileHover={HOVER}
+                className="group w-full rounded-[24px] border border-border bg-card shadow-black/5 shadow-lg"
+              >
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  tabIndex={copy === 1 ? -1 : undefined}
+                  className="block rounded-[24px] p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                >
+                  <blockquote className="m-0 p-0">
                     <p
                       lang={post.lang}
-                      className="whitespace-pre-line text-pretty text-[0.9375rem] leading-relaxed text-current/85"
+                      className="m-0 line-clamp-6 whitespace-pre-line text-current/70 leading-relaxed"
                     >
                       {post.quote}
                     </p>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div
-              data-fade
-              className="absolute inset-x-0 bottom-0 flex h-48 items-end justify-center bg-gradient-to-t from-background via-background/80 to-transparent pb-2"
-            >
-              <label
-                htmlFor="wall-more"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "cursor-pointer bg-background",
-                )}
-              >
-                Show more
-              </label>
-            </div>
-          </div>
-        </FadeUp>
-
-        <FadeUp delay={0.14}>
-          <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            {POSTS.map(({ label, text, primary }) => (
-              <a
-                key={label}
-                href={intent(text)}
-                target="_blank"
-                rel="noreferrer"
-                className={cn(
-                  buttonVariants({
-                    size: "lg",
-                    variant: primary ? "default" : "outline",
-                  }),
-                  "h-11 w-full gap-2 px-6 text-sm sm:w-auto",
-                )}
-              >
-                <XIcon className="size-4" />
-                {label}
-              </a>
+                    <footer className="mt-4 flex items-center gap-3">
+                      {/* biome-ignore lint/performance/noImgElement: local, fixed-size avatar. */}
+                      <img
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        src={`/wall-of-love/${post.handle}.jpg`}
+                        alt=""
+                        className="size-10 rounded-full object-cover ring-2 ring-border transition-all duration-300 group-hover:ring-primary/30"
+                      />
+                      <div className="flex min-w-0 flex-col">
+                        {/* A row, so the badge sits on the name's baseline and
+                            the name — not the badge — is what truncates. */}
+                        <span className="flex min-w-0 items-center gap-1">
+                          <cite className="truncate font-semibold text-foreground not-italic leading-5 tracking-tight">
+                            {post.name}
+                          </cite>
+                          {post.verified ? <VerifiedIcon /> : null}
+                        </span>
+                        <span className="mt-0.5 truncate text-current/50 text-sm leading-5 tracking-tight">
+                          {post.role ?? `@${post.handle}`}
+                        </span>
+                      </div>
+                    </footer>
+                  </blockquote>
+                </a>
+              </motion.li>
             ))}
-          </div>
-        </FadeUp>
-
-        <FadeUp delay={0.2}>
-          <p className="mt-5 text-center text-sm text-current/50">
-            Opens X with the post already written. Edit anything before you send
-            it.
-          </p>
-        </FadeUp>
-      </div>
-    </section>
+          </Fragment>
+        ))}
+      </motion.ul>
+    </div>
   );
 }
 
-const XIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" className={className} fill="currentColor" role="img">
-    <title>X</title>
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
+export function WallOfLove() {
+  return (
+    <section
+      id="wall-of-love"
+      aria-labelledby="testimonials-heading"
+      className="relative overflow-hidden py-24"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 50, rotate: -2 }}
+        whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{
+          duration: 1.2,
+          ease: [0.16, 1, 0.3, 1],
+          opacity: { duration: 0.8 },
+        }}
+        className="section z-10"
+      >
+        <h2
+          id="testimonials-heading"
+          className="text-pretty font-normal font-sans text-[clamp(2rem,3.6vw,2.75rem)] text-foreground leading-[1.1] tracking-[-0.03em]"
+        >
+          What they&rsquo;re saying
+        </h2>
+        <p className="mt-4 max-w-xl text-pretty text-body-lg text-current/70">
+          Real posts from X. Every card links to the original.
+        </p>
+
+        <section
+          className="mt-10 grid max-h-[740px] grid-cols-1 gap-3 overflow-hidden md:grid-cols-2 lg:grid-cols-4 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+          aria-label="Scrolling testimonials"
+        >
+          {COLUMNS.map((posts, i) => (
+            <Column
+              // biome-ignore lint/suspicious/noArrayIndexKey: four fixed columns.
+              key={i}
+              posts={posts}
+              duration={DURATIONS[i]}
+              className={
+                ["", "hidden md:block", "hidden lg:block", "hidden lg:block"][i]
+              }
+            />
+          ))}
+        </section>
+      </motion.div>
+    </section>
+  );
+}

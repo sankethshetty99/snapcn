@@ -58,7 +58,7 @@ export function NavDesktop({
           href={link.href}
           onMouseEnter={(event) => moveTo(event.currentTarget)}
           onFocus={(event) => moveTo(event.currentTarget)}
-          className="relative inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[0.8125rem] text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+          className="relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-button px-3 py-1.5 text-[0.9375rem] text-foreground/80 transition-colors duration-150 ease-out hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
         >
           {link.label}
           {link.badge ? <NavBadge>{link.badge}</NavBadge> : null}

@@ -23,6 +23,10 @@ export function StickyHeaderShell({ children }: { children: ReactNode }) {
       className={cn(
         "sticky inset-x-0 top-[var(--fd-banner-height,0px)] z-40 transition-colors duration-200 ease-out",
         scrolled && "bg-background/80 backdrop-blur-xl",
+        // A stuck gallery filter bar carries the frost for both (gallery-explorer.tsx).
+        "[html[data-bar-stuck]_&]:bg-transparent [html[data-bar-stuck]_&]:backdrop-blur-none",
+        // The Labs menu's sheet carries it while open (shadcn-labs-nav.tsx).
+        "[html[data-menu-open]_&]:bg-transparent [html[data-menu-open]_&]:backdrop-blur-none",
       )}
     >
       <div className="section flex h-14 items-center justify-between gap-6">
