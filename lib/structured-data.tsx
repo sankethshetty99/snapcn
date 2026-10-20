@@ -132,6 +132,7 @@ const COMPONENT_QUERY: Record<string, string> = {
   "trend-type": "Remotion typewriter headline with line chart animation",
   "echo-stack": "Remotion stacked echo text animation",
   "mood-board": "Remotion photo collage animation",
+  "column-cut": "Remotion photo column cut animation",
   "agent-result": "Remotion AI agent answer animation",
   "agent-tools": "Remotion AI agent tools animation",
   "task-stream": "Remotion AI agent task list animation",

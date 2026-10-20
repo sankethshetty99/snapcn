@@ -608,6 +608,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   "trend-type": "text",
   "echo-stack": "text",
   "mood-board": "scenes",
+  "column-cut": "scenes",
   "agent-result": "ai-input",
   "agent-run": "ai-input",
   "agent-tools": "ai-input",
