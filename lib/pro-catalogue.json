@@ -1,5 +1,11 @@
 [
   {
+    "name": "column-cut",
+    "title": "Column Cut",
+    "description": "A four-line cascade with a square cursor beside its third line, a blue highlight running across that line letter by letter while the type drifts up — then a hard cut to a column of pictures that jumps one picture per beat, the beats tightening from five frames to four, while a sentence lands either side of it and the whole frame pans away left, faster and faster. Replayed from a screen recording measured frame by frame: the strip's twelve rects and per-frame offset, the drift, the pan and every letter's colour are the recording's own.",
+    "added": "2026-10-20"
+  },
+  {
     "name": "agent-chat",
     "title": "Agent Chat",
     "description": "An agent conversation, from the empty field to the answer. Five beats on one clock: the prompt types itself into a compose field while the camera pushes in, the field scrolls under a soft left edge as the text outgrows it, the message goes and becomes a bubble, an avatar and a typing indicator arrive, and the reply streams back a word at a time — each word grey for a moment before it sets. Only the typing rate is a real decision; every later beat is derived from it."
