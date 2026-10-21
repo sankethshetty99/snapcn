@@ -1,0 +1,22 @@
+{
+  "name": "snapcn-mcp",
+  "displayName": "snapcn MCP",
+  "version": "1.0.0",
+  "description": "The snapcn MCP server (snapcn Pro): search the registry by the beat you need, read any component's real props, plan a whole video from a one-line brief, and preview the frame it renders. Set SNAPCN_API_KEY from https://snapcn.dev/account.",
+  "author": {
+    "name": "Shadcn Labs",
+    "url": "https://snapcn.dev"
+  },
+  "homepage": "https://snapcn.dev/docs/mcp",
+  "repository": "https://github.com/shadcn-labs/snapcn",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "remotion",
+    "video",
+    "shadcn",
+    "registry",
+    "motion-graphics"
+  ],
+  "logo": "assets/logo.svg"
+}
