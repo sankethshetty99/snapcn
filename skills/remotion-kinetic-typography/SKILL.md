@@ -8,6 +8,8 @@ description: >
   so type doesn't judder or shake the way hand-animated text does in a browser. Triggers:
   kinetic typography, animated text, text animation, title animation, typography video,
   headline animation, text reveal, "animate this line", "make the words pop".
+metadata:
+  internal: true
 ---
 
 # Remotion kinetic typography, built from snapcn

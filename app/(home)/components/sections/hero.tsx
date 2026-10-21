@@ -2,7 +2,6 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { HeroVideo } from "@/components/hero-video";
 import { Button } from "@/components/ui/button";
 import { useTrackEvent } from "@/lib/analytics";
 import { FeaturedQuote } from "./featured-quote";
@@ -21,7 +20,7 @@ export function Hero() {
   const trackEvent = useTrackEvent();
 
   return (
-    <section className="relative overflow-hidden pt-14 pb-4 sm:pt-20 sm:pb-6">
+    <section className="relative overflow-hidden pt-8 pb-2 sm:pt-12 sm:pb-4">
       {/* Theme-aware backdrop: dotted grid that fades out + a soft top glow. */}
       <div aria-hidden className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-grid-fade" />
@@ -31,7 +30,7 @@ export function Hero() {
       <div className="section">
         <div className="flex flex-col items-start text-left">
           <div className={RISE}>
-            <FeaturedQuote className="mb-8" />
+            <FeaturedQuote className="mb-6" />
           </div>
           {/* simplifyingai.com's page-heading treatment, to the number: Saans at
               regular weight, `clamp(2.75rem, 6.5vw, 5.5rem)`, leading 1.05,
@@ -59,13 +58,14 @@ export function Hero() {
 
                 Keep this under ~32 characters. Past that it wraps to three rows
                 of 5.5rem type, which is a headline you read rather than take in. */}
-            <h1 className="text-balance font-sans text-[clamp(3rem,8vw,7.5rem)] font-normal leading-none tracking-[-0.045em] text-foreground">
+            <h1 className="text-balance font-sans text-[clamp(3rem,7vw,6rem)] font-normal leading-none tracking-[-0.045em] text-foreground">
               Product demo videos, in React.
             </h1>
           </div>
 
-          {/* Tenor's split: the copy and the actions left, the launch film right. */}
-          <div className="mt-10 grid w-full grid-cols-1 gap-10 lg:mt-14 lg:grid-cols-2 lg:gap-16">
+          {/* The launch film moved to the footer (21 Oct); the showcase carousel
+              under this section is the first screen's motion now. */}
+          <div className="mt-6 w-full lg:mt-8">
             <div>
               {/* `text-body-lg` at 70% of the foreground rather than a separate
               grey. The face is Saans, inherited from `html` like everything. */}
@@ -84,35 +84,12 @@ export function Hero() {
 
               <div className={`${RISE} delay-[180ms]`}>
                 <div className="mt-7 flex flex-col items-start gap-3 sm:flex-row">
-                  {/* The editor leads, and the ranking is measured rather than
-                  chosen: of everyone who lands on the site, 24% open the editor
-                  and 3.8% export a video from it, while the gallery's job ends
-                  at a copied install command. Someone who has made a video has
-                  understood the product in a way no component grid explains.
-                  Browsing is still one click away for the reader who wants to
-                  read code first. */}
+                  {/* Components lead (21 Oct): the registry is the product and
+                  the install is the conversion, so the gallery gets the primary
+                  button. The editor, which 24% of visitors open, stays one click
+                  away beside it. */}
                   <Button
                     size="lg"
-                    className="h-11 gap-2 px-6 text-sm"
-                    nativeButton={false}
-                    render={
-                      <Link
-                        href="/docs/video-editor"
-                        onClick={() =>
-                          trackEvent("cta_clicked", {
-                            cta: "hero_editor",
-                            destination: "/docs/video-editor",
-                          })
-                        }
-                      />
-                    }
-                  >
-                    Make a video
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
                     className="h-11 gap-2 px-6 text-sm"
                     nativeButton={false}
                     render={
@@ -128,23 +105,30 @@ export function Hero() {
                     }
                   >
                     Browse components
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-11 gap-2 px-6 text-sm"
+                    nativeButton={false}
+                    render={
+                      <Link
+                        href="/docs/video-editor"
+                        onClick={() =>
+                          trackEvent("cta_clicked", {
+                            cta: "hero_editor",
+                            destination: "/docs/video-editor",
+                          })
+                        }
+                      />
+                    }
+                  >
+                    Make a video
                   </Button>
                 </div>
               </div>
             </div>
-
-            <figure
-              className={`${RISE} delay-[180ms] w-full max-w-[34rem] lg:justify-self-end`}
-            >
-              {/* Muted loop; a click opens it full-size with the music. */}
-              <HeroVideo
-                src="https://media.snapcn.dev/home/snapcn-launch.mp4"
-                poster="https://media.snapcn.dev/home/snapcn-launch.jpg"
-              />
-              <figcaption className="mt-3 text-muted-foreground text-sm">
-                Introducing snapcn. Made with snapcn.
-              </figcaption>
-            </figure>
           </div>
         </div>
       </div>

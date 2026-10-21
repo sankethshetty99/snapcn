@@ -9,6 +9,8 @@ description: >
   overview", "same spacing", "same design fashion", "clone this layout", and any request that
   pairs a UI target image with "make it exactly like that". Also activate when measuring
   spacing/typography off a reference before writing CSS.
+metadata:
+  internal: true
 ---
 
 # ux-ui-maxpro

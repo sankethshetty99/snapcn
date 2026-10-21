@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FooterGlow, GLOW_HEIGHT } from "@/components/footer-glow";
+import { HeroVideo } from "@/components/hero-video";
 import { LabsLogo } from "@/components/shadcn-labs-nav";
 import { SnapCnLogo } from "@/components/snapcn-logo";
 import { FOOTER_COLUMNS, LABS_PROJECTS, SHADCN_LABS_URL } from "@/config/site";
@@ -212,6 +213,16 @@ export function SiteFooter() {
               </div>
             ))}
           </div>
+        </div>
+        {/* The launch film, moved down from the hero (21 Oct): a small poster
+            in the bottom-left corner; a click opens it full-size with sound. */}
+        <div className="mt-4 w-40">
+          <HeroVideo
+            src="https://media.snapcn.dev/home/snapcn-launch.mp4"
+            poster="https://media.snapcn.dev/home/snapcn-launch.jpg"
+            loop={false}
+            radius={2}
+          />
         </div>
       </div>
       <FooterGlow />

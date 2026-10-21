@@ -7,6 +7,8 @@ description: >
   a Remotion composition, or when an animation is correct in code but not editable in the
   Studio. Triggers - Remotion Studio, Visual Mode, editable animation, interpolate, spring,
   composition props.
+metadata:
+  internal: true
 ---
 
 # Interactivity Best Practices

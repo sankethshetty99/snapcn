@@ -9,6 +9,8 @@ description: >
   pre-built instead of hand-animated. Triggers: product demo, demo video, remotion demo,
   product walkthrough, feature demo video, screen recording to video, app demo, SaaS demo,
   CLI demo, "turn my screen recording into a demo video".
+metadata:
+  internal: true
 ---
 
 # Remotion product demo, built from snapcn

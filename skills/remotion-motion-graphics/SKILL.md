@@ -10,6 +10,8 @@ description: >
   remotion motion graphics, animated text, title animation, logo animation, logo sting,
   brand reveal, intro animation, animated stat, "make this line animate", "motion graphic
   with Claude Code".
+metadata:
+  internal: true
 ---
 
 # Remotion motion graphics, built from snapcn
