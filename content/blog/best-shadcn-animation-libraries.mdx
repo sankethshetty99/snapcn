@@ -1,0 +1,205 @@
+---
+title: The best shadcn-compatible animation libraries in 2026
+seoTitle: Best shadcn animation libraries in 2026, compared
+description: Magic UI, Aceternity UI, Motion Primitives, Animate UI, React Bits, Kokonut UI and Cult UI compared on license, install method, price and animation engine.
+date: 2026-10-21
+tags:
+  - shadcn
+  - comparison
+faq:
+  - question: Which shadcn animation libraries install with the shadcn CLI?
+    answer: All seven in this list have a namespace in the shadcn registry directory, so `npx shadcn@latest add @<namespace>/<component>` resolves them. Magic UI, Aceternity UI, React Bits, Kokonut UI and Cult UI document that command directly. Motion Primitives also has its own CLI, and Animate UI documents its own CLI and an npm package.
+  - question: Is React Bits MIT licensed?
+    answer: Not plain MIT. Its LICENSE is "MIT + Commons Clause". You can use the components in any application, website or product, including commercial ones, but you may not sell, sublicense or redistribute the components themselves, alone, in a bundle or as a ported version. Animate UI uses a similar MIT + Commons Clause license.
+  - question: Which animation engine do these libraries use?
+    answer: "Most use Motion (the motion package, formerly Framer Motion). React Bits is the exception: depending on the component it uses GSAP, Motion, Three.js or OGL, and it lists each component's dependencies on its Code tab."
+  - question: Can I use these libraries to make videos with Remotion?
+    answer: Not as they are. Remotion's docs say every animation must be driven by useCurrentFrame(), and there is no Framer Motion integration yet (GSAP has @remotion/gsap). For video, use a registry written for Remotion, such as snapcn or remocn.
+---
+
+**Short answer:** for MIT code with a big catalogue, start with **Magic UI**.
+**Motion Primitives**, **Kokonut UI** and **Cult UI** are also MIT and free.
+**Aceternity UI** has a free tier and a paid all-access plan under its own license.
+**React Bits** and **Animate UI** are free to use in your product, but their
+MIT + Commons Clause license forbids reselling or redistributing the components.
+Every one of them has a namespace in the shadcn registry directory.
+
+Everything below was checked in October 2026, on each project's site, its
+GitHub repository and the shadcn registry directory. Star counts come from the
+GitHub API on the same day and will drift.
+
+## At a glance
+
+| Library | License | Installs with | Price | GitHub stars | Animates with |
+| --- | --- | --- | --- | --- | --- |
+| [Magic UI](https://magicui.design) | MIT | shadcn CLI (`@magicui`) | Free; Pro $199 one-time | 22,775 | Motion on animated items (some are CSS-only) |
+| [Aceternity UI](https://ui.aceternity.com) | Aceternity's own license | shadcn CLI (`@aceternity`) | Free tier; paid plans from $169 one-time | No public repo found | Motion on most items |
+| [Motion Primitives](https://motion-primitives.com) | MIT | Own CLI, manual copy, `@motion-primitives` | Free; separate Pro site | 6,779 | Motion |
+| [Animate UI](https://animate-ui.com) | MIT + Commons Clause | npm + own CLI, `@animate-ui` | Free | 4,563 | Motion |
+| [React Bits](https://reactbits.dev) | MIT + Commons Clause | shadcn CLI (`@react-bits`) or copy-paste | Free; Pro from $129 one-time | 49,890 | GSAP, Motion, Three.js or OGL, per component |
+| [Kokonut UI](https://kokonutui.com) | MIT | shadcn CLI (`@kokonutui`) | Free; separate Pro site | 2,188 | Motion |
+| [Cult UI](https://www.cult-ui.com) | MIT | shadcn CLI (`@cult-ui`) | Free | 6,654 | Motion on most items |
+
+"Animates with" comes from the `dependencies` field of the registry items we
+fetched (for example Magic UI's `blur-fade` lists `motion` and its `marquee`
+lists none) and from each project's docs. Always check the component you
+actually install.
+
+## Magic UI
+
+MIT-licensed, and the most-starred MIT library in this list. The docs install
+components with the shadcn CLI:
+
+```bash
+pnpm dlx shadcn@latest add @magicui/globe
+```
+
+Animated items depend on `motion`. Some, like `marquee`, list no dependencies
+at all. Magic UI Pro is sold separately as templates plus premium components,
+for $199 one-time, according to the docs page.
+
+## Aceternity UI
+
+Components install through the `@aceternity` namespace, for example
+`npx shadcn@latest add @aceternity/3d-card`. Most registry items we checked
+(`text-generate-effect`, `background-beams`, `hero-highlight`) depend on
+`motion`; `3d-card` lists no dependencies.
+
+Read the licence page before you ship. It is not MIT: one set of terms covers
+every item, free or paid. You can build unlimited end products for yourself or
+your clients, and those products may be sold. You cannot redistribute the
+source files, sell items on a marketplace, or build themes or templates to sell
+on a marketplace. The pricing page lists a free tier, a 1-Year License at $169,
+Lifetime Access at $199 and Team at $1,590, all one-time payments, each shown
+against a higher "regular price".
+
+## Motion Primitives
+
+MIT. The repo describes it as motion components built with Motion and Tailwind
+CSS, and says the project is in beta. Install with its CLI
+(`npx motion-primitives@latest add text-effect`) or copy the code by hand.
+Manual setup needs `motion` (plus `lucide-react` for some components). It is
+also registered as `@motion-primitives`. A separate site,
+pro.motion-primitives.com, sells sections and templates; it showed no prices
+when we checked.
+
+## Animate UI
+
+A different approach: animated drop-in versions of Radix UI, Base UI and React
+Aria primitives. The README says "Swap the import, keep your shadcn/ui
+components." The docs install `@animate-ui/react` and `motion`, then
+`npx @animate-ui/cli@latest animate all` animates every installed shadcn/ui
+component. Individual items are also served under the `@animate-ui` namespace.
+
+**License:** MIT + Commons Clause. You may use it in any application, website or
+product, commercial or not, "so long as you do not sell or redistribute the
+components themselves in their original form".
+
+## React Bits
+
+The most-starred project in this list. The README shows effects such as Split
+Text, Liquid Chrome, Ballpit and Circular Gallery. Every component comes in four versions: JavaScript or
+TypeScript, styled with CSS or Tailwind. Install with the shadcn CLI, where the
+suffix picks the version:
+
+```bash
+npx shadcn@latest add @react-bits/SplitText-TS-TW
+```
+
+Or copy the files from a component's Code tab. The engine varies by component.
+`SplitText-TS-TW` depends on `gsap` and `@gsap/react`, `BlurText-TS-TW` on
+`motion`, and the repo's package.json also includes `three` and `ogl`.
+
+**License, precisely:** the LICENSE file is "MIT + Commons Clause License
+Condition v1.0". It grants use, copying, modification and distribution "as part
+of an application, website, or product", including for commercial purposes, "so
+long as you do not sell, sublicense, or redistribute the components
+themselves-whether alone, in a bundle, or as a ported version." The same
+restriction covers the React Bits tools (Background Studio, Texture Lab and the
+others) and its sound library. What you export from the tools is yours to use in
+any product, but you may not sell the exports on their own as a pack. So using
+React Bits in your SaaS landing page is fine. Porting its components into
+another library you publish is not.
+
+React Bits Pro is a separate paid product. Its pricing page lists lifetime plans
+at $129 (Starter), $249 (Pro) and $349 (Ultimate), as one-time payments.
+
+## Kokonut UI
+
+MIT. Built with Tailwind CSS, shadcn/ui and Motion, according to its README.
+Install with `npx shadcn@latest add @kokonutui/particle-button`. The CLI
+pulls in what a component needs, such as `lucide-react`, shadcn/ui primitives
+and `motion`. Kokonut UI Pro (kokonutui.pro) sells templates and premium
+sections; the main site shows no price.
+
+## Cult UI
+
+MIT. The README says every component is a shadcn/ui registry item, uses
+Tailwind CSS v4 and shadcn theme tokens, and that "most animate with Motion".
+Install with either the URL or the namespace:
+
+```bash
+npx shadcn@latest add @cult-ui/shift-card
+```
+
+The site calls the components "all free" and links a separate Cult Pro site.
+
+## How to choose
+
+1. **Need plain MIT?** Magic UI, Motion Primitives, Kokonut UI or Cult UI.
+2. **Want your existing shadcn components to animate?** Animate UI's CLI does
+   that in one command.
+3. **Want showpiece effects (WebGL, 3D, text)?** React Bits, as long as you are
+   not planning to redistribute the components.
+4. **Building a client site from paid blocks?** Read Aceternity's licence
+   first; the marketplace limits matter for agencies.
+
+## What about video?
+
+Remotion's docs say that "all animations in Remotion must be driven by the value
+returned by the `useCurrentFrame()` hook". Anything else needs an integration
+that syncs timing with Remotion. For GSAP there is a `@remotion/gsap` package.
+For Framer Motion, the docs say there is no integration yet. So most of the
+libraries above will not render correctly in a Remotion video without rework.
+For video there are shadcn registries written for Remotion:
+
+- **[remocn](https://www.remocn.dev)**: MIT, 1,624 GitHub stars, installs as
+  `@remocn/<name>`.
+- **[snapcn](/docs/getting-started/installation)**: our registry, so weigh that.
+  It installs as `npx shadcn@latest add @snapcn/<name>` and copies the source
+  into your project. It has about 48 free MIT components, for example
+  [text-reveal](/docs/text/text-reveal) and
+  [terminal-simulator](/docs/screens/terminal-simulator), plus a paid Pro tier.
+
+The full rundown of Remotion libraries is in
+[the best Remotion component libraries](/best-remotion-component-libraries).
+
+## Sources
+
+- https://ui.shadcn.com/r/registries.json
+- https://github.com/magicuidesign/magicui
+- https://magicui.design/docs/installation
+- https://magicui.design/r/blur-fade.json
+- https://magicui.design/r/marquee.json
+- https://ui.aceternity.com/docs
+- https://ui.aceternity.com/components/3d-card-effect
+- https://ui.aceternity.com/registry/text-generate-effect.json
+- https://ui.aceternity.com/licence
+- https://ui.aceternity.com/pricing
+- https://github.com/ibelick/motion-primitives
+- https://motion-primitives.com/docs/installation
+- https://pro.motion-primitives.com
+- https://github.com/imskyleen/animate-ui (README and LICENSE.md)
+- https://animate-ui.com/docs/installation
+- https://github.com/DavidHDev/react-bits (README, LICENSE, package.json)
+- https://reactbits.dev/get-started/installation
+- https://reactbits.dev/r/SplitText-TS-TW.json
+- https://pro.reactbits.dev
+- https://github.com/kokonut-labs/kokonutui
+- https://kokonutui.com/docs
+- https://kokonutui.com
+- https://github.com/nolly-studio/cult-ui
+- https://www.cult-ui.com
+- https://github.com/Remocn/remocn
+- https://motion.dev
+- https://www.remotion.dev/docs/third-party

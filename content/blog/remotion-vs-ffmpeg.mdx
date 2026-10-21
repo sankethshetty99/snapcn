@@ -1,0 +1,213 @@
+---
+title: Remotion vs FFmpeg
+seoTitle: "Remotion vs FFmpeg — when you need each, and how they fit"
+description: FFmpeg converts, cuts and encodes media; Remotion draws new frames with React and encodes them with FFmpeg. When you need each, and documented render tips.
+date: 2026-10-21
+tags:
+  - remotion
+  - comparison
+faq:
+  - question: Does Remotion use FFmpeg?
+    answer: Yes. Remotion's server-side renderer captures each frame in a headless browser and encodes the frames with FFmpeg. Since Remotion 4.0, FFmpeg is baked into the @remotion/renderer package, so you do not install it separately. Client-side rendering in the browser is the exception; it encodes with WebCodecs through Mediabunny instead.
+  - question: When is FFmpeg alone enough?
+    answer: When the video already exists and you need to change it, such as converting formats, trimming, scaling, changing frame rate, extracting audio, muxing streams or turning an image sequence into a video. FFmpeg does all of that from one command with no browser involved.
+  - question: When do I need Remotion instead of FFmpeg?
+    answer: When you need to create new frames, such as animated text, UI, charts or a product demo. FFmpeg has filters like drawtext and overlay, but Remotion lets you draw each frame with React and CSS, preview it in Remotion Studio, and render it from props.
+  - question: Is FFmpeg free?
+    answer: FFmpeg is licensed under the LGPL 2.1 or later, with optional parts under the GPL 2 or later; if those parts are used, the GPL applies to all of FFmpeg. Remotion has its own licence, free for individuals and companies with up to three employees.
+---
+
+**Short answer:** they are not really alternatives. **FFmpeg** processes media
+that already exists: it decodes, encodes, transcodes, cuts, scales and muxes.
+**Remotion** creates new frames by rendering React components, then hands them
+to FFmpeg to encode. If you are changing a video, use FFmpeg. If you are
+making one from scratch out of text, UI and motion, use Remotion — and you
+will be using FFmpeg anyway, underneath.
+
+Facts below were checked on ffmpeg.org and remotion.dev in October 2026.
+
+## At a glance
+
+| | Remotion | FFmpeg |
+| --- | --- | --- |
+| What it is | React framework that renders video | Multimedia framework and command-line tools |
+| Job | Draw new frames | Decode, encode, transcode, mux, demux, stream, filter |
+| You write | React components | Command-line flags and filter graphs |
+| Draws with | DOM, CSS, SVG, canvas, WebGL in a headless browser | Filters such as `drawtext`, `overlay`, `scale`, `xfade` |
+| Preview | Remotion Studio, `<Player>` | `ffplay` |
+| Encoding | FFmpeg, bundled since v4 (WebCodecs for in-browser renders) | Itself |
+| Licence | Remotion licence; free for individuals and up to 3 employees | LGPL 2.1+, optional GPL 2+ parts |
+
+## What FFmpeg is
+
+FFmpeg calls itself a multimedia framework able to "decode, encode, transcode,
+mux, demux, stream, filter and play" nearly any format. It ships three tools
+— `ffmpeg` to convert between formats, `ffplay` to play, `ffprobe` to inspect
+streams — and the libraries underneath them, including `libavcodec`,
+`libavformat`, `libavfilter` and `libswscale`, which other software builds on.
+
+It is a command per job. Straight from its documentation:
+
+```bash
+# convert a file
+ffmpeg -i input.avi output.mp4
+
+# change the frame rate
+ffmpeg -i input.avi -r 24 output.mp4
+
+# turn an image sequence into a video
+ffmpeg -f image2 -framerate 12 -i foo-%03d.jpeg -s WxH foo.avi
+```
+
+`-ss`, `-t` and `-to` trim by position and duration, `-map` picks streams,
+`-c copy` remuxes without re-encoding, and the filter system covers scaling,
+overlays, text, crossfades and much more.
+
+## What Remotion is
+
+Remotion gives you a frame number and a blank canvas, and you render anything
+React can draw for that frame. A composition is a component plus width,
+height, fps and duration:
+
+```tsx
+import { AbsoluteFill, useCurrentFrame } from "remotion";
+
+export const MyComposition = () => {
+  const frame = useCurrentFrame();
+  return (
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", fontSize: 100 }}>
+      The current frame is {frame}.
+    </AbsoluteFill>
+  );
+};
+```
+
+Change what you return each frame and you have an animation. Because it is
+React, the frame can contain real text, your UI components, SVG, charts and
+video. More in [how to make videos with React](/make-videos-with-react).
+
+## How Remotion uses FFmpeg
+
+Remotion's server-side render has two halves, and the docs name both:
+
+1. **Frames.** `renderFrames()` "renders a series of images using Puppeteer"
+   — a headless browser screenshots your component at every frame.
+2. **Encoding.** `stitchFramesToVideo()` takes those images and the audio
+   information and encodes a video. Its options map onto FFmpeg flags:
+   `videoBitrate` uses the syntax of FFmpeg's `-b:v`, `audioBitrate` of `-b:a`,
+   and `bufferSize` and `maxRate` pass FFmpeg's `-bufsize` and `-maxrate`.
+
+`renderMedia()`, added in Remotion 3.0, combines both steps and is what you
+normally call. The encoding guide says it plainly: Remotion's encoding
+settings are "backed by FFmpeg".
+
+Since **Remotion 4.0, FFmpeg is baked into `@remotion/renderer`**. The
+`ffmpegExecutable` option and `npx remotion install ffmpeg` were removed. To
+still run FFmpeg commands, Remotion ships `npx remotion ffmpeg` and
+`npx remotion ffprobe`:
+
+```bash
+npx remotion ffmpeg -i input.mp4 output.mp3
+```
+
+That bundled binary is from FFmpeg's 7.1 release line and, to stay small, only
+understands the codecs Remotion supports: H.264, H.265, VP8, VP9 and ProRes.
+For anything else, install a full FFmpeg.
+
+The exception is **client-side rendering** (`@remotion/web-renderer`), which
+renders in the browser and encodes with WebCodecs via Mediabunny instead of
+FFmpeg, for a subset of HTML elements.
+
+## When FFmpeg alone is enough
+
+- **The video already exists.** Converting, trimming, resizing, changing frame
+  rate, compressing.
+- **Plumbing.** Extracting audio, swapping or muxing tracks, remuxing to a new
+  container with `-c copy` (stream copy), extracting still frames.
+- **Assembly of finished parts.** Concatenating clips, overlaying a watermark,
+  joining an image sequence you already rendered.
+- **No browser allowed.** FFmpeg runs on Linux, macOS, Windows and the BSDs
+  with no Chromium dependency.
+
+Adding Remotion to these jobs would put a headless browser in front of a task
+that never needed to draw a pixel.
+
+## When you need Remotion
+
+- **You are drawing, not editing.** Animated titles, UI walkthroughs, charts,
+  captions and product demos are new frames. FFmpeg's `drawtext` can place
+  text; it is not a layout engine.
+- **The design changes often.** Remotion Studio previews the composition
+  while you edit, and the code is reviewable in git.
+- **One template, many videos.** Props in, video out — from the CLI, Node, CI
+  or AWS Lambda.
+- **The visuals are your product.** Your interface is already React and CSS.
+  Component libraries like [snapcn](/docs/components) install ready-made
+  scenes — a [screen recording](/docs/screens/screen-recording),
+  [cursor track](/docs/screens/cursor-track) or
+  [text reveal](/docs/text/text-reveal) — with
+  `npx shadcn@latest add @snapcn/<name>`, copied into your project.
+
+A common split is both: Remotion for the scene, FFmpeg afterwards for a
+platform-specific transcode, a GIF, or stitching the render to existing
+footage.
+
+## Performance, as documented
+
+Remotion's performance page opens with "Video rendering is one of the most
+heavy workloads a computer can take on." Its documented levers:
+
+| Lever | What the docs say |
+| --- | --- |
+| Concurrency | `--concurrency` raises or lowers speed; `npx remotion benchmark` finds the best value |
+| GPU effects | WebGL, canvas, `box-shadow`, `text-shadow`, gradients, `filter: blur()` use the GPU; cloud instances without one may render them slowly |
+| Image format | `png` frames are slower than `jpeg`, but needed for transparency |
+| Codec | VP8 and VP9 are very slow to encode; H.264 is the fast default |
+| Resolution | Higher is slower; `--scale` renders smaller |
+| Video in video | Use `<Video>` from `@remotion/media`; older tags are not optimised |
+| Distribution | Lambda splits a video into chunks rendered in parallel; other options render on one machine |
+
+The encoding guide adds parallel encoding (frames are encoded while others
+still render), CRF control per codec, and hardware-accelerated encoding from
+Remotion 4.0.228 on macOS, Linux and Windows with an NVIDIA GPU for H.264 and
+H.265.
+
+FFmpeg has no browser stage, so for pure transcoding there is no frame
+capture to pay for. The workloads differ, so measure your own composition:
+`--log=verbose` lists the slowest frames of a Remotion render.
+
+## Licences
+
+FFmpeg is licensed under the LGPL 2.1 or later. Some optional parts are GPL 2
+or later, and if you use them the GPL applies to all of FFmpeg; the project
+offers no commercial licence. Its legal page includes a compliance checklist
+for distributing software that links FFmpeg.
+
+Remotion is free for individuals, for-profit companies with up to three
+employees, and non-profits. Larger companies buy a Company License; see
+[remotion.pro/license](https://www.remotion.pro/license).
+
+## Bottom line
+
+Changing a video: FFmpeg. Making one from code: Remotion, which brings FFmpeg
+with it. For hosted alternatives see [Remotion vs Shotstack](/remotion-vs-shotstack)
+and [Remotion vs Creatomate](/remotion-vs-creatomate); for another code-first
+framework, [Remotion vs Revideo](/remotion-vs-revideo).
+
+## Sources
+
+- [FFmpeg — About](https://ffmpeg.org/about.html)
+- [FFmpeg — ffmpeg documentation](https://ffmpeg.org/ffmpeg.html)
+- [FFmpeg — Filters documentation](https://ffmpeg.org/ffmpeg-filters.html)
+- [FFmpeg — License and legal considerations](https://ffmpeg.org/legal.html)
+- [Remotion — the core idea](https://www.remotion.dev/docs/the-fundamentals)
+- [Remotion — renderFrames()](https://www.remotion.dev/docs/renderer/render-frames)
+- [Remotion — stitchFramesToVideo()](https://www.remotion.dev/docs/renderer/stitch-frames-to-video)
+- [Remotion — Encoding guide](https://www.remotion.dev/docs/encoding)
+- [Remotion — v4 migration](https://www.remotion.dev/docs/4-0-migration)
+- [Remotion — npx remotion ffmpeg](https://www.remotion.dev/docs/cli/ffmpeg)
+- [Remotion — Client-side rendering](https://www.remotion.dev/docs/client-side-rendering)
+- [Remotion — Performance tips](https://www.remotion.dev/docs/performance)
+- [Remotion — How Lambda works](https://www.remotion.dev/docs/lambda/how-lambda-works)
+- [Remotion — Comparison of SSR options](https://www.remotion.dev/docs/compare-ssr)
+- [Remotion LICENSE.md](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md)

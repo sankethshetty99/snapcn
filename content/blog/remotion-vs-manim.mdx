@@ -1,0 +1,218 @@
+---
+title: Remotion vs Manim
+seoTitle: "Remotion vs Manim — React video or Python math animation"
+description: "Remotion renders React components frame by frame; Manim animates math objects in Python. Language, rendering, licence, learning curve and which fits your video."
+date: 2026-10-21
+tags:
+  - remotion
+  - comparison
+faq:
+  - question: What is the difference between Remotion and Manim?
+    answer: Remotion is a React framework. A video is a component, and each frame is that component rendered at a frame number with the DOM and CSS. Manim is a Python animation engine built for explanatory math videos. You build a Scene from mathematical objects and play animations such as Create and Transform on them.
+  - question: Is Manim free?
+    answer: Yes. Both Manim Community and 3Blue1Brown's ManimGL are MIT licensed. Remotion is free for individuals, organisations of up to three people and non-profits, and needs a paid Company License above that.
+  - question: Which Manim should I install?
+    answer: Manim Community's maintainers recommend their version for its active development and documentation. It installs with pip install manim. ManimGL, Grant Sanderson's own version, installs with pip install manimgl. The two conflict, so pick one.
+  - question: Can Manim make a product demo video?
+    answer: It can draw text and shapes, but a product demo is mostly interface, screenshots and recordings. Remotion renders those as ordinary React and CSS, so it is the better fit. Manim is better for equations, graphs and geometry.
+---
+
+**Short answer:** use **Remotion** when the video is made of interface — UI,
+text, screenshots, screen recordings — or when it must render automatically from
+data. It is React and TypeScript. Use **Manim** when the video explains maths:
+equations, graphs, geometric transformations. It is Python, with LaTeX built in.
+They rarely compete for the same video.
+
+Facts below were checked on each project's GitHub, PyPI, npm and documentation
+in October 2026.
+
+## At a glance
+
+| | Remotion | Manim |
+| --- | --- | --- |
+| Language | TypeScript / React | Python |
+| Built for | "Make videos programmatically with React" | "Explanatory math videos" |
+| A video is | A React component, rendered at each frame number | A `Scene` class whose `construct()` plays animations |
+| Draws with | DOM and CSS | Mathematical objects (circles, squares, graphs, LaTeX) |
+| Rendering | CLI, Node APIs, AWS Lambda, Cloud Run | `manim` command line (or `manimgl`) |
+| Licence | Remotion License — free up to 3 people, paid above | MIT (both versions) |
+| Latest release | 4.0.537 | Community 0.22.0; ManimGL 1.7.2 |
+| GitHub stars | ~66k | Community ~42k; 3b1b/manim ~95k |
+
+## Two Manims
+
+Before comparing anything, know that "Manim" is two projects:
+
+- **[3b1b/manim](https://github.com/3b1b/manim)** began as Grant Sanderson's
+  personal tool for animating 3Blue1Brown videos. It is now published as
+  **ManimGL** — `pip install manimgl`, Python 3.10 or higher, with FFmpeg,
+  OpenGL and optionally LaTeX as system requirements.
+- **[Manim Community](https://github.com/ManimCommunity/manim)** was forked from
+  it in 2020 "with a goal of being more stable, better tested, quicker to
+  respond to community contributions, and all around friendlier to get started
+  with." It installs with `pip install manim` and needs Python 3.11 or higher.
+
+Both READMEs warn that the install instructions are not interchangeable. The
+Community README recommends its own version "for its continued development,
+improved features, enhanced documentation, and more active community-driven
+maintenance", and points people who want to study how Grant makes his videos to
+his repository. If you are starting out, start with Community. The rest of this
+post uses its API.
+
+## The same idea in both
+
+A square that turns into a circle.
+
+**Manim** — the example from the Manim Community README:
+
+```python
+from manim import *
+
+
+class SquareToCircle(Scene):
+    def construct(self):
+        circle = Circle()
+        square = Square()
+        square.flip(RIGHT)
+        square.rotate(-3 * TAU / 8)
+        circle.set_fill(PINK, opacity=0.5)
+
+        self.play(Create(square))
+        self.play(Transform(square, circle))
+        self.play(FadeOut(square))
+```
+
+```sh
+manim -p -ql example.py SquareToCircle
+```
+
+`-p` opens the video when it finishes rendering; `-ql` renders faster at lower
+quality.
+
+**Remotion** — a box whose corner radius goes from square to round:
+
+```tsx
+import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+
+export const SquareToCircle = () => {
+  const frame = useCurrentFrame();
+  const radius = interpolate(frame, [0, 30], [0, 50], {
+    extrapolateRight: "clamp",
+  });
+  return (
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+      <div
+        style={{
+          width: 300,
+          height: 300,
+          borderRadius: `${radius}%`,
+          background: "pink",
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+```
+
+```sh
+npx remotion render
+```
+
+The difference is the whole decision. Manim's `Transform` is a true morph
+between two mathematical shapes — it works for any pair, a square into a
+circle, one equation into another. Remotion has no idea what a circle *is*; it
+animates CSS properties. That is a weakness for geometry and a strength for
+interface, because a button, a card or a code block is already CSS.
+
+## Rendering model
+
+**Manim** is a sequence. `construct()` runs top to bottom and each
+`self.play()` call adds an animation after the previous one, a little like
+Motion Canvas and Revideo's generators. You render a scene from the command line
+to a video file.
+
+**Remotion** is a function of the frame number. Frame 45 is computed from 45,
+not from frames 0 to 44, so any frame renders on its own and the work can be
+split across machines. Remotion renders from the `npx remotion render` CLI,
+Node APIs such as `renderMedia()`, and serverless renderers on AWS Lambda,
+Google Cloud Run and Vercel, which is why it is used for automated video — the
+same composition re-rendered with different data.
+
+## What each is good at
+
+### Manim
+
+- **Equations.** LaTeX is a first-class citizen. Manim Community lists it as an
+  optional install step for anyone who wants typeset formulas.
+- **Morphing between mathematical objects** — shapes, graphs, formulas.
+- **Explainers in the 3Blue1Brown style**, which is what it was built for.
+- **Notebooks.** Manim Community ships a `%%manim` IPython magic for JupyterLab
+  and Jupyter, and an online Jupyter environment to try it before installing.
+
+### Remotion
+
+- **Product and UI video.** Interfaces, typography, screenshots and recordings
+  are native to React and CSS.
+- **Data-driven and automated video**, rendered on your own infrastructure.
+- **Embedding.** The `<Player>` component plays a composition inside a web app.
+- **Ecosystem.** Remotion's README links official templates, Elements, effects,
+  transitions, captions, fonts and agent skills, and third-party libraries add
+  more. For product demos, [snapcn](/docs/components) installs ready-made shots
+  — a [laptop frame](/docs/screens/laptop-frame), a
+  [cursor track](/docs/screens/cursor-track), a
+  [text reveal](/docs/text/text-reveal) — with
+  `npx shadcn@latest add @snapcn/<name>`, copying the source into your project.
+
+## Licensing
+
+**Manim** — both versions are MIT. Free for any use, any company size.
+
+**Remotion** — its own licence. Free for individuals, for-profit organisations
+of up to three people, non-profits and evaluation. Organisations of four or more
+need a Company License: $25/month per seat for Remotion for Creators, or $0.01
+per render with a $100/month minimum for Remotion for Automators. Remotion's FAQ
+describes it as "source-available software, but it is not open source software."
+Full details: [Is Remotion free?](/remotion-license-pricing).
+
+## Learning curve
+
+Pick the one that matches the language you already know.
+
+- **Manim** asks for Python and, for the best of it, LaTeX. The vocabulary —
+  `Scene`, `Circle`, `Create`, `Transform` — is small and mathematical. Its
+  installs need system dependencies like FFmpeg and, for ManimGL, OpenGL.
+- **Remotion** asks for React. If you build web apps, there is almost nothing
+  new: `useCurrentFrame()`, `interpolate()`, `spring()` and `<Sequence>`.
+  Start with `npx create-video@latest`.
+
+## Which to use
+
+| Your video | Use |
+| --- | --- |
+| Proof, equation, graph, geometric transformation | Manim |
+| Lecture or explainer in the 3Blue1Brown style | Manim |
+| Product demo, launch video, changelog, onboarding | Remotion |
+| Thousands of personalised videos from data | Remotion |
+| Video player inside your web app | Remotion |
+
+You can also use both. Render a Manim scene to a file and drop it into a
+Remotion composition as a video clip.
+
+For other options, see [Remotion alternatives](/remotion-alternatives) and
+[Remotion vs Motion Canvas](/remotion-vs-motion-canvas). If the video is a
+product demo, start from
+[a product demo video in React](/product-demo-video-react).
+
+## Sources
+
+- https://github.com/remotion-dev/remotion
+- https://github.com/remotion-dev/remotion/releases
+- https://www.remotion.dev/docs/license/faq
+- https://www.remotion.pro/license
+- https://github.com/ManimCommunity/manim
+- https://pypi.org/project/manim/
+- https://docs.manim.community/en/stable/installation.html
+- https://docs.manim.community/en/stable/examples.html
+- https://github.com/ManimCommunity/manim/blob/main/docs/source/installation/uv.md
+- https://github.com/3b1b/manim
+- https://pypi.org/project/manimgl/

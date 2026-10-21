@@ -1,0 +1,193 @@
+---
+title: Remotion vs Creatomate
+seoTitle: "Remotion vs Creatomate — React code or template automation"
+description: Remotion renders React code to video on your own servers; Creatomate renders JSON templates in its cloud via API, spreadsheets or no-code tools. Compared.
+date: 2026-10-21
+tags:
+  - remotion
+  - comparison
+faq:
+  - question: What is the difference between Remotion and Creatomate?
+    answer: Remotion is a React framework. A video is a component rendered frame by frame, and you render it yourself with the CLI, Node or AWS Lambda. Creatomate is a hosted media automation platform. You design a template in its visual editor, then render variations through its API, spreadsheet feeds, forms, or Zapier, Make and n8n.
+  - question: How does Creatomate pricing work?
+    answer: Creatomate sells monthly or annual plans (Essential, Growth and Beyond) that include a number of credits. An image costs one credit; a video costs credits based on width, height, frame rate and duration. There is a 50-credit free trial with no credit card. Check creatomate.com/pricing for current dollar prices.
+  - question: Is Remotion free?
+    answer: Remotion is free for individuals, for-profit companies with up to three employees and non-profits. Larger companies need a Company License, priced per render for automation or per seat for manual creation. Rendering compute is yours to run and pay for.
+  - question: Which should I use for a product demo video?
+    answer: Remotion, in most cases, because a product demo is UI and Remotion draws UI with React and CSS. Creatomate fits when marketers or no-code workflows need to fill a template with data, such as social posts or listing videos, without developers in the loop.
+---
+
+**Short answer:** use **Remotion** if you want the video to be React code in
+your repo, rendered on infrastructure you control. Use **Creatomate** if you
+want a visual template editor and a hosted renderer you can drive from an API,
+a spreadsheet, a form or a no-code tool. Remotion is a framework for building
+videos; Creatomate is a platform for filling templates at scale.
+
+Facts below were checked on remotion.dev, remotion.pro and creatomate.com in
+October 2026.
+
+## At a glance
+
+| | Remotion | Creatomate |
+| --- | --- | --- |
+| What it is | React framework for video | Hosted media automation platform |
+| You write | React components, `useCurrentFrame()` | A template in the editor (stored as RenderScript JSON) |
+| Data in | Props, from CLI, Node or Lambda | `modifications` via API, spreadsheet feeds, forms, Zapier, Make, n8n |
+| Preview | Remotion Studio, `<Player>` | Template editor, JS Preview SDK |
+| Rendering | Your machine, Node, Lambda, Cloud Run, Vercel Sandbox | Creatomate's cloud |
+| Output | Files you own and host | Hosted up to 30 days, then deleted |
+| Images too | Yes, `renderStill()` | Yes, one credit each |
+| Pricing | Free for individuals and up to 3 employees; Company License above that | Credit plans, monthly or annual |
+
+## How Remotion works
+
+Remotion gives you a frame number and a blank canvas, and you render anything
+React can draw for that frame. A composition is a component plus a size, fps
+and duration. Templates are just components with props, so one composition
+renders a different video for every set of props you pass.
+
+Rendering runs on your side. `@remotion/renderer` captures frames with
+Puppeteer and encodes them with FFmpeg, which ships inside the package since
+v4. You can render from the CLI, Node, GitHub Actions, or in the cloud with
+Remotion Lambda, which renders chunks of one video in parallel and stitches
+them together. See [how to make videos with React](/make-videos-with-react)
+for a minimal composition.
+
+## How Creatomate works
+
+Creatomate's own description: design a video or image template in a visual
+editor, then generate media at scale through the API, Zapier, Make, n8n,
+spreadsheet feeds or shareable forms. Every video and image is described by a
+JSON format called **RenderScript**; a template is stored RenderScript with an
+ID. New templates start from built-in kits.
+
+Rendering a template from code is one request:
+
+```bash
+curl -X POST https://api.creatomate.com/v2/renders \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template_id": "YOUR_TEMPLATE_ID",
+    "modifications": { "Title-1": "Your headline here" }
+  }'
+```
+
+It returns `202` with a render object; you poll `GET /v2/renders/:id` until
+the status is `succeeded` or `failed`, or pass a `webhook_url`. A `dry_run`
+flag validates the request and returns the effective RenderScript without
+spending credits. Output files stay hosted for up to 30 days and are then
+deleted, so Creatomate recommends copying them to your own storage as soon as
+a render completes.
+
+For non-developers, **feeds** are spreadsheets where each row renders a video,
+and **shareable forms** let someone fill in fields and render. The **JS
+Preview SDK** embeds Creatomate's renderer in your own web app so users can
+preview or edit before rendering.
+
+## The difference that decides it
+
+In Remotion you write the pixels. Each frame is a React render, so your real
+components — inputs with a caret, charts, code blocks, your design system —
+are what appears on screen, and motion is `interpolate()` and `spring()` on
+the frame number. Anything a browser can draw is in scope, and the source of
+truth is TypeScript in git.
+
+In Creatomate you configure a template. Elements (media, text, subtitles,
+shapes, compositions) are placed and animated with presets and keyframes in
+the editor or in RenderScript, then filled with data. That is a faster path to
+a hundred social posts from a spreadsheet, and it lets a marketer change the
+template without a deploy. It is not your React codebase, so a UI shot means
+rebuilding the interface in the template or recording it first.
+
+## Pricing
+
+**Creatomate** sells three self-serve plans — **Essential** ("best for
+individuals"), **Growth** ("startups and small teams") and **Beyond**
+("scale-ups") — billed monthly or annually, with annual billing advertised as
+two months free. The dollar prices on the pricing page are rendered by
+JavaScript and were not readable when checked, so see
+[creatomate.com/pricing](https://creatomate.com/pricing) for current numbers.
+What the page does state:
+
+| Plan | Credits a month | Storage | Feed rows |
+| --- | --- | --- | --- |
+| Essential | 2,000 | 5 GB | 1,000 |
+| Growth | 10,000 to 40,000 | 50 GB | 10,000 |
+| Beyond | 50,000 to 200,000 | 500 GB | 100,000 |
+
+All plans include no-code and API access. The JS Preview SDK starts on Growth.
+The free trial is 50 credits with no credit card, and Creatomate's docs say the
+free plan clamps output to 480 px on both sides.
+
+Credits work like this, per Creatomate's docs: an image is one credit at any
+resolution, and a video costs width × height × frame rate × seconds ÷
+100,000,000, rounded up. Their examples: 1280×720 at 25 fps is about 13.8
+credits a minute, and 1080×1920 at 30 fps about 37.3. Higher resolution and
+frame rate cost proportionally more.
+
+**Remotion** is free for individuals, for-profit organisations with up to three
+employees, and non-profits, including commercial use. Above that, a Company
+License on remotion.pro costs $0.01 per render with a $100 a month minimum for
+automated rendering, or $25 a month per seat for manual creation, with
+Enterprise from $500 a month. Compute is separate: you pay your own server,
+Lambda or other host.
+
+## Rendering
+
+| | Remotion | Creatomate |
+| --- | --- | --- |
+| Where | Anywhere Node and a headless browser run | Creatomate's cloud |
+| Trigger | CLI, Node API, Lambda, CI | REST API, feeds, forms, Zapier, Make, n8n |
+| Notification | Your own code; `getRenderProgress()` on Lambda | Polling or `webhook_url` |
+| Validate first | Studio preview | `dry_run`, free |
+| Retention | Yours | Up to 30 days |
+
+## When Remotion wins
+
+- **The video is made of interface.** Product demos, changelogs and launch
+  videos are your UI, which is already React and CSS.
+- **Developers own it.** Code review, CI renders, and coding agents such as
+  Claude Code editing compositions directly. See
+  [Claude Code + Remotion](/claude-code-remotion-videos).
+- **You want installable scenes.** Libraries like [snapcn](/docs/components)
+  copy Remotion components into your project with
+  `npx shadcn@latest add @snapcn/<name>` — a
+  [screen recording](/docs/screens/screen-recording) or
+  [text reveal](/docs/text/text-reveal) is an install, not a template build.
+- **You control the cost curve.** Free up to three employees, and render
+  compute is whatever infrastructure you choose.
+
+## When Creatomate wins
+
+- **Non-developers run it.** A marketer edits the template and fills a
+  spreadsheet; no code, no deploy.
+- **The workflow is no-code.** Zapier, Make and n8n integrations are built in.
+- **You render images and video from one template system.** Social posts,
+  banners and short clips share the same editor and API.
+- **You do not want to run a renderer.** Rendering and temporary hosting are
+  part of the service.
+
+## For a product video
+
+Pick Remotion. A product video is mostly your interface, and Remotion draws it
+with the code you already have. Start with a
+[product demo video in React](/product-demo-video-react). Related:
+[Remotion vs Shotstack](/remotion-vs-shotstack),
+[Remotion vs Revideo](/remotion-vs-revideo) and
+[Remotion vs After Effects](/remotion-vs-after-effects).
+
+## Sources
+
+- [Remotion — the core idea](https://www.remotion.dev/docs/the-fundamentals)
+- [Remotion — renderFrames()](https://www.remotion.dev/docs/renderer/render-frames)
+- [Remotion — v4 migration (FFmpeg baked in)](https://www.remotion.dev/docs/4-0-migration)
+- [Remotion — How Lambda works](https://www.remotion.dev/docs/lambda/how-lambda-works)
+- [Remotion — Server-side rendering](https://www.remotion.dev/docs/ssr)
+- [Remotion — Player](https://www.remotion.dev/docs/player)
+- [Remotion LICENSE.md](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md)
+- [Remotion Company Licensing](https://www.remotion.pro/license)
+- [Creatomate — Pricing](https://creatomate.com/pricing)
+- [Creatomate — llms.txt overview](https://creatomate.com/llms.txt)
+- [Creatomate — Quick start: render a template via the API](https://creatomate.com/llms/quick-start.md)
+- [Creatomate — Credits](https://creatomate.com/llms/credits.md)
