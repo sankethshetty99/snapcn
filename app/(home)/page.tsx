@@ -122,20 +122,18 @@ export default function Page() {
   // slow phone. A few KB each; asked for up front.
   // The row runs backwards (see `startSlot`): the cards on screen first are the
   // last four.
-  // Wall commented out (20 Oct) — so are its poster preloads, or the first
-  // screen would still fetch four stills nobody sees.
-  // for (const [i, slide] of SLIDES.entries()) {
-  //   const slot = startSlot(i, SLIDES.length);
-  //   if (slot >= 0 && slot < 4 && slide.poster) {
-  //     preload(slide.poster, { as: "image", fetchPriority: "high" });
-  //   }
-  // }
+  for (const [i, slide] of SLIDES.entries()) {
+    const slot = startSlot(i, SLIDES.length);
+    if (slot >= 0 && slot < 4 && slide.poster) {
+      preload(slide.poster, { as: "image", fetchPriority: "high" });
+    }
+  }
 
   return (
     <>
       <PageJsonLd graph={jsonLd["@graph"]} path="/" />
       <Hero />
-      {/* <ShowcaseCarousel slides={SLIDES} /> */}
+      <ShowcaseCarousel slides={SLIDES} />
       <WhatYouGet />
       <Faq />
       <WallOfLove />

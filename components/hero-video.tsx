@@ -21,7 +21,20 @@ import { useEffect, useState } from "react";
 /** The open/close flight between the thumbnail and the full-size player. */
 const FLY = { type: "spring" as const, stiffness: 100, damping: 20 };
 
-export function HeroVideo({ src, poster }: { src: string; poster?: string }) {
+export function HeroVideo({
+  src,
+  poster,
+  loop = true,
+  radius = 14,
+}: {
+  src: string;
+  poster?: string;
+  /** Off for the footer copy: it is on every page, and an autoplaying loop
+      would fetch the whole film on every page view. The poster stands in. */
+  loop?: boolean;
+  /** Corner radius in px — the footer's small copy reads better tighter. */
+  radius?: number;
+}) {
   const [open, setOpen] = useState(false);
   const SPRING = { mass: 0.1 };
   const x = useSpring(0, SPRING);
@@ -44,7 +57,8 @@ export function HeroVideo({ src, poster }: { src: string; poster?: string }) {
           y.set(e.clientY - b.top);
         }}
         onPointerLeave={() => opacity.set(0)}
-        className="relative block aspect-video w-full overflow-hidden rounded-[14px] bg-[#292327]"
+        className="relative block aspect-video w-full overflow-hidden bg-[#292327]"
+        style={{ borderRadius: radius }}
       >
         <motion.span
           style={{ x, y, opacity }}
@@ -59,16 +73,16 @@ export function HeroVideo({ src, poster }: { src: string; poster?: string }) {
             layoutId="hero-video"
             transition={FLY}
             className="absolute inset-0 overflow-hidden"
-            style={{ borderRadius: 14 }}
+            style={{ borderRadius: radius }}
           >
             <video
               src={src}
               poster={poster}
-              autoPlay
+              autoPlay={loop}
               muted
               playsInline
-              loop
-              preload="metadata"
+              loop={loop}
+              preload={loop ? "metadata" : "none"}
               className="size-full object-cover"
             />
           </motion.div>

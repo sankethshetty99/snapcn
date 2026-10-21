@@ -8,6 +8,8 @@ description: >
   or keyframe is good enough to ship. For auditing a whole codebase's motion instead of one
   diff, use improve-animations.
 disable-model-invocation: true
+metadata:
+  internal: true
 ---
 
 # Reviewing Animations

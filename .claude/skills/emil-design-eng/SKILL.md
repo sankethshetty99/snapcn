@@ -7,6 +7,8 @@ description: >
   loading, empty, error), or judging why an interface feels cheap when nothing is technically
   wrong. Triggers - "make this feel better", "is this animation good", "design polish",
   "micro-interaction", "easing", "duration", "component states", "attention to detail".
+metadata:
+  internal: true
 ---
 
 # Design Engineering

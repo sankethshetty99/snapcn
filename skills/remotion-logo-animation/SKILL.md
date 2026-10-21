@@ -8,6 +8,8 @@ description: >
   scales up. Triggers: logo animation, logo reveal, logo sting, animated logo, intro
   animation, outro, brand reveal, end card, bumper, "animate my logo", "logo intro in
   Remotion".
+metadata:
+  internal: true
 ---
 
 # Remotion logo animation, built from snapcn

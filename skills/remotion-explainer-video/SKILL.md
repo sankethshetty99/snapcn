@@ -8,6 +8,8 @@ description: >
   karaoke-captions and more) for every beat instead of hand-animated slides. Triggers:
   explainer video, animated explainer, how it works video, product explainer, narrated
   video, voiceover video, "explain my product in a video", "make an explainer in Remotion".
+metadata:
+  internal: true
 ---
 
 # Remotion explainer video, built from snapcn

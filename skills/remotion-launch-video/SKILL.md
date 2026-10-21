@@ -9,6 +9,8 @@ description: >
   components → compose → render-audit → ship. Triggers: launch video, product launch
   video, remotion launch video, announcement video, release video, promo video, Product
   Hunt video, "make a video for my launch", "make a launch film with Claude Code".
+metadata:
+  internal: true
 ---
 
 # Remotion launch video, built from snapcn
