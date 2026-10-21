@@ -1,0 +1,176 @@
+---
+title: Free and paid Remotion templates in 2026
+seoTitle: Free and paid Remotion templates (2026)
+description: Every official create-video template, what the Remotion Store sells and for how much, and the third-party template collections listed in Remotion's docs.
+date: 2026-10-21
+tags:
+  - remotion
+  - templates
+  - comparison
+faq:
+  - question: How do I start a Remotion project from a template?
+    answer: Run npx create-video@latest and the wizard asks for a package manager, a template and whether to install Agent Skills. Remotion's docs also show non-interactive forms such as npx create-video@latest --yes --blank my-video and npx create-video@latest --template vercel.
+  - question: Are Remotion's official templates free?
+    answer: The 20 templates in the create-video CLI are free to start from. Remotion's templates page also lists paid templates (Editor Starter, Timeline and Watercolor Map), sold through the Remotion Store. Remotion itself is free for individuals and companies of up to 3 people; bigger companies need a Company License.
+  - question: What does the Remotion Store sell?
+    answer: When we checked, the store listed Editor Starter ($600), Cube Transition ($10), Colors and Shapes ($20) and Timeline ($300). Watercolor Map's page said it is no longer available for purchase.
+  - question: Where can I find free third-party Remotion templates?
+    answer: Remotion's List of resources links several, including SwiftClip (MIT), RenderComp Free (50 MIT templates) and cliphou.se (MIT-0). Lexington Motion is a paid pack.
+---
+
+**Short answer:** start with the free official templates from
+`npx create-video@latest`. Pick **Hello World** for a first project, **Next.js**
+or **React Router** for a video-generation SaaS, or **Render Server** /
+**Next.js (Vercel Sandbox)** if you need server rendering. Pay for a Remotion
+Store item only if you are building an editor (**Editor Starter**,
+**Timeline**). For ready-made scenes, Remotion's docs link free MIT collections
+(**SwiftClip**, **RenderComp Free**, **cliphou.se**) and a paid one
+(**Lexington Motion**).
+
+Everything below was checked in October 2026, on remotion.dev, the Remotion
+Store, the create-video source on GitHub and each third-party site. Prices are
+as published that day.
+
+## At a glance
+
+| Source | What you get | Price (as published) | License |
+| --- | --- | --- | --- |
+| [create-video templates](https://www.remotion.dev/templates) | 20 official starters | Free | Remotion license |
+| [Remotion Store](https://www.remotion.pro/store) | Editor Starter, Timeline, Cube Transition, Colors and Shapes | $10 to $600 per item | Remotion terms |
+| [SwiftClip](https://github.com/zz41354899/SwiftClip) | 30+ composition templates | Free | MIT |
+| [RenderComp Free](https://rendercomp.com/free) | 50 templates | Free; full catalogue $149 | MIT |
+| [cliphou.se](https://cliphou.se/remotion-templates/) | Editable templates, source download | Free | MIT-0 |
+| [Lexington Motion](https://lexingtonthemes.com/remotion) | 415 templates | $99 one payment | Commercial license |
+
+Whichever you pick, Remotion's own license still applies to Remotion. It is
+free for individuals, for-profit organisations with up to 3 employees and
+non-profits. Bigger companies need a Company License (see
+[License & Pricing](https://www.remotion.dev/docs/license/pricing)).
+
+## Official templates: `npx create-video@latest`
+
+The wizard asks for a package manager, a template, and whether to install Agent
+Skills. The docs recommend Hello World for a first project. To skip the
+questions:
+
+```bash
+npx create-video@latest --yes --blank my-video
+```
+
+That command is from the getting-started page. It creates a blank project with
+Agent Skills and no Tailwind. The list below is the `FEATURED_TEMPLATES` array
+in `packages/create-video/src/templates.ts`, and it matches the "Free
+templates" section on remotion.dev/templates:
+
+| Template | Description from the source |
+| --- | --- |
+| Blank | Nothing except an empty canvas |
+| Hello World | A playground with a simple animation |
+| Next.js | SaaS template for video generation apps |
+| Next.js (Vercel Sandbox) | Render videos on-demand using Vercel Sandbox |
+| Recorder | A video production tool built entirely in JavaScript |
+| Prompt to Motion Graphics SaaS Starter Kit | SaaS template for AI-powered animation generation |
+| Render Server | An Express.js server for rendering videos with Remotion |
+| Electron | Render Remotion videos from a desktop app |
+| React Router | SaaS template for video generation apps |
+| Element Library | Build and publish your own Remotion Element library |
+| React Three Fiber | Remotion + React Three Fiber starter template |
+| Still images | Dynamic PNG/JPEG template with built-in server |
+| Audiogram | Text and waveform visualization for podcasts |
+| Music Visualization | Music visualization starter |
+| Prompt to Video | Create a story with images and voiceover from a prompt |
+| Skia | React Native Skia starter |
+| Overlay | Overlays for video editing software |
+| Code Hike | Beautiful code animations |
+| Stargazer | Celebrate your repo stars with a video |
+| TikTok | Generate animated word-by-word captions |
+
+Most are maintained under the `remotion-dev` GitHub organisation. Stargazer is
+the exception: its repository is `pomber/stargazer`. Blank, Hello World,
+Audiogram, Music Visualization, Prompt to Video, Overlay, Stargazer and TikTok
+let the CLI add Tailwind. (Music Visualization's description in the source
+reuses Audiogram's text, so the table describes it by name.)
+
+The same file has a separate `PAID_TEMPLATES` list. It holds one entry, Editor
+Starter, which links to remotion.pro.
+
+## The Remotion Store
+
+The store at remotion.pro/store listed four products:
+
+| Item | Price | What it is |
+| --- | --- | --- |
+| Editor Starter | $600 | A starting point for building your own video editor. GitHub repository, copy-and-pasteable. Marked as an Enterprise license perk |
+| Timeline | $300 | A `<Timeline>` component that syncs with the Remotion Player, shipped in a Vite example project. Built with Tailwind CSS and React |
+| Cube Transition | $10 | A 3D cube presentation for `<TransitionSeries.Transition>` from `@remotion/transitions`, also available as an npm package |
+| Colors and Shapes | $20 | Marked as a "License perk" on the store listing. Its product page did not load when we checked |
+
+The templates page also lists **Watercolor Map** under paid templates. Its store
+page now says "This product is no longer available for purchase."
+
+On "license perk": Remotion's pricing page lists "Editor Starter included" in
+the Enterprise License (starting at $500 per month). The Editor Starter page
+marks it as included with the Enterprise license, not the Company license. If
+your company is already on Enterprise, check your perks before you buy.
+
+## Third-party template collections
+
+These are the template collections linked from Remotion's
+[List of resources](https://www.remotion.dev/docs/resources). We checked each
+one ourselves.
+
+**SwiftClip.** MIT, open source, 45 GitHub stars. The README describes it as
+"an open-source library of 30 copy-paste video composition templates". Its
+feature list says 32: Product Launch, SaaS Promo, Data Viz, Lower Third,
+Testimonial Card, End Screen and more. They are built on `useCurrentFrame()`,
+`interpolate()` and `spring()`, with Remotion, React and lucide-react as the
+only dependencies.
+
+**RenderComp Free.** 50 templates under MIT. The page says you can use them in
+commercial projects as long as you keep the MIT notice. Full source is on
+GitHub with no signup. RenderComp sells the full catalogue (1,000+) as
+"RenderComp Solo" for $149, "pay once, lifetime updates".
+
+**cliphou.se.** Templates under MIT-0. You can edit text and colours in the
+browser, download MP4s, or download a standalone Remotion source package
+(`npm ci`, then render with your props). The page says "100% free", with no
+watermark or attribution required.
+
+**Lexington Motion.** Paid: "415 video templates for reels, social, web, charts
+and more", $99 for all of them, one payment, with a commercial license and
+unlimited renders. The page notes that a Remotion license is not included.
+
+## Templates vs components
+
+A template is a whole project you start from. If you already have a Remotion
+project and need the shots inside it, a component library fits better. Those
+are covered in
+[the best Remotion component libraries](/best-remotion-component-libraries).
+snapcn is one of them (ours): you install components into an existing project
+with `npx shadcn@latest add @snapcn/<name>`, including full scenes like
+[Product Hero](/docs/scenes/hero-launch), and the source is copied into your
+repo. It is about 48 free MIT components plus a paid Pro tier, not a starter
+template.
+
+If you are rendering on a server, the next question is where to run it:
+[Lambda vs Cloud Run vs your own server](/remotion-lambda-vs-self-hosted-rendering).
+
+## Sources
+
+- https://www.remotion.dev/docs (Creating a new project)
+- https://www.remotion.dev/templates
+- https://github.com/remotion-dev/remotion/blob/main/packages/create-video/src/templates.ts
+- https://www.remotion.dev/docs/vercel-sandbox
+- https://www.remotion.pro/store
+- https://www.remotion.pro/editor-starter
+- https://www.remotion.pro/timeline
+- https://www.remotion.pro/cube-transition
+- https://www.remotion.pro/watercolor-map
+- https://www.remotion.dev/docs/license/pricing
+- https://github.com/remotion-dev/remotion/blob/main/LICENSE.md
+- https://www.remotion.dev/docs/resources
+- https://github.com/zz41354899/SwiftClip
+- https://rendercomp.com/free
+- https://github.com/RenderComp/free-remotion-templates
+- https://cliphou.se/remotion-templates/
+- https://lexingtonthemes.com/remotion

@@ -1,0 +1,188 @@
+---
+title: "Is Remotion free? The Remotion license explained"
+seoTitle: "Is Remotion free? Remotion license and pricing (2026)"
+description: "Who can use Remotion free, when a Company License is required, what a seat and a render cost, and how headcount, agencies and automations are counted."
+date: 2026-10-21
+tags:
+  - remotion
+  - licensing
+faq:
+  - question: Is Remotion free?
+    answer: Yes for individuals, for-profit organisations of up to three people, non-profits, and anyone still evaluating it. Everyone else needs a paid Company License. There is no difference in features between the free and paid licences.
+  - question: How much does a Remotion Company License cost?
+    answer: Remotion for Creators is $25 per month per seat. Remotion for Automators is $0.01 per render with a $100 per month minimum. If you take both, a combined $100 per month minimum applies. The Enterprise License starts at $500 per month.
+  - question: Does my whole company count, or only the people using Remotion?
+    answer: The whole company. Remotion's terms count headcount as all personnel, whether or not they use Remotion. A 20-person company where one person uses Remotion needs a Company License, but on the Creators option it only needs one seat for that person.
+  - question: Is Remotion open source?
+    answer: No. Remotion's own FAQ calls it source-available. The code is public on GitHub, but its use is governed by the Remotion License, which is not an OSI-approved open source licence.
+---
+
+**Short answer:** Remotion is free if you are an individual, a for-profit
+organisation of up to three people, a non-profit, or still evaluating it — even
+for commercial work. Organisations of four or more people need a **Company
+License**: **$25/month per seat** to make videos by hand (Remotion for
+Creators), or **$0.01 per render with a $100/month minimum** to run an
+automation (Remotion for Automators). Features are identical on every tier.
+
+Everything below was checked on remotion.dev, remotion.pro and Remotion's
+GitHub repository in October 2026. Prices change; the
+[License FAQ](https://www.remotion.dev/docs/license/faq) is the source of truth.
+
+## At a glance
+
+| Licence | Who it is for | Price |
+| --- | --- | --- |
+| Free License | Individuals, organisations of up to 3 people, non-profits, evaluation | $0 |
+| Company License — Remotion for Creators | Organisations of 4+ making videos without an automation | $25/month per seat |
+| Company License — Remotion for Automators | Organisations of 4+ running an automation | $0.01 per render, $100/month minimum |
+| Both Company options together | — | Combined $100/month minimum |
+| Enterprise License | Custom terms, paperwork, private support | Starting at $500/month |
+
+## Who can use Remotion for free
+
+The [Remotion License](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md)
+lists four groups eligible for the Free License:
+
+- an individual
+- a for-profit organisation with up to 3 employees
+- a non-profit or not-for-profit organisation
+- someone evaluating whether Remotion is a good fit and not yet using it
+  commercially
+
+The FAQ is explicit about the edges. A single-person company can stay on the
+Free License "as long as your total headcount is 3 or less", even if
+incorporated. You can make money under it. You can run an automation under it.
+And you don't need to sign up anywhere — "simply get started".
+
+The free licence also has no feature limits. The FAQ answers "Does the Free
+License have restrictions in functionality?" with a plain "No."
+
+## When you need a Company License
+
+As soon as your organisation has four or more people. remotion.pro describes the
+Company License as "Required for collaborations and companies of 4+ people".
+
+The part people get wrong is *who counts*. Remotion's
+[Terms and Conditions](https://www.remotion.dev/docs/terms) define headcount as
+"all personnel, regardless of whether they use the Remotion Software." So the
+FAQ's own example — a 20-person company where only one person uses Remotion —
+needs a Company License. The good news in the same answer: on the Creators
+option, you only pay for one seat, for the person actually using it.
+
+## Creators or Automators?
+
+The Company License has two options, and you pick by what you do with Remotion,
+not by how many people you are.
+
+**Remotion for Creators — $25/month per seat.** For organisations that produce
+videos without setting up an automation. The FAQ says it costs "$25/month per
+person who writes Remotion code themselves or using agentic coding tools."
+remotion.pro describes it as "For low volume manual video creations, and
+building motion design systems in a local environment (including using AI
+agents and Remotion Studio)."
+
+**Remotion for Automators — $0.01 per render, $100/month minimum.** For
+organisations building automations. Developers working on automations do not
+need a Creators seat. If you activate both options, a combined minimum of
+$100/month applies.
+
+### What counts as an automation
+
+The FAQ defines an automation as "owning code that programmatically calls" one
+of a list of APIs and commands. The list includes `renderMedia()`,
+`renderStill()`, `renderFrames()`, the Lambda, Cloud Run and Vercel render
+functions, `renderMediaOnWeb()`, the `npx remotion render` and `still` CLI
+commands — and the `<Player>` component.
+
+That last one surprises people. In the FAQ's words, "organizations building
+video editors, prompt-to-video tools, automated video pipelines or using the
+Remotion Player will fall under Remotion for Automators."
+
+### What counts as a render
+
+"1 render is the successful generation of a video, audio, GIF, still image or
+image sequence." An image sequence counts as one render however many frames it
+has. Previews in Remotion Studio or the Remotion Player do not count.
+
+Only Automators pay per render. Free License users and Creators-only customers
+never do.
+
+## Enterprise License
+
+An Enterprise License costs the same as a Company License as a baseline, but
+with a $500/month minimum instead of $100 — remotion.pro lists it as "Starting
+at $500 per month". It adds things that are overhead for Remotion: custom terms
+and pricing, signed agreements, compliance and vendor forms, a private Slack,
+Discord or Teams channel, a monthly consulting session, and the Editor Starter
+included. Purchase orders and vendor onboarding require it.
+
+## Agencies, contractors and clients
+
+The FAQ splits agency work into cases:
+
+- **You deliver only a finished file (an MP4).** The client never gets or runs
+  the project, so only your agency's headcount counts. Three people or fewer,
+  free; four or more, Company License.
+- **The client owns or operates the Remotion project.** Both companies'
+  headcounts are added together for the 4-person threshold, and the licence is
+  the responsibility of whoever ultimately owns the project's IP.
+- **You bring in another agency or contractors** on the same project. Their
+  headcount aggregates with yours.
+
+## What you can and can't build
+
+Any commercial use is allowed, with two limits that apply to everyone. You can't
+sell Remotion itself, or a derivative of it. And you can't run a service where
+users "bring/upload their own Remotion code" for rendering without Remotion's
+written approval.
+
+What *is* allowed: a template users personalise and render, a drag-and-drop
+editor built on Remotion, and a service that generates Remotion code with an
+LLM and renders it — users may even edit that code, as long as your service
+generated it first.
+
+## Telemetry and how renders are counted
+
+On the Automators plan it is your job to keep the licensed render count in step
+with real usage, adjusted in the remotion.pro dashboard. Client-side rendering
+has telemetry enabled by default that cannot be disabled. Server-side rendering
+has no automatic telemetry today, but the FAQ says Remotion 5.0 will make it
+mandatory for Automators customers. It stays voluntary for Free License users
+and Creators.
+
+## Changes coming in Remotion 5.0
+
+The current LICENSE.md opens with a note that the licence "will slightly change"
+in Remotion 5.0, linking to
+[pull request #3750](https://github.com/remotion-dev/remotion/pull/3750),
+which is still open. It lists two effective changes: contractors also count
+towards team size, and the Company License becomes bound to Remotion's terms and
+conditions. The latest release when we checked was 4.0.537.
+
+## Is Remotion open source?
+
+No — and Remotion says so itself. The FAQ: "Remotion is source-available
+software, but it is not open source software according to the Open Source
+Initiative's Open Source Definition." If you need an OSI licence, see
+[Remotion alternatives](/remotion-alternatives); Revideo, Motion Canvas and
+Manim are MIT, HyperFrames is Apache 2.0.
+
+## What this means for third-party components
+
+Libraries built on top of Remotion carry their own licence, but they don't
+replace Remotion's. snapcn's free components are MIT and copy into your project
+with `npx shadcn@latest add @snapcn/<name>` — you still need a Remotion licence
+if your organisation is four or more people. See the
+[snapcn license page](/docs/getting-started/license) for what snapcn's own plans
+cover.
+
+## Sources
+
+- https://www.remotion.dev/license (redirects to the LICENSE.md below)
+- https://github.com/remotion-dev/remotion/blob/main/LICENSE.md
+- https://www.remotion.dev/docs/license/faq
+- https://www.remotion.dev/docs/license/pricing
+- https://www.remotion.pro/license
+- https://www.remotion.dev/docs/terms
+- https://github.com/remotion-dev/remotion/pull/3750
+- https://github.com/remotion-dev/remotion/releases

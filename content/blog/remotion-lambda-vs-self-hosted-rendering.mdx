@@ -1,0 +1,193 @@
+---
+title: "Rendering Remotion videos: Lambda vs Cloud Run vs your own server"
+seoTitle: "Remotion rendering: Lambda vs Cloud Run vs own server"
+description: Remotion Lambda, Vercel Sandbox, Cloud Run and @remotion/renderer on your own server compared on speed, cost, setup and limits, from Remotion's docs.
+date: 2026-10-21
+tags:
+  - remotion
+  - rendering
+  - comparison
+faq:
+  - question: What is the best way to render Remotion videos in the cloud?
+    answer: Remotion's docs recommend Remotion Lambda for most people, as the best tradeoff of speed, ease of setup, maturity, total cost and scalability. They call Vercel Sandbox a great choice if you are already a Vercel customer and want the simplest setup.
+  - question: Is Remotion Cloud Run still supported?
+    answer: It is marked experimental. The docs say Cloud Run is in Alpha and not actively being developed, that only essential changes are being made, and that the plan is to port the Lambda runtime to Cloud Run instead of maintaining a separate implementation.
+  - question: How much does Remotion Lambda cost?
+    answer: Remotion's cost example page measured, for example, $0.001 to render the Hello World composition and about $0.10 for a 10-minute remote HD video, in us-east-1 at 2048 MB. That is Lambda compute only. S3, bandwidth, CloudWatch and, for companies of 4+ people, a Remotion license come on top.
+  - question: Is rendering on my own server cheaper than Lambda?
+    answer: The docs say a server has by far the cheapest compute cost, but you also pay while it is idle, and you have to build queueing, scaling, progress reporting, logging and provisioning yourself. Their conclusion is that the more videos you render, the more a long-running server might be worth it.
+---
+
+**Short answer:** use **Remotion Lambda** unless you have a reason not to. It is
+the only option with distributed rendering, so it is the fastest, and Remotion's
+docs recommend it for most people. If you are already on Vercel and want the
+least setup, use **Vercel Sandbox**. Run **@remotion/renderer on your own
+server** only if you render enough volume for idle time to stop mattering and
+can build the queueing yourself. Avoid starting new work on **Cloud Run**: it
+is in Alpha and not actively developed.
+
+Everything here was checked in October 2026, against Remotion's documentation,
+mainly the
+[comparison of server-side rendering options](https://www.remotion.dev/docs/compare-ssr).
+Every number below is one Remotion publishes. We added none of our own.
+
+## At a glance
+
+| | Lambda | Vercel Sandbox | Cloud Run | Your own server (Node.js/Bun APIs) |
+| --- | --- | --- | --- | --- |
+| Package | `@remotion/lambda` | `@remotion/vercel` | `@remotion/cloudrun` | `@remotion/renderer` |
+| Distributed rendering | Yes | No, one machine | No, one machine | No (no docs for building your own) |
+| Setup | Fast; built into the SaaS templates | Easiest: Vercel account + Blob store | Fast | You build queueing, scaling, progress, logging, provisioning |
+| Compute cost | Highest per unit, only while rendering | Usage-based, while the VM runs | Cheaper than Lambda, nothing while idle | Cheapest, but you pay while idle |
+| Max duration | 15 min Lambda timeout | 45 min (Hobby), 5 h (Pro/Enterprise) | 60 min timeout | Your machine |
+| GPU | No | No | Untested by Remotion | Guides exist, not yet supported |
+| Status | Committed long-term | New, actively improved | Alpha, essential changes only | Committed long-term |
+
+## Remotion Lambda
+
+How it works, per the Lambda docs: your Remotion project is deployed to an S3
+bucket as a website. One Lambda function opens it and fans out many Lambda
+functions in parallel, each rendering a small part. The initial function then
+stitches the chunks together and uploads the result to S3. It needs a Chromium
+layer, currently hosted by Remotion. You drive it with `npx remotion lambda` or
+the equivalent Node.js API, and the comparison page notes it can also render
+from PHP, Go and Python.
+
+Use it when, in the docs' words, your videos are "less than 80 minutes long at
+Full HD", you stay within the AWS Lambda concurrency limit (or request an
+increase), and you are fine with AWS in one of the supported regions.
+
+Limits to know:
+
+- **Concurrency:** 1,000 concurrent executions per region by default, possibly
+  lower for new accounts. `npx remotion lambda quotas increase` requests more
+  (AWS root accounts only).
+- **Execution time:** at most 15 minutes.
+- **Storage:** 10 GB, which has to hold the chunks and the joined output. The
+  docs put the output cap at about 5 GB.
+- **No AV1** encoding on Lambda.
+
+Lambda also has features the comparison page says Cloud Run lacks: webhooks,
+Apple Emoji, cost estimation, and renders with an expiration date.
+
+### What Lambda costs, per Remotion's measurements
+
+Remotion's [cost example](https://www.remotion.dev/docs/lambda/cost-example)
+rendered with 2048 MB RAM, 10 GB disk, default concurrency, in us-east-1, on
+Remotion 4.0.381:
+
+| Render | Warm | Cold |
+| --- | --- | --- |
+| Hello World composition | $0.001, 7.56 s | $0.001, 11.02 s |
+| 1-minute video from the same S3 bucket | $0.017, 18.91 s | $0.021, 15.52 s |
+| 10-minute remote HD video | $0.103, 56.09 s | $0.108, 60.98 s |
+| 10-second remote 4K video | $0.013, 45.28 s | $0.014, 53.09 s |
+
+These figures are Lambda compute only, "usually the majority of the cost". On
+top come S3 egress for assets, S3 storage for sites and renders, and CloudWatch
+Logs. Remotion says prices vary with region, bundle size and latency, and
+recommends measuring your own composition. For every render, Lambda also shows
+you an estimated cost.
+
+## Vercel Sandbox
+
+Each render spawns an ephemeral Linux VM with the Remotion renderer, and the
+output goes to Vercel Blob. To start: `npx create-video@latest --template
+vercel`, push to Vercel, create a Blob store under Storage, connect it, and
+redeploy. The `@remotion/vercel` package exposes `createSandbox()`,
+`addBundleToSandbox()`, `renderMediaOnVercel()`, `getRenderProgress()`,
+`renderStillOnVercel()` and `uploadToVercelBlob()`.
+
+From the docs:
+
+- **Limits:** a 45-minute timeout on Hobby and 5 hours on Pro and Enterprise.
+  Concurrency is 10 simultaneous renders on Hobby and 2,000 on Pro and
+  Enterprise.
+- **Long renders:** Vercel functions run for up to 800 seconds. For anything
+  longer, call `renderMediaOnVercel({detached: true})` and poll with
+  `getRenderProgress()`.
+- **Speed:** rendering happens on a single machine, so it is slower than
+  Lambda. Cold starts are longer because each render provisions a VM, installs
+  system dependencies and downloads a browser. Remotion plans to improve this
+  with sandbox snapshots.
+- **Before going public:** the template has no rate limiting or caching. Set up
+  Vercel Spend Management. Snapshots, renders and Blob data persist until you
+  delete them.
+
+Cost is usage-based: you pay while the VM runs. Remotion's docs do not publish a
+per-render figure, and point to Vercel's own Sandbox pricing.
+
+## Cloud Run
+
+The package page is marked **EXPERIMENTAL** and says Cloud Run is "in Alpha
+status and not actively being developed." The comparison page adds that
+Remotion is only making essential changes, because every change needs a new
+Docker image and testing is slow. The SSR page says the plan is to port the
+Lambda runtime to Cloud Run instead of maintaining a separate implementation.
+
+What it does today: it deploys a Cloud Run service and a Cloud Storage bucket,
+and renders the whole video or still on one instance. Documented limits are
+32 GB memory, 8 vCPUs and a 60-minute timeout. On cost, the docs say it is
+cheaper than Lambda because there is no distributed rendering overhead, and you
+pay nothing while the instance is idle.
+
+## Your own server with `@remotion/renderer`
+
+The SSR APIs work in Node.js and Bun. A render takes three steps: `bundle()`
+the project (once, reusable across renders), `selectComposition()` with your
+input props, then `renderMedia()`. Related APIs include `renderStill()`,
+`renderFrames()`, `openBrowser()` to reuse a browser across renders, and
+`makeCancelSignal()`. On Linux, Chrome Headless Shell needs some shared
+libraries.
+
+Where to run it:
+
+- **Any server or container.** The docs have guides for Docker, Azure Container
+  Apps and Cloudflare Containers. Cloudflare Containers ships as a template you
+  own; it chunks renders like Lambda does.
+- **The Render Server template.** `create-video` includes "An Express.js server
+  for rendering videos with Remotion".
+- **GitHub Actions.** The SSR page has a workflow that runs `npx remotion
+  render` and uploads the MP4 as an artifact.
+- **Not Next.js.** You cannot use `@remotion/bundler` inside Next.js; for
+  Next.js, Remotion recommends Lambda.
+
+The tradeoff is spelled out on the comparison page. Compute is cheapest, but you
+pay for idle time and handle queueing, traffic spikes, progress reporting,
+error handling, logging and provisioning yourself. Remotion calls that "a big
+effort overall", recommended only for teams committed to Remotion who want the
+most flexibility.
+
+## The license applies to all of them
+
+Both the Lambda and Cloud Run pages say companies that need a license and render
+in the cloud must cover those renders with a **Remotion for Automators** plan.
+The pricing page lists it at $0.01 per render with a $100/month minimum.
+Individuals and companies of up to 3 people use Remotion for free.
+
+## How to choose
+
+1. **Default:** Lambda.
+2. **Already on Vercel, want push-to-deploy:** Vercel Sandbox, and use detached
+   renders past 800 seconds.
+3. **High, steady volume and an ops team:** your own server with
+   `@remotion/renderer`.
+4. **One-off renders from a repo:** GitHub Actions.
+5. **Cloud Run:** only if you are already on it.
+
+Rendering a product demo? The components you render are the other half:
+[the best Remotion component libraries](/best-remotion-component-libraries).
+
+## Sources
+
+- https://www.remotion.dev/docs/compare-ssr
+- https://www.remotion.dev/docs/lambda
+- https://www.remotion.dev/docs/lambda/limits
+- https://www.remotion.dev/docs/lambda/cost-example
+- https://www.remotion.dev/docs/lambda/faq
+- https://www.remotion.dev/docs/vercel-sandbox
+- https://www.remotion.dev/docs/cloudrun
+- https://www.remotion.dev/docs/ssr
+- https://www.remotion.dev/docs/ssr-node
+- https://www.remotion.dev/docs/license/pricing
+- https://github.com/remotion-dev/remotion/blob/main/packages/create-video/src/templates.ts

@@ -1,0 +1,200 @@
+---
+title: Remotion alternatives in 2026
+seoTitle: "Remotion alternatives in 2026: code and API video tools"
+description: "Revideo, Motion Canvas, HyperFrames, Manim, Shotstack and Creatomate compared with Remotion — language, licence, pricing model and when to pick each."
+date: 2026-10-21
+tags:
+  - remotion
+  - comparison
+faq:
+  - question: What is the best free alternative to Remotion?
+    answer: It depends on what you write. Revideo (MIT) is closest for TypeScript scenes rendered headlessly. HyperFrames (Apache 2.0) renders plain HTML, CSS and JavaScript. Manim (MIT) is the standard for math animation in Python. Motion Canvas (MIT) is a TypeScript library plus a live preview editor.
+  - question: Is there an open source alternative to Remotion?
+    answer: Yes. Remotion itself is source-available, not open source. Revideo, Motion Canvas and both versions of Manim are MIT licensed, and HyperFrames is Apache 2.0.
+  - question: What if I don't want to write code at all?
+    answer: Use a hosted API such as Shotstack or Creatomate. You send a template or a JSON description of the edit and they render it in their cloud, priced by usage rather than by seat.
+  - question: Should I switch from Remotion for a product demo video?
+    answer: Usually not. Product demos are UI, text, screenshots and recordings, which Remotion renders as React and CSS, and it has the largest ecosystem of templates and components. Switch if the licence is the blocker, or if your source material is already plain HTML or math.
+---
+
+**Short answer:** stay on **Remotion** if your team writes React and the video
+is made of UI. Pick **Revideo** for MIT-licensed TypeScript scenes rendered
+headlessly, **HyperFrames** if you'd rather write plain HTML and GSAP,
+**Manim** for math and diagrams in Python, **Motion Canvas** for vector
+explainers synced to voice-over, and **Shotstack** or **Creatomate** if you want
+a hosted render API instead of a framework.
+
+Every tool here was checked on its own site, GitHub and npm or PyPI in October
+2026. We left out tools whose repositories have gone quiet.
+
+## At a glance
+
+| Tool | Language | Licence | Pricing model | GitHub stars | Latest release |
+| --- | --- | --- | --- | --- | --- |
+| [Remotion](https://www.remotion.dev) | React / TypeScript | Remotion License (source-available) | Free up to 3 people; Company License above | ~66k | 4.0.537 |
+| [Revideo](https://github.com/midrender/revideo) | TypeScript | MIT | Free | ~4.1k | 0.11.0 (npm) |
+| [Motion Canvas](https://github.com/motion-canvas/motion-canvas) | TypeScript | MIT | Free | ~19k | 3.17.2 |
+| [HyperFrames](https://github.com/heygen-com/hyperframes) | HTML, CSS, JavaScript | Apache 2.0 | Free | ~69k | 0.8.184 |
+| [Manim Community](https://github.com/ManimCommunity/manim) | Python | MIT | Free | ~42k | 0.22.0 |
+| [ManimGL (3b1b)](https://github.com/3b1b/manim) | Python | MIT | Free | ~95k | 1.7.2 |
+| [Shotstack](https://shotstack.io) | Any (HTTP API, JSON) | Proprietary service | Credits, from $39/month | — | — |
+| [Creatomate](https://creatomate.com) | Any (HTTP API) or no-code | Proprietary service | Credits, monthly plans | — | — |
+
+## Remotion, for reference
+
+Remotion makes videos from React: a video is a component, each frame is that
+component rendered at a frame number. It renders from a CLI, Node APIs and AWS
+Lambda, and the GitHub README lists templates, Elements, transitions, captions
+and agent skills around it. The catch for many teams is the licence: free for
+individuals and organisations of up to three people, paid above that. The
+details are in [Is Remotion free?](/remotion-license-pricing).
+
+## Revideo
+
+Revideo describes itself as "a rendering engine for creating videos in code."
+Scenes are TypeScript generator functions that add nodes to a canvas and yield
+animations, and it "ships a headless render API for generating videos
+programmatically and a React player for previewing scenes in the browser." Its
+README says it "borrows concepts from Remotion and Rive" and is the engine
+behind Midrender. The repository moved to `midrender/revideo`.
+
+- **Licence:** MIT.
+- **Pick it over Remotion when** you need an MIT licence and are happy to draw
+  on a canvas instead of laying out with the DOM.
+
+Full comparison: [Remotion vs Revideo](/remotion-vs-revideo).
+
+## Motion Canvas
+
+Motion Canvas is "a TypeScript library that uses generators to program
+animations" plus "an editor providing a real-time preview of said animations."
+Its README calls it "a specialized tool designed to create informative vector
+animations and synchronize them with voice-overs."
+
+- **Licence:** MIT.
+- **Status:** the last tagged release is 3.17.2 (December 2024), but the
+  repository was still receiving commits in July 2026.
+- **Pick it over Remotion when** you are making a narrated explainer of shapes
+  and diagrams and want to tune timing in a live editor.
+
+Full comparison: [Remotion vs Motion Canvas](/remotion-vs-motion-canvas).
+
+## HyperFrames
+
+HyperFrames, from HeyGen, is "an open-source framework for turning HTML, CSS,
+media, and seekable animations into deterministic MP4 videos." You write an HTML
+file; timing lives in `data-*` attributes and motion in a paused GSAP timeline
+the renderer seeks frame by frame. It ships agent skills for Claude Code,
+Codex, Cursor and others, and a Studio editor. The repository was created in
+March 2026 and was shipping several releases a day in October 2026.
+
+Its own [HyperFrames or Remotion?](https://hyperframes.heygen.com/guides/hyperframes-vs-remotion)
+guide is unusually fair. It says Remotion "is older and much more established"
+with "more templates, more tutorials, more answered questions", and that its
+pure-function-of-the-frame model is "genuinely simpler to hold in your head."
+HyperFrames' pitch: no React or build step, existing HTML and GSAP or Lottie
+animations "drop in close to as-is", and Apache 2.0 means "no seat count and no
+license review." It also offers a skill that ports Remotion compositions.
+
+- **Licence:** Apache 2.0.
+- **Rendering:** locally, AWS Lambda, Google Cloud Run, or HeyGen's hosted
+  cloud.
+- **Pick it over Remotion when** your source material is already HTML — a
+  landing page, a prototype, a GSAP animation — or you need a permissive licence
+  and don't want React.
+
+## Manim
+
+Manim is "an animation engine for explanatory math videos", the tool behind
+3Blue1Brown. There are two versions, and their installs conflict:
+
+- **Manim Community** (`pip install manim`) — forked from 3b1b/manim in 2020 and
+  recommended by its maintainers "for its continued development, improved
+  features, enhanced documentation, and more active community-driven
+  maintenance." Requires Python 3.11+ on PyPI.
+- **ManimGL** (`pip install manimgl`) — Grant Sanderson's own version, Python
+  3.10+, needing FFmpeg, OpenGL and optionally LaTeX.
+
+Both are MIT. You write a Python `Scene`, call `self.play(...)` with animations
+like `Create` and `Transform`, and render from the command line.
+
+- **Pick it over Remotion when** the video is equations, graphs and geometric
+  transformations. LaTeX typesetting is built in.
+
+Full comparison: [Remotion vs Manim](/remotion-vs-manim).
+
+## Shotstack
+
+Shotstack is a hosted video API: you describe an edit as JSON or a template and
+it renders in the cloud. Its site also lists bulk generation from templates, a
+white-label embeddable editor, and AI image, voice and music generation paid for
+in the same credits.
+
+Pricing on its [pricing page](https://shotstack.io/pricing/):
+
+| Plan | Price | Rendered minutes |
+| --- | --- | --- |
+| Pay as you go | $10 once | 50 |
+| Starter | $39/month | 250/month |
+| Pro | $99/month | 750/month |
+| Scale | $199/month | 2,000/month |
+| Volume | $499/month | 10,000/month |
+
+New sign-ups get 10 credits valid for 30 days, and every option includes a free
+sandbox.
+
+- **Pick it over Remotion when** you want rendering as a service with no
+  infrastructure, and your videos are template edits of footage, images and
+  text rather than custom-coded animation.
+
+## Creatomate
+
+Creatomate calls itself "the media automation platform for developers and
+no-code users": a video and image editing API, a template editor, bulk
+generation from spreadsheets, shareable forms and a JavaScript Preview SDK for
+embedding the editor in your app. Plans are Essential, Growth and Beyond, billed
+in credits; "one minute of video at 720p (25 fps) is about 14 credits". The
+trial is 50 credits with no credit card. Its pricing page did not show dollar
+amounts when we checked, so we haven't quoted any.
+
+- **Pick it over Remotion when** non-developers need to design templates and
+  trigger renders, or you want an API without running renderers.
+
+## Left out
+
+**Editly** (`mifi/editly`, MIT) describes itself as "slick, declarative command
+line video editing & API". Its last commit to the default branch was in
+February 2025 and its last release a January 2025 release candidate, so we
+don't recommend starting a new project on it.
+
+## How to choose
+
+- **The video is UI, text and screen recordings** — Remotion. It is where the
+  components are: Remotion's own Elements and templates, plus libraries like
+  [snapcn](/docs/components) for product-demo shots such as a
+  [screen recording](/docs/screens/screen-recording) or a
+  [text reveal](/docs/text/text-reveal).
+- **The licence is the blocker** — Revideo or HyperFrames.
+- **You already have HTML or GSAP** — HyperFrames.
+- **Math** — Manim Community.
+- **Narrated vector explainers** — Motion Canvas or Revideo.
+- **No code, hosted rendering** — Shotstack or Creatomate.
+
+## Sources
+
+- https://github.com/remotion-dev/remotion
+- https://www.remotion.dev/docs/license/faq
+- https://github.com/midrender/revideo
+- https://www.npmjs.com/package/@revideo/core
+- https://github.com/motion-canvas/motion-canvas
+- https://www.npmjs.com/package/@motion-canvas/core
+- https://github.com/heygen-com/hyperframes
+- https://hyperframes.heygen.com/introduction
+- https://hyperframes.heygen.com/guides/hyperframes-vs-remotion
+- https://github.com/ManimCommunity/manim
+- https://pypi.org/project/manim/
+- https://github.com/3b1b/manim
+- https://pypi.org/project/manimgl/
+- https://shotstack.io/pricing/
+- https://creatomate.com/pricing
+- https://github.com/mifi/editly

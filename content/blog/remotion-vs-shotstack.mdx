@@ -1,0 +1,209 @@
+---
+title: Remotion vs Shotstack
+seoTitle: "Remotion vs Shotstack — React code or a video editing API"
+description: Remotion renders React components to video on your own servers; Shotstack renders a JSON timeline in its cloud. How each works, pricing, and when to pick each.
+date: 2026-10-21
+tags:
+  - remotion
+  - comparison
+faq:
+  - question: What is the difference between Remotion and Shotstack?
+    answer: Remotion is a React framework. A video is a component, each frame is that component rendered at a frame number, and you render it yourself with the CLI, Node or AWS Lambda. Shotstack is a hosted video editing API. You POST a JSON edit describing clips on a timeline, Shotstack renders it in its cloud and returns a file.
+  - question: How much does Shotstack cost?
+    answer: Shotstack charges for minutes of rendered video. Pay as you go is $10 for 50 minutes; monthly plans run from Starter at $39 for 250 minutes to Volume at $499 for 10,000 minutes, and new accounts get 10 free credits valid for 30 days.
+  - question: How much does Remotion cost?
+    answer: Remotion is free for individuals, for-profit companies with up to three employees and non-profits. Larger companies need a Company License, priced per render for automation ($0.01 per render, $100 a month minimum) and per seat for manual creation ($25 a month per seat). You also pay for whatever infrastructure renders the video.
+  - question: Which is better for a product demo video?
+    answer: Remotion, usually. A product demo is UI, text and screen recordings, which Remotion draws with the same React and CSS as your app. Shotstack fits better when the job is assembling existing footage, images and audio into many variants without running render infrastructure.
+---
+
+**Short answer:** use **Remotion** if you want to write the video as React
+code, animate UI and type frame by frame, and render on infrastructure you
+control. Use **Shotstack** if you want to send a JSON timeline of clips to an
+API and get a finished file back, with no renderer to run. Remotion is a
+framework; Shotstack is a service.
+
+Facts below were checked on remotion.dev, remotion.pro and shotstack.io in
+October 2026.
+
+## At a glance
+
+| | Remotion | Shotstack |
+| --- | --- | --- |
+| What it is | React framework for video | Cloud video editing API |
+| You write | React components, `useCurrentFrame()` | A JSON edit: timeline, tracks, clips, output |
+| Preview | Remotion Studio, `<Player>` | Studio, a visual timeline editor |
+| Rendering | Your machine, Node, Lambda, Cloud Run, Vercel Sandbox | Shotstack's cloud |
+| Templates | React components with props | Saved edits with merge fields like `{{NAME}}` |
+| Embeddable editor | `@remotion/player` (playback, props) | Studio SDK (source-available, PolyForm Shield) |
+| Output hosting | Yours | Shotstack CDN, or 24-hour temporary files |
+| Pricing | Free for individuals and up to 3 employees; Company License above that | Per rendered minute, pay as you go or monthly |
+
+## How Remotion works
+
+Remotion gives you a frame number and a blank canvas, and you render anything
+React can draw for that frame. A composition is a component plus a width,
+height, fps and duration. Change what you render frame by frame and you have
+an animation.
+
+Rendering happens on your side. `renderFrames()` in `@remotion/renderer`
+captures each frame with Puppeteer, and the encoding step is backed by FFmpeg,
+which has been baked into `@remotion/renderer` since v4. You can run that from
+the CLI, from Node, in GitHub Actions, or in the cloud with Remotion Lambda,
+which splits a video into chunks, renders them in parallel across Lambda
+functions and concatenates the result. Remotion recommends Lambda for most
+cloud rendering. More on the model in
+[how to make videos with React](/make-videos-with-react).
+
+## How Shotstack works
+
+Shotstack describes itself as a video editor that runs in the cloud and is
+driven by software. An edit is JSON: a `timeline` of `tracks`, each holding
+`clips` with an `asset` (rich text, video, image, audio and others), a `start`
+and a `length`, plus an `output` block for format and size. Its Hello World
+looks like this, trimmed:
+
+```json
+{
+  "timeline": {
+    "tracks": [
+      {
+        "clips": [
+          {
+            "asset": { "type": "rich-text", "text": "HELLO WORLD" },
+            "start": 0,
+            "length": 5,
+            "transition": { "in": "fade", "out": "fade" }
+          }
+        ]
+      }
+    ]
+  },
+  "output": { "format": "mp4", "size": { "width": 1024, "height": 576 } }
+}
+```
+
+You POST that to the render endpoint with an `x-api-key` header, get back a
+render `id`, then poll for status (`queued`, `fetching`, `rendering`, `saving`,
+`done`, `failed` and a few more) or register a webhook. Finished videos go to
+Shotstack's hosting and CDN by default; if you opt out, the file sits at a
+temporary URL for 24 hours.
+
+The same edit opens in **Studio**, Shotstack's visual timeline, and saves as a
+template with merge fields. There are SDKs for Node.js, Python, PHP and Ruby,
+apps for Make, Zapier and n8n, an MCP server for AI agents, and the **Studio
+SDK**, a white-label editor you embed in your own product. Shotstack's pricing
+page says that editor is source-available under a PolyForm Shield License and
+uses FFmpeg for exports.
+
+## The difference that decides it
+
+In Remotion you write the pixels. Every frame is a React render, so anything
+the browser can draw — a real `<input>` with a caret, a chart, a code block,
+your actual component library — is available, and motion is `interpolate()`
+and `spring()` on the frame number.
+
+In Shotstack you arrange media. The edit places assets on tracks with
+transitions and effects, and Shotstack's engine composites them. That is the
+right abstraction for cutting footage, slideshows, captions and personalised
+variants. It is a step away from the DOM, so animating a UI built in React
+means rebuilding it in the edit format or recording it first.
+
+## Pricing
+
+**Shotstack** charges for minutes of video you render, counted by the second
+and rounded down, so a 30-second video uses half a minute. From its pricing
+page:
+
+| Plan | Price | Minutes | Max resolution |
+| --- | --- | --- | --- |
+| Pay as you go | $10 once | 50 | 1080p |
+| Starter | $39 a month | 250 a month | 1080p |
+| Pro | $99 a month | 750 a month | 4K |
+| Scale | $199 a month | 2,000 a month | 4K |
+| Volume | $499 a month | 10,000 a month | 4K |
+
+New accounts get 10 credits, valid for 30 days. Plan minutes roll over for
+three months; pay-as-you-go minutes last 12 months. When you run out,
+rendering pauses until you top up. AI generation (images, video clips, voice,
+music) is charged separately per model, in credits.
+
+**Remotion** is free for individuals, for-profit organisations with up to three
+employees, and non-profits, including commercial use. Larger for-profit teams
+need a Company License. On remotion.pro that is $0.01 per render with a $100 a
+month minimum for automation ("Remotion for Automators"), or $25 a month per
+seat for people making videos by hand ("Remotion for Creators"). An Enterprise
+License starts at $500 a month. You also pay for the compute that renders the
+video — your own server, Lambda or another host — which Remotion's licence does
+not include.
+
+The two models reward different shapes of usage. Shotstack bundles rendering,
+hosting and the engine into one per-minute price. Remotion separates the
+licence from the compute, which you run and pay for yourself.
+
+## Rendering
+
+| | Remotion | Shotstack |
+| --- | --- | --- |
+| Where | Anywhere Node and a headless browser run | Shotstack's cloud |
+| Parallelism | Lambda splits into chunks; Node uses `--concurrency` | Renders in parallel in the cloud |
+| Notification | Your own code; Lambda progress via `getRenderProgress()` | Polling or webhook |
+| Sandbox | Local Studio, free | Staging environment and API key |
+| Output | Files you own and host | Shotstack CDN or your storage |
+
+Remotion's own performance notes are worth reading before you choose cloud
+hardware: GPU-heavy effects such as `box-shadow`, `filter: blur()`, gradients
+and WebGL are slow on cloud instances without a GPU, and VP8/VP9 encoding is
+much slower than H.264.
+
+## When Remotion wins
+
+- **The video is made of interface.** A product demo is buttons, inputs, cards,
+  code and screenshots. Those are React and CSS already.
+- **It belongs in your repo.** The video is TypeScript: reviewed in pull
+  requests, rendered in CI, edited by Claude Code or Cursor.
+- **You want components, not a canvas.** Install scenes instead of building
+  them — for example [snapcn](/docs/components), whose components copy into
+  your project with `npx shadcn@latest add @snapcn/<name>`. A
+  [screen recording](/docs/screens/screen-recording) in a
+  [laptop frame](/docs/screens/laptop-frame) is a product shot in two installs.
+- **You are small.** Up to three employees, the framework is free and you pay
+  only for compute.
+
+## When Shotstack wins
+
+- **The job is editing media, not drawing UI.** Highlight reels, listing
+  videos, slideshows and captioned clips assembled from footage you already
+  have.
+- **You do not want to run a renderer.** No Chromium, no Lambda, no storage to
+  manage: POST JSON, receive a URL.
+- **Non-developers edit the template.** Studio gives them a visual timeline on
+  the same JSON your code renders.
+- **You need an editor inside your product.** The Studio SDK is a white-label
+  editor; Remotion's Player plays compositions but is not a timeline editor.
+
+## For a product video
+
+Pick Remotion. A launch or demo video is mostly your interface, and Remotion
+draws it with the same code you ship. Start from a
+[product demo video in React](/product-demo-video-react). For other
+comparisons, see [Remotion vs Creatomate](/remotion-vs-creatomate),
+[Remotion vs FFmpeg](/remotion-vs-ffmpeg) and
+[Remotion vs After Effects](/remotion-vs-after-effects).
+
+## Sources
+
+- [Remotion — the core idea](https://www.remotion.dev/docs/the-fundamentals)
+- [Remotion — renderFrames()](https://www.remotion.dev/docs/renderer/render-frames)
+- [Remotion — Encoding guide](https://www.remotion.dev/docs/encoding)
+- [Remotion — v4 migration (FFmpeg baked in)](https://www.remotion.dev/docs/4-0-migration)
+- [Remotion — How Lambda works](https://www.remotion.dev/docs/lambda/how-lambda-works)
+- [Remotion — Comparison of SSR options](https://www.remotion.dev/docs/compare-ssr)
+- [Remotion — Performance tips](https://www.remotion.dev/docs/performance)
+- [Remotion — Player](https://www.remotion.dev/docs/player)
+- [Remotion LICENSE.md](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md)
+- [Remotion Company Licensing](https://www.remotion.pro/license)
+- [Shotstack — What is Shotstack?](https://shotstack.io/docs/guide/)
+- [Shotstack — Hello World with the API](https://shotstack.io/docs/guide/getting-started/hello-world-using-curl/)
+- [Shotstack — Editing videos, images and audio](https://shotstack.io/docs/guide/architecting-an-application/guidelines/)
+- [Shotstack — Pricing](https://shotstack.io/pricing/)

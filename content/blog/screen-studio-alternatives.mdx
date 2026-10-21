@@ -1,0 +1,156 @@
+---
+title: Screen Studio alternatives (Mac, Windows, free and paid)
+seoTitle: Screen Studio alternatives for Mac and Windows (2026)
+description: Screen Studio is Mac-only. These alternatives run on Windows, cost less or are free — FocuSee, Cap, Tella, Screenity, OBS Studio and Loom, with platforms and prices checked.
+date: 2026-10-21
+tags:
+  - screen recording
+  - comparison
+  - tools
+faq:
+  - question: Is there a Screen Studio for Windows?
+    answer: Screen Studio itself is macOS only, and its FAQ says there are no near-future plans for Windows. FocuSee and Cap both run on Windows and Mac and advertise automatic zooms; Tella runs on Windows too.
+  - question: Is there a free Screen Studio alternative?
+    answer: Cap has a free plan for personal use, the Screenity Chrome extension is free and open source under GPLv3, and OBS Studio is free and open source on Windows, macOS and Linux.
+  - question: How much does Screen Studio cost?
+    answer: Screen Studio lists $29 a month, or $9 a month billed yearly, with every feature in every plan.
+  - question: Can I make a Screen Studio style video in code?
+    answer: Yes. With Remotion you can put a screen recording inside a React composition and animate the zoom and cursor yourself, or use a prebuilt component such as snapcn's screen-recording scene.
+---
+
+**Short answer:** on **Windows**, try **FocuSee** (auto zoom, Windows and Mac) or
+**Cap** (open source, Windows, Mac and Linux). For **free**, start with **Cap's
+free plan**, the **Screenity** Chrome extension or **OBS Studio**. If you want a
+camera and an editor, **Tella**. If the video should live in code and be
+re-rendered, **Remotion**.
+
+Everything below was checked on each product's own site in October 2026.
+
+## Why look for an alternative
+
+[Screen Studio](https://screen.studio) describes itself as "the screen recorder
+for Mac that handles the hard parts" — zooms, motion, sound and framing. It is
+**macOS only**: its FAQ says "Currently, Screen Studio only supports macOS" and
+that there are no near-future plans to add Windows support. It costs $29 a month,
+or $9 a month billed yearly. The usual reasons to look elsewhere are a Windows
+machine, wanting something free, or wanting a camera track and an editor.
+
+## At a glance
+
+| Tool | Platform | Free option | Paid price | Auto zoom |
+| --- | --- | --- | --- | --- |
+| [Screen Studio](https://screen.studio) | macOS | No free plan listed | $29/month or $9/month yearly | Yes |
+| [FocuSee](https://focusee.imobie.com) | Windows, macOS | Trial exports one video | $19.99/month, $49.99/year, $199.99 lifetime (Advanced) | Yes |
+| [Cap](https://cap.so) | macOS, Windows, Linux | Free plan, personal use | $29/year or $58 lifetime (Desktop) | Yes |
+| [Tella](https://www.tella.com) | Mac, Windows, browser, Chrome | Free trial | From $13/user/month billed annually | Yes |
+| [Screenity](https://screenity.io) | Chrome extension + web editor | Extension free, GPLv3 | Editor $10/month or $120/year | In the editor |
+| [OBS Studio](https://obsproject.com) | Windows, macOS, Linux | Free, open source | — | No |
+| [Loom](https://www.loom.com) | Mac, Windows, iOS, Android | 25 videos, 5 min each | Business $18/user/month | Not its focus |
+
+## FocuSee
+
+FocuSee calls itself an "AI-powered screen recorder with auto zoom effects", the
+closest match to Screen Studio's pitch. It supports **Windows and macOS**. Its
+store lists Standard at $19.99 a month or $49.99 a year for one computer, and
+Advanced at $24.99 a month, $79.99 a year, or $199.99 once for a lifetime licence
+covering up to five computers. The free trial lets you export one video; some AI
+features need credits.
+
+**Pick it if:** you are on Windows and want the Screen Studio style of automatic
+zooms.
+
+## Cap
+
+Cap is an open-source recorder; most of its code is AGPLv3 according to its
+GitHub repository. The download page offers macOS (Apple Silicon and Intel),
+Windows and Linux builds. The **free plan** covers personal use, including Studio
+Mode and 4K/60fps export, but not commercial use. Studio Mode's editor
+advertises automatic zoom from your recorded clicks, cursor smoothing and click
+effects, and custom backgrounds. The Desktop License is $29 a
+year or $58 once, and Cap Pro — cloud sharing, AI titles and transcripts — is $12
+per user per month, or $8.16 billed annually.
+
+**Pick it if:** you want a free or one-time-price recorder, or the source code.
+
+## Tella
+
+Tella records screen, camera, microphone and system audio as separate tracks, and
+can automatically add layouts, backgrounds, zoom effects and subtitles. It runs on
+**Mac, Windows**, in the browser and as a Chrome extension, and exports up to 4K
+at 60fps. Pro is $13 and Premium $19 per user per month, billed annually; there is
+no free plan, though the FAQ mentions a trial.
+
+**Pick it if:** you want yourself on camera next to the product and an editor to
+cut it.
+
+## Screenity
+
+Screenity is a screen recorder and video editor. The recorder is a **Chrome
+extension** that is free and open source under GPLv3, with a cursor spotlight. The
+paid editor ($10 a month, or $120 a year, with a 7-day trial) turns your clicks
+into zooms you can retime or remove.
+
+**Pick it if:** you only need to record browser tabs and want it free.
+
+## OBS Studio
+
+OBS Studio is "free and open source software for video recording and live
+streaming", on **Windows, macOS and Linux**. It is a general recorder, not a demo
+polisher: you set up the scenes and do the zooms in an editor afterwards.
+
+**Pick it if:** you need free, full control and do not mind editing separately.
+
+## Loom
+
+Loom records screen and camera for async video messages, on Mac, Windows, iOS and
+Android. The free Starter plan allows 25 videos of up to five minutes at up to
+720p; Business is $18 per user per month. It is built for sharing a quick
+explanation, not for a polished launch video.
+
+**Pick it if:** the video is a message to a teammate or customer.
+
+## Or build the video in code
+
+A recorder gives you a finished clip. If you would rather have the video in your
+repo — editable text, re-rendered each release —
+[Remotion](https://www.remotion.dev) renders React components into a video. Its
+license is free for individuals, for-profit companies with up to three employees
+and non-profits; larger companies need a company license.
+
+You can still start from a recording. snapcn (our library, so read with that in
+mind) has a [screen-recording scene](/docs/screens/screen-recording) that frames
+a clip with a camera move and a [cursor track](/docs/screens/cursor-track), and
+both install with `npx shadcn@latest add @snapcn/<name>`, copying the source into
+your project. About 48 components are free under MIT. Recording in Cap or OBS and
+finishing in Remotion is a reasonable free pipeline. The full walkthrough is
+[how to make a product demo video in React](/product-demo-video-react), and for a
+looping README clip see [the GitHub demo GIF](/github-readme-demo-gif).
+
+## How to choose
+
+- **Windows, want auto zoom:** FocuSee or Cap.
+- **Free:** Cap free plan (personal use), Screenity extension, OBS Studio.
+- **Camera plus editing:** Tella.
+- **Quick message:** Loom.
+- **Re-rendered every release, motion graphics around the recording:** Remotion.
+
+Comparing beyond recorders, including interactive demo tools, see
+[the best product demo video tools](/best-product-demo-video-tools).
+
+## Sources
+
+- https://screen.studio/
+- https://focusee.imobie.com/
+- https://focusee.imobie.com/go/store.php?product=fs&id=1
+- https://cap.so/
+- https://cap.so/pricing
+- https://cap.so/download
+- https://github.com/CapSoftware/Cap
+- https://www.tella.com/
+- https://www.tella.com/pricing
+- https://screenity.io/
+- https://obsproject.com/
+- https://www.loom.com/
+- https://www.loom.com/pricing
+- https://www.remotion.dev/
+- https://github.com/remotion-dev/remotion/blob/main/LICENSE.md
