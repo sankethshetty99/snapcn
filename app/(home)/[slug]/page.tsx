@@ -116,7 +116,7 @@ export async function generateMetadata(props: {
   const url = page.url;
   // The card carries the post's own title, not the site's. `/og` mirrors the
   // page path, so this needs no second slug map to drift out of date.
-  const ogImage = `/og${url}`;
+  const ogImage = `/og${url}?v=2`;
 
   return {
     title: metaTitle(title),

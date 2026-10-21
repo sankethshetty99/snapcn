@@ -35,26 +35,34 @@ export function CategoryDoc({ category }: { category: CategoryId }) {
   // cannot afford to be coy. The label is already the H1 above this.
   const query = CATEGORY_QUERY[category];
 
-  // The category's first curated entry is its flagship — the one worth showing
-  // in the install and usage examples.
-  const leadSlug = slugFromHref(items[0].href);
-  const config = CONFIGS[leadSlug];
   // The grid below shows the paid ones as well, so the sentence above it counts
   // them — and says how many of those cards are not free.
-  const pro = CATALOGUE_ITEMS.filter(
+  const proItems = CATALOGUE_ITEMS.filter(
     (item) => item.pro && item.category === category,
-  ).length;
+  );
+  const pro = proItems.length;
+
+  // The category's first curated entry is its flagship — the one worth showing
+  // in the install and usage examples. A category can open with Pro only
+  // (Transitions did), so fall back to its first paid card.
+  const lead = items[0] ?? proItems[0];
+  if (!lead) return null;
+  const leadSlug = slugFromHref(lead.href);
+  const config = CONFIGS[leadSlug];
 
   return (
     <>
       <h2 id="components">The components</h2>
       <p>
-        {items.length === 1
-          ? `One free ${query}`
-          : `${items.length} free ${query}s`}
-        {pro > 0 ? `, plus ${pro} in Pro` : ""}. Each card plays its own default
-        scene — open one for its props, the source file <code>shadcn add</code>{" "}
-        writes, and a player you can scrub frame by frame.
+        {items.length === 0
+          ? `${pro === 1 ? `One ${query}` : `${pro} ${query}s`}, in Pro`
+          : items.length === 1
+            ? `One free ${query}`
+            : `${items.length} free ${query}s`}
+        {items.length > 0 && pro > 0 ? `, plus ${pro} in Pro` : ""}. Each card
+        plays its own default scene — open one for its props, the source file{" "}
+        <code>shadcn add</code> writes, and a player you can scrub frame by
+        frame.
       </p>
 
       <CategoryGrid category={category} />

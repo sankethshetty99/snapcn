@@ -9,8 +9,6 @@ import { Lock } from "lucide-react";
  * When a category ships, move it to `GALLERY_CATEGORIES` and drop it here.
  */
 export const UPCOMING_CATEGORIES = [
-  "Cursor & Clicks",
-  "Transitions",
   "Numbers & Counters",
   "Product Hero",
   "Callouts",

@@ -36,7 +36,7 @@ const nextConfig: NextConfig = {
   // is imported, so nothing traces them into the deployed function — without
   // this the route builds fine and 500s on every crawler.
   outputFileTracingIncludes: {
-    "/og/[[...slug]]": ["./app/og/fonts/*.ttf", "./public/logo/snapcn.png"],
+    "/og/[[...slug]]": ["./app/og/fonts/*.ttf", "./public/logo/snapcn-white.png"],
   },
   // PostHog's endpoints are sensitive to a trailing-slash redirect in front of
   // them; Next would otherwise rewrite `/ingest/e/` and then 308 it.

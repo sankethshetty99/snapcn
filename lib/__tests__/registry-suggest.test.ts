@@ -14,7 +14,8 @@ describe("suggestComponents", () => {
     // `count-grid`, so someone asking for a dynamic grid is being pointed at a
     // grid, which is the suggester working rather than guessing. "number-wheel"
     // came off for the same reason when `word-wheel` shipped — a reel of words
-    // is what that person was describing.
+    // is what that person was describing. "button" came off when
+    // `button-press` shipped — a clicked button is the video version of it.
     for (const invented of [
       "blur-out-up",
       "soft-blur-in",
@@ -22,7 +23,6 @@ describe("suggestComponents", () => {
       "line-by-line-slide",
       "frosted-glass-wipe",
       "rgb-glitch-text",
-      "button",
       "dropdown",
       "combobox",
     ]) {

@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     siteName: "snapcn",
-    images: [{ url: "/og/components", width: 1200, height: 630, alt: TITLE }],
+    images: [{ url: "/og/components?v=2", width: 1200, height: 630, alt: TITLE }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/og/components"],
+    images: ["/og/components?v=2"],
   },
 };
 

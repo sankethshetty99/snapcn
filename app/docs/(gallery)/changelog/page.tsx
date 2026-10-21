@@ -14,7 +14,7 @@ import { docsBreadcrumb, PUBLISHER, SITE_URL } from "@/lib/structured-data";
 
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META["changelog"];
 /** Per-page card. `/og` alone is the generic site card. */
-const OG_IMAGE = "/og/changelog";
+const OG_IMAGE = "/og/changelog?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META.changelog.seoTitle ?? TITLE),

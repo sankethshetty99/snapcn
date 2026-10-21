@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META.templates;
 /** Per-page card. `/og` alone is the generic site card. */
-const OG_IMAGE = "/og/templates";
+const OG_IMAGE = "/og/templates?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META.templates.seoTitle ?? TITLE),

@@ -4,14 +4,16 @@ import { announceTitleConfig } from "@/registry/snap-cn/announce-title/config";
 import { answerHighlightConfig } from "@/registry/snap-cn/answer-highlight/config";
 import { answerStreamConfig } from "@/registry/snap-cn/answer-stream/config";
 import { blockWordmarkConfig } from "@/registry/snap-cn/block-wordmark/config";
+import { buttonPressConfig } from "@/registry/snap-cn/button-press/config";
 import { captureRevealConfig } from "@/registry/snap-cn/capture-reveal/config";
 import { cardRailConfig } from "@/registry/snap-cn/card-rail/config";
 import { channelThreadConfig } from "@/registry/snap-cn/channel-thread/config";
 import { checkCycleConfig } from "@/registry/snap-cn/check-cycle/config";
+import { clickTypeConfig } from "@/registry/snap-cn/click-type/config";
 import { countGridConfig } from "@/registry/snap-cn/count-grid/config";
 import { cursorTrackConfig } from "@/registry/snap-cn/cursor-track/config";
-import { fontShuffleConfig } from "@/registry/snap-cn/font-shuffle/config";
 import { followerRushConfig } from "@/registry/snap-cn/follower-rush/config";
+import { fontShuffleConfig } from "@/registry/snap-cn/font-shuffle/config";
 import { heroLaunchConfig } from "@/registry/snap-cn/hero-launch/config";
 import { karaokeCaptionsConfig } from "@/registry/snap-cn/karaoke-captions/config";
 import { laptopFrameConfig } from "@/registry/snap-cn/laptop-frame/config";
@@ -95,6 +97,8 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "word-wheel": wordWheelConfig,
   "capture-reveal": captureRevealConfig,
   "font-shuffle": fontShuffleConfig,
+  "button-press": buttonPressConfig,
+  "click-type": clickTypeConfig,
   "check-cycle": checkCycleConfig,
   "text-highlight": textHighlightConfig,
   "text-reveal": textRevealConfig,

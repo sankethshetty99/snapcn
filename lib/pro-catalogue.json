@@ -294,5 +294,23 @@
     "title": "Mood Board",
     "description": "A collage builds itself under a two-line headline. Each tile lands as a flat swatch and turns into its picture a few frames later, the words of the headline arrive one at a time and settle into place, and the camera rides across the board: easing in, a hard zoom-out cut, a long drift, then a run across a second cluster into large pictures that warm, glow and wash out one after another. Replayed from a screen recording measured frame by frame: the camera, every tile's swatch, colour, rect and timing, and each word's entrance are fitted tables.",
     "added": "2026-10-14"
+  },
+  {
+    "name": "column-cut",
+    "title": "Column Cut",
+    "description": "A four-line cascade with a square cursor beside its third line, a blue highlight running across that line letter by letter while the type drifts up — then a hard cut to a column of pictures that jumps one picture per beat, the beats tightening from five frames to four, while a sentence lands either side of it and the whole frame pans away left, faster and faster. Replayed from a screen recording measured frame by frame: the strip's twelve rects and per-frame offset, the drift, the pan and every letter's colour are the recording's own.",
+    "added": "2026-10-20"
+  },
+  {
+    "name": "template-launch",
+    "title": "Launch Video Template",
+    "description": "A finished product-launch video in five beats — hook, product, proof, numbers, wordmark — on one paper with a dissolve between each. Type your words and colours once in LAUNCH_CONTENT; every beat reads them. Each beat lists the components you can swap in, with the command that installs them.",
+    "added": "2026-10-15"
+  },
+  {
+    "name": "dot-dissolve",
+    "title": "Dot Dissolve",
+    "description": "LED dot-matrix transition: dots pop in across the frame in clumps until the matrix covers it, hold, then break up in clumps and let go, the last stragglers out bottom left. Each dot takes its tone off a drifting noise field mapped onto a calm dusk palette (slate, dusty blue, mist), so the matrix drifts like soft light through LEDs. It paints only its dots, so it lays over any cut: cut between your shots under it at DOT_DISSOLVE_CUT.",
+    "added": "2026-10-21"
   }
 ]

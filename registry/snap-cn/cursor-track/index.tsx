@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import {
   AbsoluteFill,
   Easing,
@@ -119,16 +119,17 @@ export const RING_START = 0.18;
 export const RING_END = 1.1;
 
 /**
- * The macOS-style arrow, drawn in a 13x21 box with its hotspot — the tip — at
- * (1, 1). An SVG and not an emoji or a font glyph: a glyph is whatever face the
+ * The site's own pointer (app/globals.css): a rounded arrow, ink with a rim and
+ * a soft shadow, in a 24-unit box with its hotspot — the tip — at (5.5, 5.5).
+ * An SVG and not an emoji or a font glyph: a glyph is whatever face the
  * renderer happens to resolve, and it would carry the hinting problems the
  * motion-quality skill is about into the one element that moves every frame.
  */
-const ARROW_VIEW_W = 13;
-const ARROW_VIEW_H = 21;
-const ARROW_TIP = 1;
-const ARROW_PATH =
-  "M1 1 L1 16.6 L4.6 13.2 L6.6 19.6 L9 18.8 L7.1 12.6 L11.6 12.6 Z";
+const ARROW_VIEW = 24;
+const ARROW_TIP = 5.5;
+/** The arrow's ink spans 14 of the 24 units; `size` is that span. */
+const ARROW_INK = 14;
+const ARROW_PATH = "M5.5 5.5 19 11l-5.6 1.45a2 2 0 0 0-1.45 1.45L10.5 19.5z";
 
 /** The `dot` puck's diameter, as a multiple of the cursor height. */
 const DOT_RATIO = 0.62;
@@ -288,6 +289,7 @@ export function CursorTrack({
   const t = useSnapCnTheme(theme, mode);
   const { width, height } = useVideoConfig();
   const isRendering = getRemotionEnvironment().isRendering;
+  const shadowId = `cursor-shadow-${useId().replace(/:/g, "")}`;
 
   const h = size ?? height * CURSOR_HEIGHT_RATIO;
   const ink = color ?? t.foreground;
@@ -361,31 +363,53 @@ export function CursorTrack({
               />
             ) : (
               <svg
-                viewBox={`0 0 ${ARROW_VIEW_W} ${ARROW_VIEW_H}`}
-                width={(h * ARROW_VIEW_W) / ARROW_VIEW_H}
-                height={h}
+                viewBox={`0 0 ${ARROW_VIEW} ${ARROW_VIEW}`}
+                width={(h * ARROW_VIEW) / ARROW_INK}
+                height={(h * ARROW_VIEW) / ARROW_INK}
                 style={{
-                  // The hotspot is the tip, at (1, 1) of the box — not its
-                  // corner. Both axes scale by h / ARROW_VIEW_H.
+                  // The hotspot is the tip, not the box's corner.
                   position: "absolute",
-                  left: (-h * ARROW_TIP) / ARROW_VIEW_H,
-                  top: (-h * ARROW_TIP) / ARROW_VIEW_H,
+                  left: (-h * ARROW_TIP) / ARROW_INK,
+                  top: (-h * ARROW_TIP) / ARROW_INK,
                   display: "block",
+                  overflow: "visible",
                 }}
               >
                 <title>Pointer</title>
-                {/* `paint-order: stroke` puts the whole outline outside the
-                    letterform, the way Rule 3c does for captions — a centred
-                    stroke would eat a fifth of the arrow's ink. No drop shadow:
-                    the outline is what carries it over arbitrary footage. */}
-                <path
-                  d={ARROW_PATH}
-                  fill={ink}
-                  stroke={outline}
-                  strokeWidth={1.4}
-                  strokeLinejoin="round"
-                  paintOrder="stroke"
-                />
+                <defs>
+                  <filter
+                    id={shadowId}
+                    x="-30%"
+                    y="-30%"
+                    width="160%"
+                    height="160%"
+                  >
+                    <feDropShadow
+                      dx={0}
+                      dy={1}
+                      stdDeviation={0.8}
+                      floodOpacity={0.35}
+                    />
+                  </filter>
+                </defs>
+                {/* Rim first, then the ink over it: the site cursor, stroke
+                    for stroke. The rim is what carries it over footage. */}
+                <g filter={`url(#${shadowId})`}>
+                  <path
+                    d={ARROW_PATH}
+                    fill={outline}
+                    stroke={outline}
+                    strokeWidth={5}
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d={ARROW_PATH}
+                    fill={ink}
+                    stroke={ink}
+                    strokeWidth={2}
+                    strokeLinejoin="round"
+                  />
+                </g>
               </svg>
             )}
           </div>

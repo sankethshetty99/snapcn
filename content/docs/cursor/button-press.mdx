@@ -1,0 +1,67 @@
+---
+title: Button Press
+description: "A cursor walks onto a split action button: hover, press, a spinner while it works, then a drawn tick"
+---
+
+<ComponentPreview name="button-press" />
+
+A cursor walks in and lands on a split action button: the label, a hairline divider and a chevron, in your primary colour. The button darkens as the cursor reaches it, gives a little on the click and springs back. The label slides out for a spinner, then the spinner slides out for a tick that draws itself. It's the deploy, publish or send beat in a launch video.
+
+## How it moves
+
+**Only the surface presses.** The fill gives by 3.5% and returns to exactly 1. The label never scales, so it never shimmers.
+
+**One width, three labels.** The button is sized once (`width`, at 720p) for the longest label, so it never reflows under the cursor sitting on it.
+
+## Installation
+
+<InstallBlock name="button-press" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="button-press" />
+
+## Usage
+
+```tsx
+// src/Root.tsx
+import { Composition } from "remotion";
+import { ButtonPress } from "@/components/snap-cn/button-press";
+
+const Scene = () => <ButtonPress label="Publish" pending="Publishing…" done="Live" />;
+
+export const RemotionRoot = () => (
+  <Composition
+    id="ButtonPress"
+    component={Scene}
+    durationInFrames={126}
+    fps={30}
+    width={1280}
+    height={720}
+  />
+);
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { name: "label", type: "string", default: "\"Deploy\"", description: "Idle label" },
+    { name: "pending", type: "string", default: "\"Deploying…\"", description: "Shown with the spinner" },
+    { name: "done", type: "string", default: "\"Deployed\"", description: "Shown with the tick" },
+    { name: "width", type: "number", default: "320", description: "Button width at 720p. Size it for the longest label" },
+    {
+      name: "theme",
+      type: "Partial<SnapCnTheme>",
+      description:
+        "Design-system token overrides. Anything you leave out falls back to the shadcn defaults",
+    },
+    {
+      name: "mode",
+      type: '"light" | "dark"',
+      description: "Which end of the design system to resolve tokens against",
+    },
+  ]}
+/>

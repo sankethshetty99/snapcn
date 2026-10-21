@@ -14,7 +14,7 @@ import { CANVAS, MAX_CLIPS, MAX_TOTAL_FRAMES } from "@/lib/video-editor/types";
 const { title: TITLE, description: DESCRIPTION } =
   DOCS_PAGE_META["video-editor"];
 /** Per-page card. `/og` alone is the generic site card. */
-const OG_IMAGE = "/og/video-editor";
+const OG_IMAGE = "/og/video-editor?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META["video-editor"].seoTitle ?? TITLE),

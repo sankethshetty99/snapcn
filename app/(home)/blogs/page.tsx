@@ -7,7 +7,7 @@ import { blogPosts } from "@/source";
 const TITLE = "Blog";
 const DESCRIPTION =
   "Guides to building product demo videos in React with Remotion — one technique per post, each with the component that does it.";
-const OG_IMAGE = "/og";
+const OG_IMAGE = "/og?v=2";
 
 export const metadata: Metadata = {
   // The H1 stays "Blog"; the tab and the search result say what it is about.

@@ -10,7 +10,7 @@ import { docsBreadcrumb, PUBLISHER, SITE_URL } from "@/lib/structured-data";
 
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META["roadmap"];
 /** Per-page card. `/og` alone is the generic site card. */
-const OG_IMAGE = "/og/roadmap";
+const OG_IMAGE = "/og/roadmap?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META.roadmap.seoTitle ?? TITLE),
