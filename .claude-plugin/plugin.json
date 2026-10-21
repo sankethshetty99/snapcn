@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": { "name": "snapcn", "url": "https://snapcn.dev" },
   "homepage": "https://snapcn.dev",
-  "repository": "https://github.com/snapcndev/snapcn",
+  "repository": "https://github.com/shadcn-labs/snapcn",
   "license": "MIT",
   "keywords": [
     "remotion",

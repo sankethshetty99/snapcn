@@ -1,0 +1,23 @@
+{
+  "name": "snapcn",
+  "displayName": "snapcn",
+  "version": "1.0.0",
+  "description": "Make launch videos, product demos and motion graphics in Remotion from hand-tuned snapcn components — your agent composes the shots instead of inventing the animation.",
+  "author": {
+    "name": "Shadcn Labs",
+    "url": "https://snapcn.dev"
+  },
+  "homepage": "https://snapcn.dev",
+  "repository": "https://github.com/shadcn-labs/snapcn",
+  "license": "MIT",
+  "keywords": [
+    "remotion",
+    "video",
+    "shadcn",
+    "motion-graphics",
+    "launch-video",
+    "product-demo",
+    "animation"
+  ],
+  "logo": "assets/logo.svg"
+}

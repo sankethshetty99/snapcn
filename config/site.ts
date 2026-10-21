@@ -7,7 +7,7 @@ export const PEACH = "#FFB38E";
 export const LAVENDER = "#D4B3FF";
 export const MINT = "#A1EEBD";
 
-export const GITHUB_URL = "https://github.com/snapcndev/snapcn";
+export const GITHUB_URL = "https://github.com/shadcn-labs/snapcn";
 export const X_URL = "https://x.com/snapcndev";
 /** snapcn is a Shadcn Labs project — the family behind termcn, framecn, emailcn. */
 export const SHADCN_LABS_URL = "https://shadcn-labs.com";

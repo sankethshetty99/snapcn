@@ -140,7 +140,7 @@ full corpus at [`llms-full.txt`](https://snapcn.dev/llms-full.txt).
 ## Contributing
 
 Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). Missing a component you need?
-[Open an issue](https://github.com/snapcndev/snapcn/issues) — the roadmap is mostly whatever
+[Open an issue](https://github.com/shadcn-labs/snapcn/issues) — the roadmap is mostly whatever
 people ask for.
 
 ## What's next
