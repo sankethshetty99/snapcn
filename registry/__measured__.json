@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "measuredAt": "2026-10-15T13:21:07.473Z",
+  "measuredAt": "2026-10-21T05:30:30.461Z",
   "components": {
     "agent-steps": {
       "sourceHash": "4af6c8c9c78f",
@@ -160,7 +160,7 @@
       "detailCoverage": 0.0278
     },
     "count-grid": {
-      "sourceHash": "c9137eb0b0e2",
+      "sourceHash": "2158fb6522e5",
       "width": 1280,
       "height": 720,
       "fps": 30,
@@ -3258,7 +3258,7 @@
     "count-grid": {
       "slug": "count-grid",
       "settleFrame": null,
-      "settleFrameAtCapacity": 47,
+      "settleFrameAtCapacity": 46,
       "neverSettles": true,
       "durationInFrames": 47,
       "capacity": {
@@ -3301,42 +3301,42 @@
             0.18261,
             0.16671,
             0.1174,
-            0.11808,
-            0.11679,
+            0.11711,
+            0.11579,
             0.11132,
-            0.08605,
-            0.07792,
+            0.08523,
+            0.07807,
             0.09129,
-            0.091,
-            0.07777,
+            0.09172,
+            0.07888,
             0.05518,
             0.06804,
             0.05841,
             0.06053,
-            0.02201,
+            0.02104,
             0.03,
-            0.04179,
+            0.04096,
             0.01035,
             0.03504,
-            0.03662,
-            0.02687,
-            0.03932,
-            0.04829,
-            0.00976,
-            0.02516,
+            0.03917,
+            0.02668,
+            0.03915,
+            0.04948,
+            0.00057,
+            0.01598,
             0.01749,
-            0.02764,
-            0.03159,
+            0.03663,
+            0.0345,
             0.24124,
             0.62422,
             0.68478,
             0.46514,
-            0.43863,
-            0.47824,
-            0.45408,
+            0.43816,
+            0.47695,
+            0.45345,
             0.24558,
             0.24409,
-            0.1087
+            0.10867
           ]
         },
         {
@@ -3349,29 +3349,29 @@
         },
         {
           "check": "noFrozenFrames",
-          "value": 6,
+          "value": 15,
           "unit": "count",
           "threshold": null,
           "pass": null,
-          "frame": 35,
-          "detail": "6 consecutive frames move less than 0.5px while animating (ends at frame 35) — they rasterise identically and the motion visibly stops dead. Use a moderate decelerate, not quint/expo."
+          "frame": 36,
+          "detail": "15 consecutive frames move less than 0.5px while animating (ends at frame 36) — they rasterise identically and the motion visibly stops dead. Use a moderate decelerate, not quint/expo."
         },
         {
           "check": "centroidMonotonic",
-          "value": 12,
+          "value": 8,
           "unit": "count",
           "threshold": null,
           "pass": null,
           "frame": 39,
-          "detail": "the ink's y centroid changes direction 12 times under a monotone transform — the type is snapping to the pixel grid. Pivot the scale on the baseline."
+          "detail": "the ink's y centroid changes direction 8 times under a monotone transform — the type is snapping to the pixel grid. Pivot the scale on the baseline."
         },
         {
           "check": "shapeInvariant",
-          "value": 0.8987,
+          "value": 0.89905,
           "unit": "fraction",
           "threshold": null,
           "pass": null,
-          "detail": "ink area / width² drifts 89.87% under a scale — hinting is re-snapping the stems and the letterforms are boiling. Set text-rendering: geometricPrecision."
+          "detail": "ink area / width² drifts 89.91% under a scale — hinting is re-snapping the stems and the letterforms are boiling. Set text-rendering: geometricPrecision."
         },
         {
           "check": "detailCoverage",
@@ -3392,21 +3392,21 @@
         },
         {
           "check": "settlesBeforeTransition@capacity:from",
+          "value": 46,
+          "unit": "frames",
+          "threshold": 28,
+          "pass": null,
+          "frame": 46,
+          "detail": "still animating on frame 46; the 18-frame transition starts at 29, so the next beat fades in over 18 frames of unfinished animation. Measured over 94 frames: at 9 chars the copy does not finish inside the component's own 47. Reported, not judged: the default copy already settles inside the transition overlap, so the copy length is not what did this."
+        },
+        {
+          "check": "settlesBeforeTransition@capacity:to",
           "value": null,
           "unit": "frames",
           "threshold": null,
           "pass": null,
-          "detail": "still moving on frame 93 and never goes quiet; the 18-frame transition opens at 29. Reported, not failed — a loop and an unfinished beat are indistinguishable without a periodicity test. Bill it at full length. Measured over 94 frames: at 9 chars the copy does not finish inside the component's own 47.",
+          "detail": "still moving on frame 93 and never goes quiet; the 18-frame transition opens at 29. Reported, not failed — a loop and an unfinished beat are indistinguishable without a periodicity test. Bill it at full length. Measured over 94 frames: at 7 chars the copy does not finish inside the component's own 47.",
           "frame": 93
-        },
-        {
-          "check": "settlesBeforeTransition@capacity:to",
-          "value": 47,
-          "unit": "frames",
-          "threshold": 28,
-          "pass": null,
-          "frame": 47,
-          "detail": "still animating on frame 47; the 18-frame transition starts at 29, so the next beat fades in over 19 frames of unfinished animation. Measured over 94 frames: at 7 chars the copy does not finish inside the component's own 47. Reported, not judged: the default copy already settles inside the transition overlap, so the copy length is not what did this."
         },
         {
           "check": "settlesBeforeTransition@capacity:noun",

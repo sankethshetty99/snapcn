@@ -5,7 +5,7 @@ import { GithubButtonLink } from "./github-button-link";
 export async function GithubButton() {
   const stars = await getGitHubStars();
   return (
-    <GithubButtonLink className="inline-flex h-9 items-center gap-1.5 rounded-button border border-border px-2.5 text-sm font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+    <GithubButtonLink className="inline-flex h-9 items-center gap-1.5 rounded-button px-2.5 text-sm font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
       <GitHubIcon className="size-4" />
       {/* Just the mark and the count — "Star" made the header too busy. */}
       <span className="sr-only">Star on GitHub</span>

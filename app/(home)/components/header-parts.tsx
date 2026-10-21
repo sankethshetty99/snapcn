@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_LINKS } from "@/config/site";
+import { NAV_LINKS, X_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { GithubButton } from "./github-button";
 import { NavMobile } from "./header-nav";
@@ -25,10 +25,26 @@ export function HeaderLogo() {
 export function HeaderActions() {
   return (
     <div className="flex items-center gap-1.5">
-      <SearchButton iconOnly />
+      <SearchButton iconOnly className="border-transparent bg-transparent" />
       <div className="hidden sm:block">
         <GithubButton />
       </div>
+      <a
+        href={X_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="hidden size-9 items-center justify-center rounded-button text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="size-3.5"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+        <span className="sr-only">snapcn on X</span>
+      </a>
       <ThemeToggle />
       <div className="hidden sm:block">
         <UserMenu />
