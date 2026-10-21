@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DocsTopBar } from "@/components/docs/gallery/docs-top-bar";
 import { GalleryFrame } from "@/components/docs/gallery/gallery-frame";
+import { DocsNewsletterCta } from "@/components/docs/newsletter-cta";
 import { DOCS_PAGE_META } from "@/config/site";
+import { SITE_NOTES } from "@/lib/changelog-notes";
 import {
   CATALOGUE_COUNT,
   CATALOGUE_ITEMS,
@@ -62,6 +64,18 @@ export default function ChangelogPage() {
   // thirty-five components appeared is not a record of what shipped.
   const releases = itemsByReleaseDate(CATALOGUE_ITEMS);
   const dated = releases.reduce((n, r) => n + r.items.length, 0);
+  // Every day something shipped: components (from their `added`) and site
+  // notes (`SITE_NOTES`), newest first, so a day with only a site change still
+  // gets its entry.
+  const notesByDate = new Map(SITE_NOTES.map((n) => [n.date, n.notes]));
+  const itemsByDate = new Map(releases.map((r) => [r.date, r.items]));
+  const days = [...new Set([...itemsByDate.keys(), ...notesByDate.keys()])]
+    .sort((a, b) => b.localeCompare(a))
+    .map((date) => ({
+      date,
+      items: itemsByDate.get(date) ?? [],
+      notes: notesByDate.get(date) ?? [],
+    }));
 
   /**
    * The list this page renders, as data. Every entry carries the date the
@@ -105,7 +119,7 @@ export default function ChangelogPage() {
       <PageJsonLd graph={jsonLd} path="/docs/changelog" />
       <DocsTopBar />
 
-      <div className="mx-auto w-full max-w-3xl py-12 sm:py-16">
+      <div className="w-full py-12 sm:py-16">
         <p className="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
           Changelog
         </p>
@@ -129,55 +143,59 @@ export default function ChangelogPage() {
         )}
 
         <ol className="mt-12 space-y-12">
-          {releases.map(({ date, items }) => (
+          {days.map(({ date, items, notes }) => (
             <li key={date}>
               <div className="flex items-baseline gap-3">
                 <h2 className="font-mono text-sm font-medium tabular-nums text-foreground">
                   <time dateTime={date}>{formatDay(date)}</time>
                 </h2>
                 <span className="text-sm text-muted-foreground">
-                  {items.length}{" "}
-                  {items.length === 1 ? "component" : "components"}
+                  {items.length > 0
+                    ? `${items.length} ${items.length === 1 ? "component" : "components"}`
+                    : "Site update"}
                 </span>
               </div>
 
-              <ul className="mt-5 space-y-4 border-l border-border pl-5">
-                {items.map((item) => (
-                  <li key={item.href}>
-                    {/* Deep-links into the gallery overlay rather than the doc
+              {notes.length > 0 ? (
+                <ul className="mt-5 list-disc space-y-1.5 pl-5 text-pretty text-sm text-current/80 marker:text-primary">
+                  {notes.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              ) : null}
+
+              {items.length > 0 ? (
+                <ul className="mt-5 space-y-4 border-l border-border pl-5">
+                  {items.map((item) => (
+                    <li key={item.href}>
+                      {/* Deep-links into the gallery overlay rather than the doc
                         page: the overlay is where a component is actually
                         demonstrated, and it is one back-button from here. */}
-                    <Link
-                      href={item.href}
-                      className="font-medium text-foreground underline-offset-4 hover:underline"
-                    >
-                      {item.name}
-                    </Link>
-                    {item.pro ? (
-                      <span className="ml-2 rounded-full border border-border px-1.5 py-0.5 align-middle text-[11px] font-medium text-muted-foreground">
-                        Pro
-                      </span>
-                    ) : null}
-                    <p className="mt-1 max-w-prose text-pretty text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+                      <Link
+                        href={item.href}
+                        className="font-medium text-foreground underline-offset-4 hover:underline"
+                      >
+                        {item.name}
+                      </Link>
+                      {item.pro ? (
+                        <span className="ml-2 rounded-full border border-border px-1.5 py-0.5 align-middle text-[11px] font-medium text-muted-foreground">
+                          Pro
+                        </span>
+                      ) : null}
+                      <p className="mt-1 max-w-prose text-pretty text-sm text-muted-foreground">
+                        {item.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </li>
           ))}
         </ol>
 
-        <p className="mt-16 text-sm text-muted-foreground">
-          Want these as they ship?{" "}
-          <Link
-            href="/#newsletter"
-            className="text-foreground underline underline-offset-4"
-          >
-            Join the list
-          </Link>{" "}
-          — one email a week, never a sponsored one.
-        </p>
+        {/* The site's one newsletter ask — the same section every docs page
+            ends on. */}
+        <DocsNewsletterCta />
       </div>
     </GalleryFrame>
   );

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 /**
  * The closing call to action, Tenor's layout: a big centred line, two short
@@ -91,9 +92,39 @@ function Blobs({
   );
 }
 
-export function Cta() {
+/**
+ * The site's one closing section. The copy is the home page's by default;
+ * another page passes its own and gets the same section — templates, pricing
+ * and every docs page close on it. `children` replaces the button when the
+ * ask is something else, like the newsletter form.
+ *
+ * It always spans the window, wherever it is mounted: inside a page's
+ * `.section` it bleeds back out to the edges, so the blobs are never clipped.
+ */
+export function Cta({
+  title = "Make a video",
+  body = (
+    <>
+      Start with one component,
+      <br />
+      see where it can go.
+    </>
+  ),
+  href = "/docs/video-editor",
+  label = "Open the editor",
+  children,
+}: {
+  title?: ReactNode;
+  body?: ReactNode;
+  href?: string;
+  label?: ReactNode;
+  children?: ReactNode;
+} = {}) {
   return (
-    <section id="cta" className="relative overflow-hidden py-24 sm:py-32">
+    <section
+      id="cta"
+      className="relative mx-[calc(50%-50vw)] overflow-hidden py-24 sm:py-32"
+    >
       <Blobs
         id="cta-blobs-left"
         shape={LEFT}
@@ -104,21 +135,23 @@ export function Cta() {
         shape={RIGHT}
         className="pointer-events-none absolute top-1/2 right-0 hidden h-[92%] translate-x-[12%] -translate-y-1/2 text-primary md:block"
       />
-      <div className="relative mx-auto flex max-w-md flex-col items-center px-6 text-center">
-        <h2 className="font-normal text-[clamp(2.75rem,6vw,4.5rem)] text-foreground leading-none tracking-[-0.04em]">
-          Make a video
+      {/* Wide enough for a longer line than "Make a video" to set on two
+          lines, not one word per line; balanced so they come out even. */}
+      <div className="relative mx-auto flex max-w-2xl flex-col items-center px-6 text-center">
+        <h2 className="text-balance font-normal text-[clamp(2.75rem,6vw,4.5rem)] text-foreground leading-none tracking-[-0.04em]">
+          {title}
         </h2>
-        <p className="mt-6 text-body-lg text-current/70">
-          Start with one component,
-          <br />
-          see where it can go.
-        </p>
-        <Link
-          href="/docs/video-editor"
-          className="mt-8 inline-flex h-10 items-center rounded-button bg-foreground px-5 font-medium text-background text-sm transition-colors hover:bg-foreground/85"
-        >
-          Open the editor
-        </Link>
+        <div className="mt-6 text-body-lg text-current/70">{body}</div>
+        {children ? (
+          <div className="mt-8 w-full max-w-md">{children}</div>
+        ) : (
+          <Link
+            href={href}
+            className="mt-8 inline-flex h-10 items-center rounded-button bg-foreground px-5 font-medium text-background text-sm transition-colors hover:bg-foreground/85"
+          >
+            {label}
+          </Link>
+        )}
       </div>
     </section>
   );

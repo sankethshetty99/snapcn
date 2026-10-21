@@ -1,3 +1,4 @@
+import { Cta } from "@/app/(home)/components/sections/cta";
 import { NewsletterForm } from "@/components/newsletter-form";
 
 /**
@@ -9,10 +10,11 @@ import { NewsletterForm } from "@/components/newsletter-form";
  * copied the install line and left was never given a way to hear about the next
  * component, and that is most of the traffic this site gets.
  *
- * Deliberately a quiet strip rather than a second hero: it sits at the end of
- * the prose, where a reader who got this far
- * has already had the thing they came for. A docs page that opens with a
- * capture band is a docs page people stop linking to.
+ * The site's one closing section — the landing page's — with the form as its
+ * action,
+ * and still at the end of the prose, where a reader who got this far has
+ * already had the thing they came for. A docs page that opens with a capture
+ * band is a docs page people stop linking to.
  *
  * `defaultSource: "docs"` so the list can be split by the surface that earned
  * it. `?ref=` still overrides — the `shadcn add` string links here with
@@ -20,20 +22,17 @@ import { NewsletterForm } from "@/components/newsletter-form";
  */
 export function DocsNewsletterCta() {
   return (
-    <aside className="mt-14 rounded-lg border border-border bg-muted/30 p-6">
-      <h2 className="font-medium text-foreground text-sm">
-        Get the next component in your inbox
-      </h2>
-      <p className="mt-1.5 max-w-[52ch] text-muted-foreground text-sm leading-relaxed">
-        New free components as they ship, and the pro pack first when it lands.
-        One email a week at most, never a sponsored one.
-      </p>
-      <NewsletterForm
-        defaultSource="docs"
-        id="docs-newsletter-email"
-        buttonLabel="Join"
-        className="mt-4 max-w-md"
-      />
+    <aside className="not-prose mt-14">
+      <Cta
+        title="Get the next component in your inbox"
+        body="New free components as they ship, and the pro pack first when it lands. One email a week at most, never a sponsored one."
+      >
+        <NewsletterForm
+          defaultSource="docs"
+          id="docs-newsletter-email"
+          buttonLabel="Join"
+        />
+      </Cta>
     </aside>
   );
 }

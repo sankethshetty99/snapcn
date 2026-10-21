@@ -113,7 +113,7 @@ export default async function SharedVideoPage({
 
   return (
     <div className="section py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl">
+      <div>
         {/* The video is the page. It leads, at the aspect it was rendered at,
             with nothing above it to scroll past. `controls` only — autoplay on
             a page someone arrived at from a link is how you get muted playback

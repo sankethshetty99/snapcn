@@ -320,6 +320,42 @@
   @apply mx-auto w-full px-4 sm:px-6 xl:px-[min(3.5vw,4rem)];
 }
 
+/**
+ * Every page fills `.section` — the navbar's edges, the landing page's edges.
+ * No page sets a narrower column of its own; that is how every page ended up
+ * a different width. Boxes, code, grids and CTAs run the full container.
+ *
+ * Running text is the one thing that must not: a paragraph 1,500px wide is
+ * unreadable. So the measure lives on the text, not the page — the same split
+ * the landing hero makes (`max-w-xl` on its heading, not on its section).
+ */
+.prose
+:where(p, ul, ol, blockquote, h2, h3, h4):not(
+  :where(.not-prose, .not-prose *)
+) {
+  max-width: 72ch;
+}
+
+/**
+ * Docs pages read as long-form: roomy lines, sections spaced like chapters,
+ * and list markers in the accent so a run of bullets scans as a list rather
+ * than a paragraph with dots in it.
+ */
+.docs-long-form :where(p, li) {
+  line-height: 1.7;
+}
+.docs-long-form :where(ul > li)::marker {
+  color: var(--primary);
+}
+.docs-long-form :where(h2) {
+  scroll-margin-top: calc(var(--fd-banner-height, 0px) + 5.5rem);
+}
+/* Headings are the page's structure, not links: ink, even though each one is
+   wrapped in its own anchor. */
+.docs-long-form :is(h2, h3, h4) a {
+  color: inherit;
+}
+
 .bg-control {
   @apply bg-muted border border-border;
 }

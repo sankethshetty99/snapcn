@@ -1,5 +1,5 @@
 /**
- * Real posts about snapcn, pulled from X.
+ * Real posts about snapcn, pulled from X (and the odd one from Threads).
  *
  * Every entry is a real public post — `url` is the source, `quote` is that
  * post's own words. Nothing here is written by us, which is the only thing
@@ -330,6 +330,17 @@ export const WALL_POSTS: readonly WallPost[] = [
     url: "https://x.com/ManuAGI01/status/2111880358790840414",
     quote:
       "🚀Project Number 10 - snapcn 🔥\n\n'Remotion video components installed with the shadcn CLI'\n\n#opensource #githubprojects #developer #programming #devtools #aiagents #aicoding\n#snapcn",
+    verified: true,
+  },
+  {
+    // From Threads, not X: `verified` is the Threads badge on the post.
+    handle: "aiposthub",
+    name: "aiposthub",
+    lang: "zh-Hant",
+    date: "2026-10-12",
+    url: "https://www.threads.com/@aiposthub/post/DebGn6gganM",
+    quote:
+      "甚至還提供 AI Agent Skill，可以搭配 AI Coding 工具協助挑選元件、安排動畫時間軸。\n\n以後要製作 SaaS 產品介紹、AI 工具 Demo、功能宣傳短片，又多了一個超強選擇！…",
     verified: true,
   },
 ] as const;

@@ -2,6 +2,7 @@ import { DocsBody, DocsDescription, DocsTitle } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { notFound, permanentRedirect } from "next/navigation";
+import type { ReactNode } from "react";
 import { FaqSection } from "@/components/docs/faq-section";
 import { DocsTopBar } from "@/components/docs/gallery/docs-top-bar";
 import { DocsNewsletterCta } from "@/components/docs/newsletter-cta";
@@ -194,26 +195,62 @@ export default async function Page(props: {
     );
   }
 
+  // Top-level sections only: a list of every h3 is a second copy of the page.
+  const toc = (
+    (data.toc ?? []) as { title: ReactNode; url: string; depth: number }[]
+  ).filter((entry) => entry.depth === 2);
+
   // The layout is only the frame: a component URL renders the gallery, which
   // brings its own top bar (`GalleryHeaderRow`), so the prose page brings this one.
   return (
     <>
       <DocsTopBar />
-      <article className="mx-auto w-full max-w-4xl pt-4 pb-16 md:pt-6 md:pb-20">
+      <article className="w-full pt-4 pb-16 md:pt-6 md:pb-20">
         <PageJsonLd graph={jsonLd["@graph"]} path={page.url} />
-        <DocsTitle
-          style={{ fontFamily: "var(--font-display)" }}
-          className="text-4xl font-semibold tracking-tight text-balance md:text-5xl lg:text-6xl"
-        >
-          {data.title}
-        </DocsTitle>
-        <DocsDescription className="mt-3 mb-0 max-w-3xl text-balance text-lg text-muted-foreground md:text-xl">
-          {data.description}
-        </DocsDescription>
-        <DocsBody className="mt-8">
-          <MDX components={getMDXComponents()} />
-          <FaqSection questions={questions} />
-        </DocsBody>
+        {/* The long-form layout: a sticky "On this page" list on the left,
+            the page on the right. The list is the page's own h2s — the TOC
+            fumadocs already extracts from the MDX — so it cannot drift. */}
+        <div className="grid gap-12 lg:grid-cols-[230px_1fr] lg:gap-16">
+          <aside className="hidden lg:block">
+            {toc.length > 0 ? (
+              <nav
+                aria-label="On this page"
+                className="sticky top-[calc(var(--fd-banner-height,0px)+5.5rem)]"
+              >
+                <p className="font-mono text-[0.6875rem] text-foreground/50 uppercase tracking-[0.094em]">
+                  On this page
+                </p>
+                <ol className="mt-4 space-y-2">
+                  {toc.map((entry) => (
+                    <li key={entry.url}>
+                      <a
+                        href={entry.url}
+                        className="text-foreground/65 text-sm leading-relaxed transition-colors hover:text-foreground"
+                      >
+                        {entry.title}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            ) : null}
+          </aside>
+          <div className="min-w-0">
+            <DocsTitle
+              style={{ fontFamily: "var(--font-display)" }}
+              className="text-4xl font-semibold tracking-tight text-balance md:text-5xl lg:text-6xl"
+            >
+              {data.title}
+            </DocsTitle>
+            <DocsDescription className="mt-3 mb-0 max-w-3xl text-balance text-lg text-muted-foreground md:text-xl">
+              {data.description}
+            </DocsDescription>
+            <DocsBody className="docs-long-form mt-8">
+              <MDX components={getMDXComponents()} />
+              <FaqSection questions={questions} />
+            </DocsBody>
+          </div>
+        </div>
         {/* Every docs page, not just component ones — a guide reader is as good
           an address as a component reader, and this is the only ask on them. */}
         <DocsNewsletterCta />

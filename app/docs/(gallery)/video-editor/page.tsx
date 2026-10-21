@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { auth, getConfiguredProviders, isEmailSignInConfigured } from "@/auth";
 import { GalleryFrame } from "@/components/docs/gallery/gallery-frame";
-import { ProBanner } from "@/components/pro-banner";
 import { VideoEditor } from "@/components/video-editor/video-editor";
-import { PRO_ITEMS } from "@/config/catalogue";
 import { DOCS_PAGE_META } from "@/config/site";
 import { metaDescription, metaTitle } from "@/lib/meta";
 import { PageJsonLd } from "@/lib/page-json-ld";
@@ -103,10 +101,6 @@ export default async function VideoEditorPage({
           to be named by — for a screen reader's heading list and for search. */}
       <h1 className="sr-only">snapcn {TITLE}</h1>
       <div className="flex h-full flex-col">
-        <ProBanner
-          count={PRO_ITEMS.length}
-          className="shrink-0 border-x-0 border-t-0"
-        />
         <div className="min-h-0 flex-1">
           <VideoEditor
             signedIn={Boolean(session?.user)}

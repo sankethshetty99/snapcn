@@ -26,7 +26,7 @@ export default async function BlogPostPage(props: {
   const { faq } = page.data;
 
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 pt-12 pb-20 md:pt-16 md:pb-28">
+    <article className="section pt-12 pb-20 md:pt-16 md:pb-28">
       <JsonLd
         graph={[
           blogPosting({

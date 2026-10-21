@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Cta } from "@/app/(home)/components/sections/cta";
 import { FeaturedQuote } from "@/app/(home)/components/sections/featured-quote";
 import { auth } from "@/auth";
 import { ComponentCardGrid } from "@/components/docs/component-card-grid";
@@ -64,7 +65,6 @@ export default async function PricingPage({
   const session = await auth().catch(() => null);
   const { plan } = await planFor(session?.user?.id ?? null);
   const { tiers, footnote } = await pricing({ testCountry: country });
-  const sampleVideo = proDemoSrc(PRO_SAMPLE.name);
   const showcase = SHOWCASE.flatMap((slug) => {
     const src = proDemoSrc(slug);
     const item = PRO_GALLERY_ITEMS.find((i) => i.href.endsWith(`/${slug}`));
@@ -77,7 +77,7 @@ export default async function PricingPage({
       {/* The account menu, like every other gallery page. Without it the one
           page that says "Your plan" had no way to sign in or out. */}
       <DocsTopBar />
-      <div className="mx-auto w-full max-w-5xl px-4 py-16 lg:py-24">
+      <div className="w-full py-16 lg:py-24">
         <div className="flex flex-col items-center">
           <FeaturedQuote className="mb-8" />
           <h1 className="text-center font-normal text-4xl text-foreground leading-[1.06] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
@@ -90,7 +90,7 @@ export default async function PricingPage({
         </div>
 
         {showcase.length > 0 ? (
-          <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3 lg:mt-12">
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 lg:mt-12">
             {showcase.map(({ slug, src, item }, i) => (
               <Link
                 key={slug}
@@ -120,34 +120,17 @@ export default async function PricingPage({
 
         {/* The second exit, for everyone who will not buy today: one Pro
             component for a confirmed address. Moved here from `/pro`. */}
-        <div
-          id="free"
-          className="mx-auto mt-20 grid max-w-3xl scroll-mt-24 items-center gap-6 rounded-2xl border border-border bg-card p-6 sm:grid-cols-2 sm:p-8"
-        >
-          <div>
-            <h2 className="font-medium text-foreground text-lg">
-              Not ready? Get {PRO_SAMPLE.title} free.
-            </h2>
-            <p className="mt-2 text-muted-foreground text-sm">
-              Confirm your address and the install command for one Pro component
-              is yours — on the page and in your inbox. At most one email a week
-              after that, never sponsored.
-            </p>
+        <div id="free" className="mt-20 scroll-mt-24">
+          <Cta
+            title={`Not ready? Get ${PRO_SAMPLE.title} free.`}
+            body="Confirm your address and the install command for one Pro component is yours — on the page and in your inbox. At most one email a week after that, never sponsored."
+          >
             <NewsletterForm
               defaultSource="pro-sample"
               id="pro-sample-email"
               buttonLabel={`Send me ${PRO_SAMPLE.title}`}
-              className="mt-4"
             />
-          </div>
-          {sampleVideo ? (
-            <div className="surface-card relative aspect-video w-full overflow-hidden rounded-xl">
-              <RenderedDemo
-                src={sampleVideo}
-                poster={proDemoPoster(PRO_SAMPLE.name) ?? undefined}
-              />
-            </div>
-          ) : null}
+          </Cta>
         </div>
 
         {PRO_GALLERY_ITEMS.length > 0 ? (

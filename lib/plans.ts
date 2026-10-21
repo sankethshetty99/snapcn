@@ -176,6 +176,20 @@ export const EARLY_BIRD = {
  */
 export const PRICES_RISEN = Date.now() >= Date.parse(EARLY_BIRD.endsAt);
 
+/**
+ * Templates release the moment the early-bird window closes — one date, so the
+ * price rise and the release can never drift apart. Until then nothing installs
+ * a template: not a Pro key, not Lifetime, not the watermarked preview.
+ */
+export const TEMPLATES_RELEASE_AT = EARLY_BIRD.endsAt;
+
+/** Whether `name` is a template that has not been released yet. */
+export function templateLocked(name: string, now: number = Date.now()): boolean {
+  return (
+    name.startsWith("template-") && now < Date.parse(TEMPLATES_RELEASE_AT)
+  );
+}
+
 /** Whole days left at early-bird prices; 0 once the window has closed. */
 export function earlyBirdDaysLeft(now: number = Date.now()): number {
   return Math.max(

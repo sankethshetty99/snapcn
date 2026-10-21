@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DocsTopBar } from "@/components/docs/gallery/docs-top-bar";
 import { GalleryFrame } from "@/components/docs/gallery/gallery-frame";
+import { DocsNewsletterCta } from "@/components/docs/newsletter-cta";
 import { DOCS_PAGE_META } from "@/config/site";
 import { metaDescription, metaTitle } from "@/lib/meta";
 import { PageJsonLd } from "@/lib/page-json-ld";
@@ -85,7 +86,7 @@ export default function RoadmapPage() {
       <PageJsonLd graph={jsonLd} path="/docs/roadmap" />
       <DocsTopBar />
 
-      <div className="mx-auto w-full max-w-3xl py-12 sm:py-16">
+      <div className="w-full py-12 sm:py-16">
         <p className="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
           Roadmap
         </p>
@@ -143,14 +144,8 @@ export default function RoadmapPage() {
         </div>
 
         <p className="mt-16 text-sm text-muted-foreground">
-          Want to know the day one of these moves?{" "}
-          <Link
-            href="/#newsletter"
-            className="text-foreground underline underline-offset-4"
-          >
-            Join the list
-          </Link>
-          , or watch the{" "}
+          Want to know the day one of these moves? Join the list below, or watch
+          the{" "}
           <Link
             href="/docs/changelog"
             className="text-foreground underline underline-offset-4"
@@ -159,6 +154,7 @@ export default function RoadmapPage() {
           </Link>
           .
         </p>
+        <DocsNewsletterCta />
       </div>
     </GalleryFrame>
   );

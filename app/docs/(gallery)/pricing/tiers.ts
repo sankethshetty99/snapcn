@@ -60,6 +60,8 @@ const TIERS = [
       "Unlimited editor exports at 720p",
       "A small snapcn mark on exports",
       "Saved projects once you sign in",
+      // Free and MIT: the skills ship in the public repo and need no key.
+      "7 agent skills for Claude Code, Cursor and Gemini CLI",
     ],
     href: "/docs/components",
     cta: "Start free",
@@ -76,7 +78,8 @@ const TIERS = [
       `All ${PRO_ITEMS.length} Pro components today`,
       `Growing to ${CATALOGUE_PROMISE.components} Pro components`,
       `${CATALOGUE_PROMISE.templates} video templates: ${CATALOGUE_PROMISE.templatesSchedule}`,
-      "The snapcn MCP server for your agent",
+      "The snapcn MCP server: your agent plans the video from a brief",
+      "One-click plugins for Claude Code, Cursor and Gemini CLI",
       "No watermark, 1080p exports",
     ],
     product: "everything_annual" as const,
@@ -93,7 +96,7 @@ const TIERS = [
       "Everything in Pro, for good",
       `Every one of the ${CATALOGUE_PROMISE.components} components to come`,
       `Every one of the ${CATALOGUE_PROMISE.templates} templates`,
-      "The MCP server and 1080p exports",
+      "The MCP server, the agent plugins and 1080p exports",
     ],
     product: "lifetime" as const,
     cta: "Buy it outright",
@@ -120,7 +123,7 @@ const TIERS = [
 /** The headline over the cards on `/docs/pricing`. */
 export const PRICING_INTRO = {
   title: "Own the whole catalogue.",
-  description: `${PRO_ITEMS.length} Pro components today, growing to ${CATALOGUE_PROMISE.components}, and ${CATALOGUE_PROMISE.templates} video templates — installed with the shadcn CLI you already use, or by your agent through the snapcn MCP server, which Pro includes.`,
+  description: `${PRO_ITEMS.length} Pro components today, growing to ${CATALOGUE_PROMISE.components}, and ${CATALOGUE_PROMISE.templates} video templates — installed with the shadcn CLI you already use, or by your agent: free agent skills for Claude Code, Cursor and Gemini CLI, and in Pro the snapcn MCP server and its one-click plugins.`,
 };
 
 const regionName = (country: string) =>
