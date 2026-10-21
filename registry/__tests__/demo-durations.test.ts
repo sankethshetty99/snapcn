@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CONFIGS } from "@/registry/__configs__";
+import { clickTypeFrames } from "@/registry/snap-cn/click-type";
 import { cursorTrackFrames, DEMO_PATH } from "@/registry/snap-cn/cursor-track";
 import {
   DEMO_CAMERA,
@@ -28,6 +29,7 @@ describe("screen component demo durations", () => {
   it.each([
     ["screen-recording", () => screenRecordingFrames(DEMO_CAMERA)],
     ["cursor-track", () => cursorTrackFrames(DEMO_PATH)],
+    ["click-type", () => clickTypeFrames()],
   ])("%s reports its own track's length", (name, frames) => {
     expect(
       CONFIGS[name].durationInFrames,

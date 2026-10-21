@@ -21,7 +21,7 @@ import { PricingPlans } from "./pricing-plans";
 import { PRICING_INTRO, pricing } from "./tiers";
 
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META.pricing;
-const OG_IMAGE = "/og/pricing";
+const OG_IMAGE = "/og/pricing?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META.pricing.seoTitle ?? TITLE),

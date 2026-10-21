@@ -21,7 +21,7 @@ import STUDIO_ELEMENTS from "@/lib/studio-elements.json";
 const { title: TITLE, description: DESCRIPTION } =
   DOCS_PAGE_META["remotion-studio"];
 const PATH = "/docs/remotion-studio";
-const OG_IMAGE = "/og/remotion-studio";
+const OG_IMAGE = "/og/remotion-studio?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META["remotion-studio"].seoTitle ?? TITLE),

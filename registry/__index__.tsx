@@ -6,10 +6,12 @@ import { AnnounceTitle } from "@/registry/snap-cn/announce-title";
 import { AnswerHighlight } from "@/registry/snap-cn/answer-highlight";
 import { AnswerStream } from "@/registry/snap-cn/answer-stream";
 import { BlockWordmark } from "@/registry/snap-cn/block-wordmark";
+import { ButtonPress } from "@/registry/snap-cn/button-press";
 import { CaptureReveal } from "@/registry/snap-cn/capture-reveal";
 import { CardRail } from "@/registry/snap-cn/card-rail";
 import { ChannelThread } from "@/registry/snap-cn/channel-thread";
 import { CheckCycle } from "@/registry/snap-cn/check-cycle";
+import { ClickType } from "@/registry/snap-cn/click-type";
 import { CountGrid } from "@/registry/snap-cn/count-grid";
 import { CursorTrack } from "@/registry/snap-cn/cursor-track";
 import { FollowerRush } from "@/registry/snap-cn/follower-rush";
@@ -149,6 +151,8 @@ const registry: Record<string, RegistryEntry> = {
     config: CONFIGS["capture-reveal"],
   },
   "font-shuffle": { Component: FontShuffle, config: CONFIGS["font-shuffle"] },
+  "button-press": { Component: ButtonPress, config: CONFIGS["button-press"] },
+  "click-type": { Component: ClickType, config: CONFIGS["click-type"] },
   "check-cycle": { Component: CheckCycle, config: CONFIGS["check-cycle"] },
   "text-highlight": {
     Component: TextHighlight,

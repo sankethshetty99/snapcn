@@ -1,10 +1,12 @@
 import {
+  Blend,
   Captions,
   ChartColumn,
   Clapperboard,
   Hexagon,
   type LucideIcon,
   Monitor,
+  MousePointerClick,
   Sparkles,
   Type,
   Users,
@@ -28,6 +30,8 @@ export type CategoryId =
   | "captions"
   | "logos"
   | "screens"
+  | "cursor"
+  | "transitions"
   | "charts"
   | "social"
   | "scenes"
@@ -44,6 +48,8 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
   { id: "captions", label: "Captions" },
   { id: "logos", label: "Logos" },
   { id: "screens", label: "Screens & Devices" },
+  { id: "cursor", label: "Cursor & Clicks" },
+  { id: "transitions", label: "Transitions" },
   { id: "charts", label: "Charts & Stats" },
   { id: "social", label: "Social Proof" },
   { id: "scenes", label: "Scenes" },
@@ -56,6 +62,8 @@ export const CATEGORY_ICONS: Record<CategoryId, LucideIcon> = {
   captions: Captions,
   logos: Hexagon,
   screens: Monitor,
+  cursor: MousePointerClick,
+  transitions: Blend,
   charts: ChartColumn,
   social: Users,
   scenes: Clapperboard,
@@ -339,6 +347,22 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     added: "2026-08-29",
   },
   {
+    name: "Click Type",
+    description:
+      "A prompt composer writes its own placeholder while a cursor flies in and clicks the field, then a hard cut into the field where the prompt types at the caret",
+    category: "cursor",
+    href: "/docs/cursor/click-type",
+    added: "2026-10-21",
+  },
+  {
+    name: "Button Press",
+    description:
+      "A cursor walks onto a split action button: hover, press, a spinner while it works, then a drawn tick. The deploy beat of every launch video",
+    category: "cursor",
+    href: "/docs/cursor/button-press",
+    added: "2026-10-21",
+  },
+  {
     name: "Capture Reveal",
     description:
       'A toast counts a screenshot up to 100% over a browser window, the window drops away, "Copied to clipboard." pops and a headline rises out from behind it',
@@ -597,6 +621,8 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   "orbit-flow": "scenes",
   "library-flight": "scenes",
   "wire-feed": "scenes",
+  // A whole template: five scenes on one paper, installed as one file.
+  "template-launch": "scenes",
   // Social proof
   "chat-thread": "social",
   "comment-storm": "social",
@@ -617,6 +643,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   "task-stream": "ai-input",
   "glass-prompt": "ai-input",
   "search-retype": "ai-input",
+  "dot-dissolve": "transitions",
 };
 
 /**

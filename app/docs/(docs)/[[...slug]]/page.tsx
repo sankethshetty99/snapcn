@@ -269,7 +269,7 @@ export async function generateMetadata(props: {
           category: pro.category,
         }
       : notFound();
-  const ogImage = `/og${data.url.slice("/docs".length)}`;
+  const ogImage = `/og${data.url.slice("/docs".length)}?v=2`;
   // The search title carries the query; the social card keeps the plain
   // description, which is written to be read rather than matched.
   const { title, description } = searchMeta(

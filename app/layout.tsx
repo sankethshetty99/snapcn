@@ -66,7 +66,7 @@ const SITE_DESCRIPTION =
   "A shadcn registry of Remotion components for React video: text animations, captions, device mockups and full scenes. Install with the CLI, own the code. MIT.";
 
 export const metadata: Metadata = {
-  // Resolves the relative `/bg.jpg` below into an absolute URL for crawlers.
+  // Resolves the relative `/og` card URLs below into an absolute URL for crawlers.
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_TITLE,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/og",
+        url: "/og?v=2",
         width: 1200,
         height: 630,
         alt: SITE_TITLE,
@@ -97,7 +97,7 @@ export const metadata: Metadata = {
     creator: "@SriNath693",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/og"],
+    images: ["/og?v=2"],
   },
 };
 

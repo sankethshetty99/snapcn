@@ -24,7 +24,7 @@ import { McpClients, McpJobs } from "./mcp-install";
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META.mcp;
 const PATH = "/docs/mcp";
 /** Per-page card. `/og` alone is the generic site card. */
-const OG_IMAGE = "/og/mcp";
+const OG_IMAGE = "/og/mcp?v=2";
 
 export const metadata: Metadata = {
   title: metaTitle(DOCS_PAGE_META.mcp.seoTitle ?? TITLE),

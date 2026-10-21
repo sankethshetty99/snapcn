@@ -71,7 +71,7 @@ export async function generateMetadata({
       title,
       description,
       siteName: "snapcn",
-      images: [{ url: "/og", width: 1200, height: 630, alt: title }],
+      images: [{ url: "/og?v=2", width: 1200, height: 630, alt: title }],
       videos: [
         {
           url: videoUrl,
@@ -85,7 +85,7 @@ export async function generateMetadata({
       card: "player",
       title,
       description,
-      images: ["/og"],
+      images: ["/og?v=2"],
       players: [
         {
           playerUrl: videoUrl,
