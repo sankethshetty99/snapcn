@@ -6,6 +6,7 @@ import {
   EARLY_BIRD,
   earlyBirdDaysLeft,
   PLANS,
+  templateLocked,
 } from "@/lib/plans";
 import { proDemoSrc } from "@/lib/pro-demos";
 import { bearer, planForApiKey } from "@/lib/server/api-key";
@@ -115,6 +116,23 @@ export async function GET(
   if (body === null && !listed) {
     // Not free (or it would have been served statically) and not pro. Gone.
     return new Response("Not found", { status: 404 });
+  }
+
+  /**
+   * Not released yet. Ahead of the key check on purpose: a template is locked
+   * for everybody until release day — paying customers included, and the
+   * watermarked preview too, since a template's preview IS its film. 423, so a
+   * buyer reads "not yet", not "your key failed".
+   */
+  if (templateLocked(name)) {
+    return Response.json(
+      {
+        error: "template_not_released",
+        component: name,
+        message: `@snapcn/${name} releases ${EARLY_BIRD.endsOn}. Nothing was installed. If you have Pro, run the same command on ${EARLY_BIRD.endsOn} and it installs; until then the early-bird price holds: https://snapcn.dev/docs/pricing?ref=cli-template`,
+      },
+      { status: 423, headers: { "cache-control": "no-store" } },
+    );
   }
 
   const plan = await planForApiKey(bearer(req));

@@ -60,7 +60,7 @@ export default async function AccountPage({
   return (
     <section className="relative py-16 sm:py-24">
       <div className="section">
-        <div className="mx-auto max-w-3xl">
+        <div>
           <h1 className="font-normal font-sans text-[clamp(2.25rem,4.6vw,3.5rem)] text-foreground leading-[1.06] tracking-[-0.03em]">
             Account
           </h1>

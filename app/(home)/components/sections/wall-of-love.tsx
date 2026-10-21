@@ -131,7 +131,7 @@ export function WallOfLove() {
           What they&rsquo;re saying
         </h2>
         <p className="mt-4 max-w-xl text-pretty text-body-lg text-current/70">
-          Real posts from X. Every card links to the original.
+          Real posts from X and Threads. Every card links to the original.
         </p>
 
         <section

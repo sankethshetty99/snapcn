@@ -37,7 +37,7 @@ export function HeaderActions() {
       >
         <svg
           viewBox="0 0 24 24"
-          className="size-3.5"
+          className="size-[1.125rem]"
           fill="currentColor"
           aria-hidden="true"
         >

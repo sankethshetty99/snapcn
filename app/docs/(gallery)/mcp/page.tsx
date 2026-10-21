@@ -68,7 +68,7 @@ export default function McpPage() {
       <PageJsonLd graph={jsonLd} path="/docs/mcp" />
       <DocsTopBar />
 
-      <div className="mx-auto w-full max-w-3xl py-12 sm:py-16">
+      <div className="w-full py-12 sm:py-16">
         <p className="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
           MCP server
         </p>

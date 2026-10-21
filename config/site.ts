@@ -165,11 +165,12 @@ export type NavLink = {
 // The list had drifted to two items while the site grew to eight sections. The
 // docs rail (`DOCS_SECTIONS`) lists all of them because a rail is a roadmap —
 // this is a header, and it carries what has actually shipped: the gallery, the
-// editor, and other people's work. Templates stay out until they land, the same
-// rule the footer keeps. Docs sits last because it is where you go once one of the first three
+// editor, and other people's work. Templates joined ahead of their launch
+// (25 Oct). Docs sits last because it is where you go once one of the first three
 // has convinced you.
 export const NAV_LINKS: NavLink[] = [
   { href: "/docs/components", label: "Components" },
+  { href: "/docs/templates", label: "Templates" },
   // Its "New" flag came off 20 Oct: a "New" that outlives its release teaches
   // people to stop reading flags.
   { href: "/docs/video-editor", label: "Video Editor" },

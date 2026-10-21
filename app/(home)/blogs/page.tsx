@@ -45,7 +45,7 @@ export default function BlogIndexPage() {
   const posts = blogPosts();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pt-12 pb-20 md:pt-16 md:pb-28">
+    <div className="section pt-12 pb-20 md:pt-16 md:pb-28">
       <PageJsonLd
         path="/blogs"
         graph={[
