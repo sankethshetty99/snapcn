@@ -11,7 +11,7 @@ import type { Reel } from "./template-reels";
  *
  * Every beat is a Pro component, so nothing here can run live (that tree is
  * gitignored — see `template-timeline.tsx`). Each film is the template rendered
- * with its default words, on R2 at `templates-wip/<slug>` (`v` is the mp4's
+ * with its default words, on R2 at `templates-wip/<slug>-<v>.mp4` (`v` is the mp4's
  * byte hash). The beats in `template-reels.ts` are generated from
  * `registry/snap-cn-pro/templates/<slug>`; `frames` place each beat in the film.
  */
@@ -22,8 +22,9 @@ const clock = (frames: number, fps: number) => {
 
 export function TemplateReel({ reel }: { reel: Reel }) {
   const { fps, beats } = reel;
-  const src = `${MEDIA_BASE}/templates-wip/${reel.slug}.mp4?v=${reel.v}`;
-  const poster = `${MEDIA_BASE}/templates-wip/${reel.slug}.webp?v=${reel.pv}`;
+  // Hashes are in the names (see `template-reels.ts`); the first still is the poster.
+  const src = `${MEDIA_BASE}/templates-wip/${reel.slug}-${reel.v}.mp4`;
+  const poster = `${MEDIA_BASE}/templates-wip/${reel.slug}-1-${reel.stills[0]}.webp`;
   const starts = useMemo(() => {
     const out: number[] = [];
     for (let i = 0, n = 0; i < beats.length; n += beats[i].frames, i++)
