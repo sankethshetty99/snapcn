@@ -577,6 +577,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   // Text & titles
   manifesto: "text",
   "read-through": "text",
+  "glow-pullback": "text",
   "word-settle": "text",
   "sentence-set": "text",
   "phrase-swarm": "text",

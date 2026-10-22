@@ -6,6 +6,8 @@ import {
   getRemotionEnvironment,
   Img,
   interpolate,
+  OffthreadVideo,
+  Sequence,
   staticFile,
   useCurrentFrame,
   useVideoConfig,
@@ -47,6 +49,7 @@ export interface ReelCollageProps {
   /**
    * The collage, six pictures, in `COLLAGE` slot order: left, centre, top
    * right, bottom left, bottom right, and the centre-right one on top of it.
+   * Image or video URLs — a `.mp4`/`.webm`/`.mov` plays, muted.
    */
   collage?: string[];
   /** The page. */
@@ -80,6 +83,7 @@ const FONT_FAMILY =
  *  just copied into. Pass your own — root-relative or remote, both resolve. */
 const POSTER = (slug: string) =>
   `https://media.snapcn.dev/demos/posters/${slug}.webp`;
+const DEMO = (slug: string) => `https://media.snapcn.dev/demos/${slug}.mp4`;
 const DEFAULT_SLIDES = [
   "orbit-gallery",
   "card-rail",
@@ -97,7 +101,7 @@ const DEFAULT_COLLAGE = [
   "channel-thread",
   "hero-launch",
   "follower-rush",
-].map(POSTER);
+].map(DEMO);
 
 // ─── Geometry, in reference pixels ────────────────────────────────────────────
 /** The reference frame's width. Every length below is a fraction of it. */
@@ -221,6 +225,47 @@ export const slideAt = (frame: number) =>
   CUTS.reduce<number>((k, cut, i) => (frame >= cut ? i : k), 0);
 
 /** Rewrite root-relative assets through staticFile everywhere but the Player. */
+/** True for a video URL — those play instead of painting a still. */
+export const isVideoSrc = (src: string) =>
+  /\.(mp4|webm|mov|m4v)(?:[?#]|$)/i.test(src);
+
+/** Seconds into a clip to start from: a media fragment, `clip.mp4#t=2.5`. */
+export const clipStart = (src: string) => {
+  const m = /#t=([\d.]+)/.exec(src);
+  return m ? Number(m[1]) : 0;
+};
+
+/**
+ * A picture or a clip, filling its box. A clip is muted and starts playing at
+ * `from` (composition frames) — the moment its box appears — so the viewer
+ * sees it from the top, or from `#t=<seconds>` when the URL carries one (to
+ * show only a clip's last part). Ceiling: a clip that ends while its box is
+ * still up goes blank; pick clips at least as long as their box is on screen.
+ */
+function Media({
+  src,
+  style,
+  from = 0,
+}: {
+  src: string;
+  style: CSSProperties;
+  from?: number;
+}) {
+  const { fps } = useVideoConfig();
+  const resolved = resolveSrc(src.replace(/#.*$/, ""));
+  if (!isVideoSrc(src)) return <Img src={resolved} style={style} />;
+  return (
+    <Sequence from={Math.floor(from)} layout="none">
+      <OffthreadVideo
+        src={resolved}
+        muted
+        trimBefore={Math.round(clipStart(src) * fps)}
+        style={style}
+      />
+    </Sequence>
+  );
+}
+
 function resolveSrc(src: string): string {
   const isLocal = src.startsWith("/") && !src.startsWith("//");
   if (!isLocal || getRemotionEnvironment().isPlayer) return src;
@@ -261,8 +306,11 @@ export function ReelCollage({
   speed = 1,
   className,
 }: ReelCollageProps) {
-  const frame = useCurrentFrame() * speed;
-  const { width, height } = useVideoConfig();
+  const { width, height, fps } = useVideoConfig();
+  // The timeline is in 30fps frames; scaled so it runs at the same speed in a
+  // composition of any frame rate.
+  const tick = (speed * 30) / fps;
+  const frame = useCurrentFrame() * tick;
   const t = useSnapCnTheme(theme, mode);
   const face = resolveFont(fontFamily ?? t.fontFamily) ?? FONT_FAMILY;
   const ink = textColor ?? t.foreground;
@@ -355,8 +403,8 @@ export function ReelCollage({
           }}
         >
           {/* The picture keeps its open size; only the window closes on it. */}
-          <Img
-            src={resolveSrc(reelSrc)}
+          <Media
+            src={reelSrc}
             style={{
               ...cover,
               position: "absolute",
@@ -388,7 +436,11 @@ export function ReelCollage({
               ...(isRendering ? {} : { willChange: "transform" as const }),
             }}
           >
-            <Img src={resolveSrc(src)} style={cover} />
+            <Media
+              src={src}
+              style={cover}
+              from={(slot === 4 ? 50.74 : 50.14) / tick}
+            />
           </div>
         );
       })}
