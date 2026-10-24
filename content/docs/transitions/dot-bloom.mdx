@@ -1,0 +1,45 @@
+---
+title: Dot Bloom
+description: A halftone transition — the outgoing shot washes to cream, breaks into warm drifting dots, and the dots thin out onto the incoming shot
+---
+
+<ComponentPreview name="dot-bloom" />
+
+## Installation
+
+<InstallBlock name="dot-bloom" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="dot-bloom" />
+
+## Usage
+
+Dot Bloom paints only the transition. Lay it over both shots and cut between them
+underneath it at `DOT_BLOOM_CUT`, the frame where the cream covers the whole screen.
+
+```tsx
+import { AbsoluteFill, Sequence } from "remotion";
+import { DOT_BLOOM_CUT, DotBloom } from "@/components/snap-cn/dot-bloom";
+
+const AT = 60; // where the transition starts
+
+export const Cut = () => (
+  <AbsoluteFill>
+    <Sequence durationInFrames={AT + DOT_BLOOM_CUT}><ShotA /></Sequence>
+    <Sequence from={AT + DOT_BLOOM_CUT}><ShotB /></Sequence>
+    <Sequence from={AT} durationInFrames={30}><DotBloom /></Sequence>
+  </AbsoluteFill>
+);
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { name: "speed", type: "number", default: "1", description: "Time multiplier" },
+    { name: "className", type: "string", description: "Optional className passed to the outer wrapper" },
+  ]}
+/>

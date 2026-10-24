@@ -1,0 +1,59 @@
+---
+title: Reel Wall
+description: A curved wall of vertical clips turns past in the dark — it eases in from rest, then keeps turning
+---
+
+<ComponentPreview name="reel-wall" />
+
+## Installation
+
+<InstallBlock name="reel-wall" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="reel-wall" />
+
+## Usage
+
+A ring of vertical clips on a 3D wall. It eases in from rest, moving on twos like the
+reference it was fitted from, then keeps turning at an even speed for as long as the
+composition runs — make the composition longer for a longer turn.
+
+```tsx
+// src/Root.tsx
+import { Composition, staticFile } from "remotion";
+import { ReelWall } from "@/components/snap-cn/reel-wall";
+
+const Scene = () => (
+  <ReelWall videos={[staticFile("clips/1.mp4") /* …your vertical clips */]} />
+);
+
+export const RemotionRoot = () => (
+  <Composition
+    id="ReelWall"
+    component={Scene}
+    durationInFrames={216}
+    fps={24}
+    width={1280}
+    height={720}
+  />
+);
+```
+
+Clips take a root-relative `/…` path or an `http(s)` URL, play muted, and repeat around the
+ring. Vertical 9:16 clips fit best; any aspect is cropped to cover. Pass clips at least as
+long as the composition — a shorter clip stops on its last frame.
+
+## Props
+
+<PropsTable
+  rows={[
+    { name: "videos", type: "string[]", description: "Clips for the wall, left to right; they repeat around the ring" },
+    { name: "background", type: "string", default: "\"#0e0e0e\"", description: "The page behind the wall" },
+    { name: "cardColor", type: "string", default: "\"#1a1a1a\"", description: "A card before its clip has a frame to show" },
+    { name: "speed", type: "number", default: "1", description: "Global playback multiplier" },
+    { name: "className", type: "string", description: "Optional className passed to the outer wrapper" },
+  ]}
+/>

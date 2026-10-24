@@ -12,6 +12,7 @@ import { checkCycleConfig } from "@/registry/snap-cn/check-cycle/config";
 import { clickTypeConfig } from "@/registry/snap-cn/click-type/config";
 import { countGridConfig } from "@/registry/snap-cn/count-grid/config";
 import { cursorTrackConfig } from "@/registry/snap-cn/cursor-track/config";
+import { dotBloomConfig } from "@/registry/snap-cn/dot-bloom/config";
 import { followerRushConfig } from "@/registry/snap-cn/follower-rush/config";
 import { fontShuffleConfig } from "@/registry/snap-cn/font-shuffle/config";
 import { heroLaunchConfig } from "@/registry/snap-cn/hero-launch/config";
@@ -25,10 +26,13 @@ import { moodboardRevealConfig } from "@/registry/snap-cn/moodboard-reveal/confi
 import { orbSwarmConfig } from "@/registry/snap-cn/orb-swarm/config";
 import { orbitGalleryConfig } from "@/registry/snap-cn/orbit-gallery/config";
 import { phoneFrameConfig } from "@/registry/snap-cn/phone-frame/config";
+import { phoneStackConfig } from "@/registry/snap-cn/phone-stack/config";
+import { portalIntroConfig } from "@/registry/snap-cn/portal-intro/config";
 import { promptSendConfig } from "@/registry/snap-cn/prompt-send/config";
 import { promptZoomConfig } from "@/registry/snap-cn/prompt-zoom/config";
 import { punchLinesConfig } from "@/registry/snap-cn/punch-lines/config";
 import { reelCollageConfig } from "@/registry/snap-cn/reel-collage/config";
+import { reelWallConfig } from "@/registry/snap-cn/reel-wall/config";
 import { rosterGrantConfig } from "@/registry/snap-cn/roster-grant/config";
 import { screenRecordingConfig } from "@/registry/snap-cn/screen-recording/config";
 import { searchTypingConfig } from "@/registry/snap-cn/search-typing/config";
@@ -79,10 +83,12 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "moodboard-reveal": moodboardRevealConfig,
   "orbit-gallery": orbitGalleryConfig,
   "phone-frame": phoneFrameConfig,
+  "phone-stack": phoneStackConfig,
   "prompt-send": promptSendConfig,
   "prompt-zoom": promptZoomConfig,
   "punch-lines": punchLinesConfig,
   "reel-collage": reelCollageConfig,
+  "reel-wall": reelWallConfig,
   "roster-grant": rosterGrantConfig,
   "screen-recording": screenRecordingConfig,
   "search-typing": searchTypingConfig,
@@ -93,6 +99,8 @@ export const CONFIGS: Record<string, ComponentConfig> = {
   "card-rail": cardRailConfig,
   "logo-collapse": logoCollapseConfig,
   "word-gather": wordGatherConfig,
+  "portal-intro": portalIntroConfig,
+  "dot-bloom": dotBloomConfig,
   "orb-swarm": orbSwarmConfig,
   "word-wheel": wordWheelConfig,
   "capture-reveal": captureRevealConfig,

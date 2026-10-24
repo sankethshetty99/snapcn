@@ -313,6 +313,14 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     tile: "tall",
   },
   {
+    name: "Phone Stack",
+    description:
+      "Phone screens playing clips rise out of a blur one after another, each pushing the stack back so the older ones peek out on top",
+    category: "screens",
+    href: "/docs/screens/phone-stack",
+    added: "2026-10-24",
+  },
+  {
     name: "Laptop Frame",
     description:
       "MacBook that opens, runs a notch notification, then dives into the screen until an image or video fills the frame",
@@ -454,6 +462,32 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     tile: "wide",
   },
   {
+    name: "Reel Wall",
+    description:
+      "A curved wall of vertical clips turns past in the dark — it eases in from rest, then keeps turning",
+    category: "scenes",
+    href: "/docs/scenes/reel-wall",
+    added: "2026-10-24",
+    tile: "wide",
+  },
+  {
+    name: "Portal Intro",
+    description:
+      "A sentence with a picture chip in it leans in until the chip takes the frame, then a title types over the picture and the mark and name arrive",
+    category: "scenes",
+    href: "/docs/scenes/portal-intro",
+    added: "2026-10-24",
+    tile: "wide",
+  },
+  {
+    name: "Dot Bloom",
+    description:
+      "A halftone transition — the outgoing shot washes to cream, breaks into warm drifting dots, and the dots thin out onto the incoming shot",
+    category: "transitions",
+    href: "/docs/transitions/dot-bloom",
+    added: "2026-10-24",
+  },
+  {
     name: "Search Typing",
     description:
       "A search field wider than the shot — it comes forward, types across its left half, then pages to its right half",
@@ -524,7 +558,7 @@ export const FREE_CATEGORIES = GALLERY_CATEGORIES.filter((category) =>
 );
 
 /** How many components the "New" shelf holds. */
-export const NEW_COUNT = 6;
+export const NEW_COUNT = 20;
 
 /**
  * Deterministic tile shape per card, stable regardless of the active filter or
