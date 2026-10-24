@@ -1,5 +1,8 @@
 {
   "title": "Transitions",
   "collapsible": false,
-  "pages": ["index"]
+  "pages": [
+    "index",
+    "dot-bloom"
+  ]
 }

@@ -1,0 +1,61 @@
+---
+title: Phone Stack
+description: Phone screens playing clips rise out of a blur one after another, each pushing the stack back so the older ones peek out on top
+---
+
+<ComponentPreview name="phone-stack" />
+
+## Installation
+
+<InstallBlock name="phone-stack" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="phone-stack" />
+
+## Usage
+
+Each clip gets its own screen. Screens arrive `stagger` frames apart: the new one rises out
+of a blur into the front, and every screen already there steps back — smaller, and higher,
+so its top peeks out above the newest. Screens more than three steps back fade away, so
+any number of clips works.
+
+```tsx
+import { Composition, staticFile } from "remotion";
+import { PhoneStack } from "@/components/snap-cn/phone-stack";
+
+const Scene = () => (
+  <PhoneStack
+    videos={[
+      staticFile("clips/onboarding.mp4"),
+      staticFile("clips/dashboard.mp4"),
+      staticFile("clips/checkout.mp4"),
+    ]}
+  />
+);
+
+export const RemotionRoot = () => (
+  <Composition id="PhoneStack" component={Scene} durationInFrames={120} fps={30} width={1280} height={720} />
+);
+```
+
+Clips take a root-relative `/…` path or an `http(s)` URL and play muted from the moment their
+screen arrives; images work too. Screen recordings at 9:19.5 fit exactly; any aspect is
+cropped to cover.
+
+## Props
+
+<PropsTable
+  rows={[
+    { name: "videos", type: "string[]", description: "One clip per screen, in the order they arrive" },
+    { name: "stagger", type: "number", default: "14", description: "Frames between one screen arriving and the next" },
+    { name: "time", type: "string", default: "\"9:41\"", description: "The time in the status bar" },
+    { name: "background", type: "string", default: "\"#f3f3ee\"", description: "The page" },
+    { name: "glowColor", type: "string", default: "\"#cdb4e6\"", description: "The glow the stack rises out of" },
+    { name: "statusColor", type: "string", default: "\"#ffffff\"", description: "The status bar's ink over the clips" },
+    { name: "speed", type: "number", default: "1", description: "Global playback multiplier" },
+    { name: "className", type: "string", description: "Optional className passed to the outer wrapper" },
+  ]}
+/>

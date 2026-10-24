@@ -4,6 +4,7 @@
   "pages": [
     "index",
     "phone-frame",
+    "phone-stack",
     "laptop-frame",
     "terminal-simulator",
     "screen-recording",

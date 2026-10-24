@@ -14,6 +14,7 @@ import { CheckCycle } from "@/registry/snap-cn/check-cycle";
 import { ClickType } from "@/registry/snap-cn/click-type";
 import { CountGrid } from "@/registry/snap-cn/count-grid";
 import { CursorTrack } from "@/registry/snap-cn/cursor-track";
+import { DotBloom } from "@/registry/snap-cn/dot-bloom";
 import { FollowerRush } from "@/registry/snap-cn/follower-rush";
 import { FontShuffle } from "@/registry/snap-cn/font-shuffle";
 import { HeroLaunch } from "@/registry/snap-cn/hero-launch";
@@ -27,10 +28,13 @@ import { MoodboardReveal } from "@/registry/snap-cn/moodboard-reveal";
 import { OrbSwarm } from "@/registry/snap-cn/orb-swarm";
 import { OrbitGallery } from "@/registry/snap-cn/orbit-gallery";
 import { PhoneFrame } from "@/registry/snap-cn/phone-frame";
+import { PhoneStack } from "@/registry/snap-cn/phone-stack";
+import { PortalIntro } from "@/registry/snap-cn/portal-intro";
 import { PromptSend } from "@/registry/snap-cn/prompt-send";
 import { PromptZoom } from "@/registry/snap-cn/prompt-zoom";
 import { PunchLines } from "@/registry/snap-cn/punch-lines";
 import { ReelCollage } from "@/registry/snap-cn/reel-collage";
+import { ReelWall } from "@/registry/snap-cn/reel-wall";
 import { RosterGrant } from "@/registry/snap-cn/roster-grant";
 import { ScreenRecording } from "@/registry/snap-cn/screen-recording";
 import { SearchTyping } from "@/registry/snap-cn/search-typing";
@@ -112,6 +116,7 @@ const registry: Record<string, RegistryEntry> = {
     config: CONFIGS["orbit-gallery"],
   },
   "phone-frame": { Component: PhoneFrame, config: CONFIGS["phone-frame"] },
+  "phone-stack": { Component: PhoneStack, config: CONFIGS["phone-stack"] },
   "prompt-send": { Component: PromptSend, config: CONFIGS["prompt-send"] },
   "prompt-zoom": { Component: PromptZoom, config: CONFIGS["prompt-zoom"] },
   "punch-lines": { Component: PunchLines, config: CONFIGS["punch-lines"] },
@@ -119,6 +124,7 @@ const registry: Record<string, RegistryEntry> = {
     Component: ReelCollage,
     config: CONFIGS["reel-collage"],
   },
+  "reel-wall": { Component: ReelWall, config: CONFIGS["reel-wall"] },
   "roster-grant": { Component: RosterGrant, config: CONFIGS["roster-grant"] },
   "screen-recording": {
     Component: ScreenRecording,
@@ -144,6 +150,8 @@ const registry: Record<string, RegistryEntry> = {
     config: CONFIGS["logo-collapse"],
   },
   "word-gather": { Component: WordGather, config: CONFIGS["word-gather"] },
+  "portal-intro": { Component: PortalIntro, config: CONFIGS["portal-intro"] },
+  "dot-bloom": { Component: DotBloom, config: CONFIGS["dot-bloom"] },
   "orb-swarm": { Component: OrbSwarm, config: CONFIGS["orb-swarm"] },
   "word-wheel": { Component: WordWheel, config: CONFIGS["word-wheel"] },
   "capture-reveal": {

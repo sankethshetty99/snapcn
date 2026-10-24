@@ -1,0 +1,65 @@
+---
+title: Portal Intro
+description: A sentence with a picture chip in it leans in until the chip takes the frame, then a title types over the picture and the mark arrives
+---
+
+<ComponentPreview name="portal-intro" />
+
+## Installation
+
+<InstallBlock name="portal-intro" />
+
+## Component code
+
+The exact file `shadcn add` copies into your project.
+
+<ComponentSource name="portal-intro" />
+
+## Usage
+
+A three-beat intro, 108 frames at 30fps:
+
+1. **Line** — the `lead` words fade up one at a time while the line drifts in.
+2. **Chip** — the line re-sets with a rounded picture chip and the `trail`, then leans in
+   until the chip takes the frame.
+3. **Title** — `title` types itself over the picture, lifts away, and the mark and `brand` arrive.
+
+```tsx
+import { Composition, staticFile } from "remotion";
+import { PortalIntro } from "@/components/snap-cn/portal-intro";
+
+const Scene = () => (
+  <PortalIntro
+    lead="your launch video"
+    trail="in code"
+    image={staticFile("hero.jpg")}
+    title="Introducing"
+    brand="Acme"
+  />
+);
+
+export const RemotionRoot = () => (
+  <Composition id="PortalIntro" component={Scene} durationInFrames={108} fps={30} width={1280} height={720} />
+);
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    { name: "lead", type: "string", default: "\"your launch video\"", description: "The words before the chip; they arrive one at a time" },
+    { name: "trail", type: "string", default: "\"in code\"", description: "The words after the chip" },
+    { name: "image", type: "string", description: "The picture the chip opens into" },
+    { name: "chipImage", type: "string", description: "The chip's own picture, if it should differ from the backdrop" },
+    { name: "title", type: "string", default: "\"Introducing\"", description: "The title typed over the picture" },
+    { name: "brand", type: "string", default: "\"snapcn\"", description: "The name beside the mark" },
+    { name: "logo", type: "ReactNode", description: "The mark, drawn in currentColor. Defaults to snapcn's" },
+    { name: "logoSrc", type: "string", description: "Or the mark as an image URL" },
+    { name: "overlay", type: "string", default: "\"#ffffff\"", description: "Ink of the title, mark and name over the picture" },
+    { name: "fontFamily", type: "string", description: "A label from fonts.ts or a family you have loaded. Defaults to Geist" },
+    { name: "speed", type: "number", default: "1", description: "Global playback multiplier" },
+    { name: "className", type: "string", description: "Optional className passed to the outer wrapper" },
+    { name: "theme", type: "Partial<SnapCnTheme>", description: "Design-system token overrides" },
+    { name: "mode", type: "\"light\" | \"dark\"", description: "Which end of the design system to resolve tokens against" },
+  ]}
+/>

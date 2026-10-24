@@ -96,6 +96,19 @@ export const RENDERED_DEMOS: readonly string[] = [
   // shuts in two frames of real travel. A cut shown a frame late is a stutter,
   // and a live Player flashes each new shot before its image is decoded.
   "reel-collage",
+  // Ten clips decoding at once on a 3D ring, held on twos — a live Player
+  // misses decodes and shows blank cards, and it cannot keep the twos even.
+  "reel-wall",
+  // Five clips decoding as their screens rise out of a blur — a live Player
+  // shows each screen blank until its clip has decoded.
+  "phone-stack",
+  // These four open on a near-empty frame (a cream page, a black stage), so a
+  // live Player in a grid card reads as a blank tile until its motion starts;
+  // the mp4's poster is a frame mid-move.
+  "portal-intro",
+  "dot-bloom",
+  "button-press",
+  "click-type",
   "hero-launch",
   // Type is under a moving scale for most of the run — a receding 3D plane, a
   // 1.5x settle, then a whole line panned at 19x — and each of the first two
