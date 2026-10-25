@@ -18,7 +18,6 @@ import { ReelCollage } from "@/registry/snap-cn/reel-collage";
 import { StatusCycle } from "@/registry/snap-cn/status-cycle";
 import { TextReveal } from "@/registry/snap-cn/text-reveal";
 import { WordmarkCut } from "@/registry/snap-cn/wordmark-cut";
-import { GlowPullback } from "@/registry/snap-cn-pro/glow-pullback";
 import { LibraryFlight } from "@/registry/snap-cn-pro/library-flight";
 import { LockupReveal } from "@/registry/snap-cn-pro/lockup-reveal";
 import { OrbitFlow } from "@/registry/snap-cn-pro/orbit-flow";
@@ -42,8 +41,8 @@ import { OrbitFlow } from "@/registry/snap-cn-pro/orbit-flow";
  *   k13  wordmark      k16 its cut
  *   k17.5 orbit · k24 collage · k30.5 status (k38.5 last chip)
  *   k44  flight        k46.5 / k49.5 its moves
- *   k56  Sell · 56.78 your · 57.5 story · 58.5 to · 60 the · 61 world.
- *   k65.5 logo         k68 its light — the strongest hit in the track
+ *   k56  Sell · k57–60 your story to the · k61 world.
+ *   k64  logo          k68 its light — both on kicks
  *
  * ## Transitions
  *
@@ -96,10 +95,6 @@ const timing = linearTiming({
 const Hold = ({ children }: { children: ReactNode }) => (
   <Freeze frame={Math.max(0, useCurrentFrame() - T)}>{children}</Freeze>
 );
-
-// GlowPullback's clock is 30fps reference frames: word i (i ≥ 1) starts at
-// firstWordAt + (i - 1) · wordEvery, the camera settles at 31.
-const ref = (f: number) => f / 30;
 
 export const XOct25 = () => (
   <AbsoluteFill style={{ background: "#ffffff" }}>
@@ -216,33 +211,29 @@ export const XOct25 = () => (
         </Hold>
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={timing} />
-      <TransitionSeries.Sequence durationInFrames={span(56, 65.5) + T}>
+      {/* Same reveal as the opener: "Sell" big on the k56 kick, then a word a
+          beat on the hits at k57–60, "world." on the bright hit at k61. */}
+      <TransitionSeries.Sequence durationInFrames={span(56, 64) + T}>
         <Hold>
-          <Warp
-            from={56}
-            keys={[
-              [56, 0],
-              [56.78, ref(13.5)],
-              [57.5, ref(17.5)],
-              [58.5, ref(21.5)],
-              [60, ref(25.5)],
-              [61, ref(29.5)],
-              [63, ref(39.5)],
-            ]}
-          >
-            <GlowPullback
-              text="Sell your story to the world."
-              fontSize={144}
-              wordEvery={4}
-            />
-          </Warp>
+          <TextReveal
+            text="Sell your story to the world."
+            fontSize={104}
+            introDuration={12}
+            holdDuration={8}
+            recedeDuration={28}
+            assembleDuration={span(56, 62) - 20}
+            wordDelay={span(56, 57) - 20}
+            wordStagger={B}
+            wordDuration={20}
+          />
         </Hold>
       </TransitionSeries.Sequence>
-      {/* Hard cut to the logo. End part of the lockup only, at speed 1,
-          offset so its cut to the light (CUT, native 3.29s) lands on k68.
-          Not warped: under <Freeze> the light scene never draws. */}
-      <TransitionSeries.Sequence durationInFrames={span(65.5, 72)}>
-        <Sequence from={span(65.5, 68) - Math.round(3.29 * FPS)}>
+      {/* Hard cut to the logo on the k64 kick, mid-slide. End part of the
+          lockup only, at speed 1, offset so its cut to the light (CUT, native
+          3.29s) lands on the k68 kick and END on k72. Not warped: under
+          <Freeze> the light scene never draws. */}
+      <TransitionSeries.Sequence durationInFrames={span(64, 72)}>
+        <Sequence from={span(64, 68) - Math.round(3.29 * FPS)}>
           <LockupReveal />
         </Sequence>
       </TransitionSeries.Sequence>

@@ -4,11 +4,16 @@ import {
   CHECKOUT_PRODUCTS,
   type CheckoutProduct,
   isCheckoutProduct,
+  OFFER,
   PLANS,
 } from "@/lib/plans";
 import { clientIp } from "@/lib/server/client-ip";
 import { isDbConfigured } from "@/lib/server/db";
-import { createCheckout, dodoConfigured } from "@/lib/server/dodo";
+import {
+  createCheckout,
+  DodoApiError,
+  dodoConfigured,
+} from "@/lib/server/dodo";
 import { checkRateLimit } from "@/lib/server/rate-limit";
 
 /**
@@ -79,7 +84,14 @@ export async function POST(request: Request) {
   // annual plan existed — the key was in the product map, the pricing page and
   // the env, and this guard was the one list nobody updated. TypeScript could
   // not catch it: a narrower union is still a valid index into a wider map.
-  const { product } = body as { product?: unknown };
+  const { product, discount } = body as {
+    product?: unknown;
+    discount?: unknown;
+  };
+  // Only the one code we hand out. Anyone can type any code on Dodo's own page,
+  // so this is not a guard on money — it keeps this route from being a probe
+  // for which codes exist.
+  const discountCode = discount === OFFER.code ? OFFER.code : undefined;
   if (!isCheckoutProduct(product)) {
     return NextResponse.json(
       { error: "Unknown product.", code: "unknown_product" },
@@ -100,8 +112,9 @@ export async function POST(request: Request) {
     );
   }
 
-  try {
-    const { checkoutUrl } = await createCheckout({
+  const checkout = (code: string | undefined) =>
+    createCheckout({
+      discountCode: code,
       productId,
       email: user?.email ?? undefined,
       name: user?.name ?? undefined,
@@ -110,7 +123,11 @@ export async function POST(request: Request) {
       // whose plan to activate — and `product` is what tells a one-time pack
       // payment apart from a subscription payment on the way back in. Values
       // must be strings; Dodo silently drops anything it does not understand.
-      metadata: userId ? { user_id: userId, product } : { product },
+      metadata: {
+        ...(userId ? { user_id: userId } : {}),
+        product,
+        ...(code ? { offer: code } : {}),
+      },
       // Through the sync route, not straight to the editor. Dodo's redirect is
       // the earliest moment we can be certain the payment happened, and routing
       // it through a reconcile means the plan is already live on the page they
@@ -129,6 +146,19 @@ export async function POST(request: Request) {
         ? `${publicOrigin(request)}/api/billing/sync?next=${encodeURIComponent(next(product))}`
         : `${publicOrigin(request)}/signin?paid=1&callbackUrl=${encodeURIComponent(next(product))}`,
     });
+
+  try {
+    let checkoutUrl: string;
+    try {
+      ({ checkoutUrl } = await checkout(discountCode));
+    } catch (err) {
+      // A code Dodo refuses (deleted, or this buyer already used it) must not
+      // cost the sale: full price on Dodo's page beats an error on ours.
+      if (!discountCode || !(err instanceof DodoApiError) || err.status >= 500)
+        throw err;
+      console.warn("[checkout] discount refused, retrying without:", err);
+      ({ checkoutUrl } = await checkout(undefined));
+    }
     return NextResponse.json({ checkoutUrl });
   } catch (err) {
     // 502: the failure is upstream, and saying so keeps a Dodo outage out of

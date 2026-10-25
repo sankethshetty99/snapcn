@@ -69,3 +69,6 @@ BILLING_LOCAL.md
 
 # local customer app for testing `shadcn add` + the MCP
 /test/next-app/
+
+# scratch renders and one-off scripts
+/tmp/

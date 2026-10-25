@@ -92,6 +92,8 @@ export async function createCheckout(opts: {
   name?: string;
   metadata?: Record<string, string>;
   returnUrl?: string;
+  /** A code that must already exist in this Dodo mode — an unknown one is a 404. */
+  discountCode?: string;
 }): Promise<{ sessionId: string; checkoutUrl: string }> {
   const apiKey = process.env.DODO_API_KEY;
   if (!apiKey) {
@@ -113,6 +115,9 @@ export async function createCheckout(opts: {
     body.metadata = opts.metadata;
   }
   if (opts.returnUrl) body.return_url = opts.returnUrl;
+  // `discount_codes`, not the deprecated `discount_code`. The buyer can still
+  // type or remove a code on Dodo's page (`allow_discount_code` defaults true).
+  if (opts.discountCode) body.discount_codes = [opts.discountCode];
 
   const res = await fetch(`${baseUrl()}/checkouts`, {
     method: "POST",

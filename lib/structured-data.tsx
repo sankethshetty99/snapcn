@@ -144,6 +144,7 @@ const COMPONENT_QUERY: Record<string, string> = {
   "task-stream": "Remotion AI agent task list animation",
   "glass-prompt": "Remotion glass prompt animation",
   "search-retype": "Remotion search bar typing animation",
+  "prompt-roll": "Remotion rotating word prompt animation",
   "app-reveal": "Remotion app reveal animation",
   "brief-send": "Remotion product brief animation",
   "build-out": "Remotion AI app build animation",

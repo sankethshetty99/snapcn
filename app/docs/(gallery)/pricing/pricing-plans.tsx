@@ -2,10 +2,19 @@
 
 import { ArrowRight, Check, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useTrackEvent } from "@/lib/analytics";
+import {
+  codeInUrl,
+  countPricingVisit,
+  earnOffer,
+  type OfferTrigger,
+  offerEarned,
+  REPEAT_VISITS,
+} from "@/lib/offer";
+import { OFFER } from "@/lib/plans";
 import { startCheckout, type UpgradeProduct } from "@/lib/upgrade";
 import { cn } from "@/lib/utils";
 
@@ -70,14 +79,35 @@ export function PricingPlans({
 }) {
   const trackEvent = useTrackEvent();
   const [pending, setPending] = useState<UpgradeProduct | null>(null);
+  const [offer, setOffer] = useState(false);
   const layout = LAYOUT[tiers.length] ?? LAYOUT[4];
+
+  // The intent offer (`lib/offer.ts`), for anyone not yet paying: arriving from
+  // the CLI paywall's link, a third separate visit here, or already earned at
+  // another wall. After mount only — the page is the same HTML for everyone.
+  useEffect(() => {
+    if (currentPlan !== "free" && currentPlan !== "anonymous") return;
+    const visits = countPricingVisit();
+    let earned: OfferTrigger | null = null;
+    if (codeInUrl(window.location.search)) earned = "cli";
+    else if (!offerEarned() && visits >= REPEAT_VISITS) earned = "repeat_visit";
+    if (earned && !offerEarned()) {
+      earnOffer(earned);
+      trackEvent("offer_shown", { trigger: earned });
+    }
+    setOffer(earned !== null || offerEarned());
+  }, [currentPlan, trackEvent]);
 
   async function buy(product: UpgradeProduct) {
     if (pending) return;
     setPending(product);
-    trackEvent("upgrade_started", { from });
+    trackEvent("upgrade_started", {
+      from,
+      plan: product,
+      ...(offer ? { discount: OFFER.code } : {}),
+    });
     try {
-      await startCheckout(product);
+      await startCheckout(product, offer ? OFFER.code : undefined);
     } catch (err) {
       setPending(null);
       toast.error(
@@ -88,6 +118,14 @@ export function PricingPlans({
 
   return (
     <div>
+      {offer && (
+        // The code, named outright, so it can be typed on Dodo's page too.
+        // No timer: the code does not expire, so nothing here says it will.
+        <p className="mx-auto mb-8 w-fit text-pretty rounded-lg border border-primary/20 bg-primary/10 px-3 py-1.5 text-center text-primary text-sm">
+          Code <span className="font-medium font-mono">{OFFER.code}</span> —{" "}
+          {OFFER.percent}% off your first payment, applied at checkout.
+        </p>
+      )}
       <div className={cn("relative grid grid-cols-1 gap-6", layout.grid)}>
         <FrameLines columns={tiers.length} visible={layout.frame} />
         {tiers.map((tier) => {
@@ -239,7 +277,8 @@ export function PricingPlans({
         >
           license terms
         </Link>
-        . All sales are final — no refunds.
+        . Prices exclude VAT and sales tax, added at checkout where it applies.
+        All sales are final — no refunds.
       </p>
     </div>
   );

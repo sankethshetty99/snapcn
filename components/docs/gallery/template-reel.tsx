@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { VideoPlayer } from "@/components/ui/video-player";
 import { MEDIA_BASE } from "@/lib/demo-urls";
 import { cn } from "@/lib/utils";
 import type { Reel } from "./template-reels";
@@ -23,7 +24,15 @@ const clock = (frames: number, fps: number) => {
 export function TemplateReel({ reel }: { reel: Reel }) {
   const { fps, beats } = reel;
   // Hashes are in the names (see `template-reels.ts`); the first still is the poster.
-  const src = `${MEDIA_BASE}/templates-wip/${reel.slug}-${reel.v}.mp4`;
+  // 4K where the player is big enough to show it, 1080p on phones — a 15MB
+  // film on a mobile connection is a spinner, not a preview.
+  const sources = [
+    {
+      src: `${MEDIA_BASE}/templates-wip/${reel.slug}-${reel.v}.mp4`,
+      media: "(min-width: 1024px)",
+    },
+    { src: `${MEDIA_BASE}/templates-wip/${reel.slug}-1080-${reel.v1080}.mp4` },
+  ];
   const poster = `${MEDIA_BASE}/templates-wip/${reel.slug}-1-${reel.stills[0]}.webp`;
   const starts = useMemo(() => {
     const out: number[] = [];
@@ -57,19 +66,18 @@ export function TemplateReel({ reel }: { reel: Reel }) {
   return (
     <div>
       <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-gallery-card">
-        <video
+        <VideoPlayer
           ref={video}
-          src={src}
+          sources={sources}
           poster={poster}
-          controls
           muted
           playsInline
           preload="metadata"
-          className="size-full"
-        />
-        <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-background/80 px-2.5 py-1 font-mono text-[0.6875rem] text-foreground backdrop-blur">
-          {beats[at].label} · {beats[at].component} · Pro preview
-        </span>
+        >
+          <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-background/80 px-2.5 py-1 font-mono text-[0.6875rem] text-foreground backdrop-blur">
+            {beats[at].label} · {beats[at].component} · Pro preview
+          </span>
+        </VideoPlayer>
       </div>
       <ol className="mt-5 grid grid-cols-2 gap-1.5 sm:grid-cols-4 lg:grid-cols-6">
         {beats.map((b, i) => (

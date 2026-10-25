@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
+import type { OfferTrigger } from "@/lib/offer";
+import type { CheckoutProduct } from "@/lib/plans";
 import { withPostHog } from "@/lib/posthog-client";
 
 /**
@@ -208,6 +210,9 @@ export type AnalyticsEvents = {
    * pay, and then do not finish. `from` is which wall they were standing at,
    * because a person who hits the export quota and a person who just wants a
    * clean file are two different buyers and they should not be averaged.
+   *
+   * `plan` is the product they clicked. Without it, a week where 8 of 10
+   * checkouts went unpaid could not say which plan they walked away from.
    */
   upgrade_started: {
     from:
@@ -215,7 +220,24 @@ export type AnalyticsEvents = {
       | "quota_toast"
       | "account_menu"
       | "pricing"
-      | "pro_page";
+      | "pro_page"
+      | "export_offer";
+    plan: CheckoutProduct;
+    /**
+     * Set when `OFFER.code` rode along. Against `offer_shown` it answers whether
+     * the code moves anyone who would not have paid anyway.
+     */
+    discount?: string;
+  };
+  /**
+   * `OFFER.code` was put in front of someone, and which wall earned it.
+   *
+   * The question: does a discount shown at the moment of friction convert, and
+   * at which wall? `trigger` is that wall; `upgrade_started` with `discount`
+   * is the click, and the Dodo webhook's `metadata.offer` is the payment.
+   */
+  offer_shown: {
+    trigger: OfferTrigger;
   };
   editor_export_started: {
     clip_count: number;

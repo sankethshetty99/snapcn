@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { Cta } from "@/app/(home)/components/sections/cta";
+import { auth } from "@/auth";
 import { DocsTopBar } from "@/components/docs/gallery/docs-top-bar";
 import { GalleryFrame } from "@/components/docs/gallery/gallery-frame";
 import { TemplateCard } from "@/components/docs/gallery/template-card";
 import { REELS } from "@/components/docs/gallery/template-reels";
 import { EarlyBirdStrip } from "@/components/early-bird";
+import { PRO_NAMES } from "@/config/catalogue";
 import { DOCS_PAGE_META } from "@/config/site";
 import { metaDescription, metaTitle } from "@/lib/meta";
 import { PageJsonLd } from "@/lib/page-json-ld";
+import { PLANS, TEMPLATES_RELEASE_AT } from "@/lib/plans";
+import { planFor } from "@/lib/server/entitlements";
 import { docsBreadcrumb } from "@/lib/structured-data";
 
 const { title: TITLE, description: DESCRIPTION } = DOCS_PAGE_META.templates;
@@ -33,9 +37,6 @@ export const metadata: Metadata = {
     images: [OG_IMAGE],
   },
 };
-
-/** Hourly, so the days-left count is right to the hour on a static page. */
-export const revalidate = 3600;
 
 const BUY = "/docs/pricing?ref=templates#plans";
 
@@ -65,7 +66,16 @@ const ORDERED = [...REELS].sort((a, b) => rank(a.title) - rank(b.title));
  * coming, prices it, and says plainly what waiting costs — a real date, a real
  * count, and the renewal promise Dodo actually keeps.
  */
-export default function TemplatesPage() {
+export default async function TemplatesPage() {
+  // Per request, not per build: who is asking decides what the page may show,
+  // and the release is a moment, not a deploy.
+  const session = await auth().catch(() => null);
+  const { plan } = await planFor(session?.user?.id ?? null);
+  const released = Date.now() >= Date.parse(TEMPLATES_RELEASE_AT);
+  // Paid: the film and the real install, release date or not. Everyone else
+  // gets the locked card, and `released` only changes its copy.
+  const unlocked = plan !== "anonymous" && PLANS[plan].components;
+
   return (
     <GalleryFrame>
       {/* It was the one route with no schema at all. */}
@@ -93,31 +103,47 @@ export default function TemplatesPage() {
           {/* Only what the card shows: the install name, film and still
               hashes stay on the server, since a client component's props
               ship in the page. */}
-          {ORDERED.map(({ slug, title, description, fps, beats }) => (
+          {ORDERED.map((reel) => (
             <TemplateCard
-              key={slug}
+              key={reel.slug}
+              released={released}
               reel={{
-                slug,
-                title,
-                description,
-                beats: beats.length,
+                slug: reel.slug,
+                title: reel.title,
+                description: reel.description,
+                beats: reel.beats.length,
                 seconds: Math.round(
-                  beats.reduce((n, b) => n + b.frames, 0) / fps,
+                  reel.beats.reduce((n, b) => n + b.frames, 0) / reel.fps,
                 ),
               }}
+              // Only ever built for a paying reader — for anyone else these
+              // props would put the film and the install name in the page.
+              unlocked={
+                unlocked
+                  ? {
+                      reel,
+                      install: PRO_NAMES.includes(reel.install)
+                        ? reel.install
+                        : null,
+                    }
+                  : undefined
+              }
             />
           ))}
         </div>
 
-        {/* Last call: the site's closing section, with this page's copy. */}
-        <div className="mt-24">
-          <Cta
-            title="Every template, included in Pro."
-            body={<EarlyBirdStrip />}
-            href={BUY}
-            label="See the early-bird prices"
-          />
-        </div>
+        {/* Last call: the site's closing section, with this page's copy.
+            Not for someone who already has every template. */}
+        {unlocked ? null : (
+          <div className="mt-24">
+            <Cta
+              title="Every template, included in Pro."
+              body={<EarlyBirdStrip />}
+              href={BUY}
+              label={released ? "See the prices" : "See the early-bird prices"}
+            />
+          </div>
+        )}
       </div>
     </GalleryFrame>
   );

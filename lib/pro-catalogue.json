@@ -1,5 +1,11 @@
 [
   {
+    "name": "prompt-roll",
+    "title": "Prompt Roll",
+    "description": "A prompt card is pushed in on while \"Make your own …\" types, cuts closer, and the last words wrap into a pill that rolls through what you can make, each in its own tint. The sentence finishes, the camera whips to a send button that draws itself in, a pointer presses it into a halo, and the arrow pulls free and flies off as the frame washes to white. Replayed from a 6.4s screen recording measured frame by frame: the push-in's card rect, the tracked pan, every keystroke, each roll step, the pointer's path and the press.",
+    "added": "2026-10-24"
+  },
+  {
     "name": "glow-pullback",
     "title": "Glow Pullback",
     "description": "A line that opens in close and pulls back to the whole sentence. The camera starts tight on the first letter and pans along the first word, then backs off a step each time a new word slides in out of a blur, until the full line sits centred and still. Plain bold type on white by default; a blue sky, a glow and a hot arrival colour are one prop each.",

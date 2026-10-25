@@ -17,6 +17,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { useTrackEvent } from "@/lib/analytics";
 import type { AuthProviderId } from "@/lib/auth-providers";
 import { getDefaults } from "@/lib/customizer-config";
+import { earnOffer, offerEarned } from "@/lib/offer";
+import { OFFER } from "@/lib/plans";
+import { startCheckout } from "@/lib/upgrade";
 import { cn } from "@/lib/utils";
 import {
   applyBrand,
@@ -477,10 +480,18 @@ export function VideoEditor({
                   // ask is not a toll. Signed-in people are skipped — we
                   // already have their address — and `hasAnsweredEmailPrompt`
                   // means nobody is asked twice on the same machine.
-                  if (!signedIn && !hasAnsweredEmailPrompt()) {
-                    setEmailPromptOpen(true);
-                  }
+                  const askEmail = !signedIn && !hasAnsweredEmailPrompt();
+                  if (askEmail) setEmailPromptOpen(true);
                   offerShareLink(jobId);
+                  // This file carries the mark and a purchase is what removes
+                  // it — the intent offer's strongest wall. Once per browser,
+                  // and never on top of the email ask: that dialog is this
+                  // moment's one question, so the code waits for the next export.
+                  if (!canRemoveWatermark && !askEmail && !offerEarned()) {
+                    earnOffer("export");
+                    trackEvent("offer_shown", { trigger: "export" });
+                    offerDiscount(trackEvent);
+                  }
                 },
               })
             }
@@ -732,6 +743,32 @@ function MobilePanels({
  * is the thing they came for; the link is a second thing we would like, and a
  * modal in front of a finished download would be a toll.
  */
+/**
+ * `OFFER.code`, after a watermarked export. Straight to checkout with the code
+ * applied — the annual, because that is what the watermark badge sells.
+ */
+function offerDiscount(trackEvent: ReturnType<typeof useTrackEvent>) {
+  toast(`${OFFER.percent}% off Pro — code ${OFFER.code}`, {
+    description: `Your video has the snapcn mark. Pro removes it and exports at 1080p; ${OFFER.code} takes ${OFFER.percent}% off your first payment.`,
+    duration: 20_000,
+    action: {
+      label: `Get ${OFFER.percent}% off`,
+      onClick: () => {
+        trackEvent("upgrade_started", {
+          from: "export_offer",
+          plan: "everything_annual",
+          discount: OFFER.code,
+        });
+        startCheckout("everything_annual", OFFER.code).catch((err) =>
+          toast.error(
+            err instanceof Error ? err.message : "Couldn't start checkout.",
+          ),
+        );
+      },
+    },
+  });
+}
+
 function offerShareLink(jobId: string) {
   toast.success("Video exported", {
     description: "Want a link you can send someone?",

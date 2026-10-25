@@ -10,7 +10,10 @@ export type Reel = {
   title: string;
   description: string;
   fps: number;
+  /** The film at 3840x2160: `<slug>-<v>.mp4`. */
   v: string;
+  /** The same film at 1920x1080, for small screens: `<slug>-1080-<v1080>.mp4`. */
+  v1080: string;
   /** Hashes of `<slug>-1/2/3.webp`, three stills across the film. */
   stills: readonly string[];
   beats: readonly { label: string; component: string; frames: number }[];
@@ -24,8 +27,9 @@ export const REELS: readonly Reel[] = [
     description:
       "A new era for your team: bright, fast cuts with a soft, low-saturation accent, from the pile of work to agents that ship.",
     fps: 30,
-    v: "56d5ea97f0",
-    stills: ["a5a8870319", "f2638c77ff", "1209cd137a"],
+    v: "a1667e7604",
+    v1080: "2f5e0ed574",
+    stills: ["35a62c8545", "f2638c77ff", "1209cd137a"],
     beats: [
       {
         label: "Era \u2014 a new era",
@@ -86,8 +90,9 @@ export const REELS: readonly Reel[] = [
     description:
       "What shipped this week, version by version, on a dark stage with a soft, low-saturation accent.",
     fps: 30,
-    v: "b6c867914d",
-    stills: ["4074747ebd", "7275e83175", "87f87713ac"],
+    v: "7e0bdbc444",
+    v1080: "c9cd7746d9",
+    stills: ["27c718820b", "7275e83175", "87f87713ac"],
     beats: [
       {
         label: "Open \u2014 the mark blooms",
@@ -135,9 +140,9 @@ export const REELS: readonly Reel[] = [
         frames: 60,
       },
       {
-        label: "Lockup \u2014 ships every week",
-        component: "Powers Lockup",
-        frames: 110,
+        label: "Weekly \u2014 ships every week",
+        component: "Word Drum",
+        frames: 117,
       },
       {
         label: "Close \u2014 see the changelog",
@@ -153,8 +158,9 @@ export const REELS: readonly Reel[] = [
     description:
       "One new feature, asked for and delivered: a dark agent-style announcement with a soft, low-saturation accent.",
     fps: 30,
-    v: "2a2c8025c5",
-    stills: ["4570db57ee", "b3bb7507ab", "27ab071679"],
+    v: "c0078cb449",
+    v1080: "f7d3f49c10",
+    stills: ["f3b15cd031", "b3bb7507ab", "27ab071679"],
     beats: [
       {
         label: "Meet \u2014 the new feature",
@@ -210,8 +216,9 @@ export const REELS: readonly Reel[] = [
     description:
       "The problem, the numbers that move, the ask: a demo-day pitch on warm paper with a soft, low-saturation accent.",
     fps: 30,
-    v: "7feaaca202",
-    stills: ["257eb1762e", "4827819b9a", "ba8efb2c63"],
+    v: "0281190e0d",
+    v1080: "ad92ad22f0",
+    stills: ["29efeded69", "4827819b9a", "ba8efb2c63"],
     beats: [
       {
         label: "Open \u2014 every pitch starts here",
@@ -272,8 +279,9 @@ export const REELS: readonly Reel[] = [
     description:
       "Upload, generate, review, publish: a bright walkthrough of your product with a soft, low-saturation accent.",
     fps: 30,
-    v: "700f07ff16",
-    stills: ["b3d9bca357", "9635c081de", "fe3d5224fe"],
+    v: "8a3afd0927",
+    v1080: "53195b1253",
+    stills: ["ac98a709cb", "9635c081de", "fe3d5224fe"],
     beats: [
       {
         label: "Hook \u2014 what if",

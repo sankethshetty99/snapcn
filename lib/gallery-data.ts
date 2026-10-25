@@ -678,6 +678,7 @@ const PRO_CATEGORY: Record<string, CategoryId> = {
   "task-stream": "ai-input",
   "glass-prompt": "ai-input",
   "search-retype": "ai-input",
+  "prompt-roll": "ai-input",
   "dot-dissolve": "transitions",
 };
 

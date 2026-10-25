@@ -78,6 +78,19 @@ export function SaleBanner() {
   const trackEvent = useTrackEvent();
   const [time, setTime] = useState<ReturnType<typeof left> | null>(null);
   const [dismissed, setDismissed] = useState(false);
+  // List prices until /api/price answers with the visitor's regional ones.
+  const [price, setPrice] = useState<{ annual: string; lifetime: string }>(
+    CATALOGUE_PRICE,
+  );
+
+  useEffect(() => {
+    fetch(
+      `/api/price${location.search.match(/[?&]country=[^&]+/)?.[0].replace("&", "?") ?? ""}`,
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => p && setPrice(p))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     setTime(left(Date.now()));
@@ -138,8 +151,7 @@ export function SaleBanner() {
           Early-bird pricing ends {EARLY_BIRD.endsOn}
           <span className="hidden lg:inline">
             {" "}
-            — Pro is {CATALOGUE_PRICE.annual}/yr or {CATALOGUE_PRICE.lifetime}{" "}
-            once
+            — Pro is {price.annual}/yr or {price.lifetime} once
           </span>
         </span>
 
