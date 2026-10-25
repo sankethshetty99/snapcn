@@ -22,11 +22,15 @@ export type UpgradeProduct = CheckoutProduct;
  * result of a click handler that has already awaited a fetch, and coming back
  * to a page that reloads is the behaviour people expect from paying.
  */
-export async function startCheckout(product: UpgradeProduct): Promise<void> {
+export async function startCheckout(
+  product: UpgradeProduct,
+  /** `OFFER.code`, pre-applied on Dodo's page. Anything else is ignored server-side. */
+  discount?: string,
+): Promise<void> {
   const res = await fetch("/api/checkout", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ product }),
+    body: JSON.stringify(discount ? { product, discount } : { product }),
   });
 
   if (!res.ok) {

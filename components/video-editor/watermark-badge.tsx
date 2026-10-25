@@ -64,7 +64,10 @@ export function WatermarkBadge({
     // the same thing.
     if (starting) return;
     setStarting(true);
-    trackEvent("upgrade_started", { from: "watermark_badge" });
+    trackEvent("upgrade_started", {
+      from: "watermark_badge",
+      plan: "everything_annual",
+    });
     try {
       await startCheckout("everything_annual");
       // No `setStarting(false)` on success — `startCheckout` navigates away,

@@ -7,8 +7,9 @@ import { buttonVariants } from "@/components/ui/button";
 import { installCommand } from "@/config/site";
 import { convertNpmCommand } from "@/lib/convert-npm-command";
 import { MEDIA_BASE } from "@/lib/demo-urls";
-import { CATALOGUE_PRICE, EARLY_BIRD, PRICES_RISEN } from "@/lib/plans";
+import { CATALOGUE_PRICE, EARLY_BIRD } from "@/lib/plans";
 import { cn } from "@/lib/utils";
+import { TemplateReel } from "./template-reel";
 import type { Reel } from "./template-reels";
 
 /**
@@ -44,11 +45,23 @@ const clock = (s: number) =>
   `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 /**
- * One template before its release: the name, one line, the facts, three masked
- * stills and the locked install. Nothing on it plays or copies — the preview
- * button is shown, disabled, with the day it opens.
+ * One template. Locked — for anyone without the Pro catalogue, and for
+ * everyone before release — it is the name, one line, the facts, three masked
+ * stills and the locked install: nothing on it plays or copies. Unlocked, it is
+ * the film with its beats and the real install command.
  */
-export function TemplateCard({ reel }: { reel: TemplateCardReel }) {
+export function TemplateCard({
+  reel,
+  released,
+  unlocked,
+}: {
+  reel: TemplateCardReel;
+  /** Past `TEMPLATES_RELEASE_AT`, read per request by the page. */
+  released: boolean;
+  /** Set only for a paying reader after release. `install` is null until the template's registry item ships. */
+  unlocked?: { reel: Reel; install: string | null };
+}) {
+  if (unlocked) return <UnlockedCard {...unlocked} />;
   return (
     <article>
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
@@ -71,8 +84,17 @@ export function TemplateCard({ reel }: { reel: TemplateCardReel }) {
             "h-12 shrink-0 cursor-not-allowed gap-2.5 rounded-xl px-6 text-base",
           )}
         >
-          <Eye aria-hidden className="size-5" />
-          Preview opens {EARLY_BIRD.endsOnShort}
+          {released ? (
+            <>
+              <Lock aria-hidden className="size-5" />
+              Preview with Pro
+            </>
+          ) : (
+            <>
+              <Eye aria-hidden className="size-5" />
+              Preview opens {EARLY_BIRD.endsOnShort}
+            </>
+          )}
         </button>
       </div>
 
@@ -115,17 +137,58 @@ export function TemplateCard({ reel }: { reel: TemplateCardReel }) {
             )}
           >
             <Lock aria-hidden className="size-4" />
-            {PRICES_RISEN
+            {released
               ? `Unlock with Pro · ${CATALOGUE_PRICE.annual}/yr`
               : `Unlock with Pro · ${CATALOGUE_PRICE.annual}/yr until ${EARLY_BIRD.endsOnShort}`}
           </Link>
-          {PRICES_RISEN ? null : (
+          {released ? null : (
             <p className="text-muted-foreground text-xs">
               Releases {EARLY_BIRD.endsOn}. Buy now at the early-bird price; it
               unlocks in your account on release day.
             </p>
           )}
         </div>
+      </div>
+    </article>
+  );
+}
+
+/** A released template, for someone whose plan includes it. */
+function UnlockedCard({
+  reel,
+  install,
+}: {
+  reel: Reel;
+  install: string | null;
+}) {
+  return (
+    <article>
+      <div className="max-w-2xl">
+        <h2 className="font-semibold font-sans text-[clamp(1.75rem,3.2vw,2.5rem)] text-foreground leading-tight tracking-[-0.03em]">
+          {reel.title}
+        </h2>
+        <p className="mt-3 text-pretty text-current/70 text-lg leading-relaxed">
+          {reel.description}
+        </p>
+      </div>
+      <div className="mt-8">
+        <TemplateReel reel={reel} />
+      </div>
+      <div className="mt-6 max-w-xl">
+        {install ? (
+          <CodeBlockCommand
+            component={install}
+            variant="outline"
+            {...convertNpmCommand(installCommand(install))}
+          />
+        ) : (
+          // Listed before its registry item exists: say so rather than print
+          // a command that would 404 at somebody who has paid for it.
+          <p className="text-muted-foreground text-sm">
+            Included in your plan — its install command lands here when the
+            template ships.
+          </p>
+        )}
       </div>
     </article>
   );

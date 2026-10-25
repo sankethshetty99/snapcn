@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundle } from "@remotion/bundler";
@@ -18,6 +18,9 @@ import { tsconfigWebpackAlias } from "../tsconfig-webpack-alias.mts";
  * while iterating on a component that is not shipped yet.
  *
  *   node scripts/dev/render-one.mts <slug> <out.mp4>
+ *
+ * `PROPS=<file.json>` renders with those props instead of the defaults (to
+ * replay a reference's own copy against it); `SCALE=0.5` renders smaller.
  */
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..", "..");
@@ -70,7 +73,10 @@ const serveUrl = await bundle({
   },
 });
 
-const composition = (await getCompositions(serveUrl)).find(
+const inputProps = process.env.PROPS
+  ? JSON.parse(readFileSync(process.env.PROPS, "utf8"))
+  : undefined;
+const composition = (await getCompositions(serveUrl, { inputProps })).find(
   (c) => c.id === slug,
 );
 if (!composition) {
@@ -85,6 +91,8 @@ await renderMedia({
   pixelFormat: "yuv420p",
   audioCodec: null,
   outputLocation: out,
+  inputProps,
+  scale: Number(process.env.SCALE) || 1,
   concurrency: Number(process.env.REMOTION_CONCURRENCY) || 4,
   onProgress: ({ progress }) =>
     process.stdout.write(`\r${slug} ${(progress * 100).toFixed(0)}%   `),

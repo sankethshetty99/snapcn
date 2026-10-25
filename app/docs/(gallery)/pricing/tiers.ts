@@ -142,7 +142,7 @@ const REGIONAL_NOTE = `Lower prices for Pro and Lifetime in ${new Intl.ListForma
  * many digits that is (IDR has two, VND and JPY none), so the two cannot
  * disagree. Cents only when there are some.
  */
-function money(minor: number, currency: string): string {
+export function money(minor: number, currency: string): string {
   const digits =
     new Intl.NumberFormat("en", {
       style: "currency",

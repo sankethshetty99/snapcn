@@ -184,10 +184,11 @@ export const PRICES_RISEN = Date.now() >= Date.parse(EARLY_BIRD.endsAt);
 export const TEMPLATES_RELEASE_AT = EARLY_BIRD.endsAt;
 
 /** Whether `name` is a template that has not been released yet. */
-export function templateLocked(name: string, now: number = Date.now()): boolean {
-  return (
-    name.startsWith("template-") && now < Date.parse(TEMPLATES_RELEASE_AT)
-  );
+export function templateLocked(
+  name: string,
+  now: number = Date.now(),
+): boolean {
+  return name.startsWith("template-") && now < Date.parse(TEMPLATES_RELEASE_AT);
 }
 
 /** Whole days left at early-bird prices; 0 once the window has closed. */
@@ -396,3 +397,23 @@ export const PPP_PRICES = {
  * which component this is is fine; removing the sample is not.
  */
 export const PRO_SAMPLE = { name: "manifesto", title: "Manifesto" } as const;
+
+/**
+ * The intent offer: a real Dodo discount code, shown only to someone who has
+ * just hit a wall that a purchase removes — a watermarked export, a Pro install
+ * refused at the CLI, a third look at the pricing page while still on Free.
+ *
+ * Created in both Dodo modes on 2026-10-25 as `percentage`, 2500 bp, restricted
+ * to the three snapcn products (the Dodo account is shared with another brand),
+ * `subscription_cycles: 1` (the first year of the annual, then list price) and
+ * `per_customer_usage_limit: 1`. No expiry, so nothing here may claim one: a
+ * countdown on a code that does not expire is the false urgency we refuse.
+ *
+ * Changing the code means creating it in Dodo first — `/api/checkout` passes
+ * this string straight to Dodo, and a code Dodo does not know fails the session
+ * (the route retries without it, so the buyer still reaches checkout).
+ */
+export const OFFER = {
+  code: "SNAPCN25",
+  percent: 25,
+} as const;
