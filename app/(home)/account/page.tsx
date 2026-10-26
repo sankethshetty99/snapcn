@@ -267,6 +267,7 @@ function planLine(
     return pro && end ? `${name} · ends ${end}` : `${name} · ${billing.status}`;
   }
   // A one-time purchase has no subscription behind it and no end.
-  if (!billing.subscriptionId) return `${name} · lifetime`;
+  if (!billing.subscriptionId)
+    return billing.licence === "commercial" ? "Commercial" : "Lifetime";
   return end ? `${name} · renews ${end}` : name;
 }

@@ -15,7 +15,7 @@ import { PageJsonLd } from "@/lib/page-json-ld";
 import { PRO_SAMPLE } from "@/lib/plans";
 import { proDemoPoster, proDemoSrc } from "@/lib/pro-demos";
 import { RenderedDemo } from "@/lib/rendered-demos";
-import { planFor } from "@/lib/server/entitlements";
+import { billingFor, planFor } from "@/lib/server/entitlements";
 import { docsBreadcrumb } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 import { PricingPlans } from "./pricing-plans";
@@ -63,7 +63,21 @@ export default async function PricingPage({
 }) {
   const { country } = await searchParams;
   const session = await auth().catch(() => null);
-  const { plan } = await planFor(session?.user?.id ?? null);
+  const userId = session?.user?.id ?? null;
+  const [{ plan }, billing] = await Promise.all([
+    planFor(userId),
+    userId ? billingFor(userId) : null,
+  ]);
+  // Lifetime and Commercial are both stored as plan "pro"; the card to mark is
+  // told apart by the licence and by having no subscription behind it.
+  const currentPlan =
+    plan === "pro" && billing?.plan === "pro"
+      ? billing.licence === "commercial"
+        ? "commercial"
+        : billing.subscriptionId
+          ? "pro"
+          : "lifetime"
+      : plan;
   const { tiers, footnote } = await pricing({ testCountry: country });
   const showcase = SHOWCASE.flatMap((slug) => {
     const src = proDemoSrc(slug);
@@ -115,7 +129,11 @@ export default async function PricingPage({
             docs pages and the old `/pro` links all land on them. This is the
             one pricing page — `/pro` forwards here. */}
         <div id="plans" className="mt-10 scroll-mt-24 lg:mt-14">
-          <PricingPlans tiers={tiers} currentPlan={plan} footnote={footnote} />
+          <PricingPlans
+            tiers={tiers}
+            currentPlan={currentPlan}
+            footnote={footnote}
+          />
         </div>
 
         {/* The second exit, for everyone who will not buy today: one Pro
